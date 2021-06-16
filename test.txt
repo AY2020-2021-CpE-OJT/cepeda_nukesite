@@ -1,7 +1,11 @@
 starting line
 
+<<<<<<< HEAD
 init1
 
 change1
 
 change again
+=======
+init1
+>>>>>>> parent of 80558a2 (change1)
