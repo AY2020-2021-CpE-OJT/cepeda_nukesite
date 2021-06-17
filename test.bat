@@ -51,6 +51,5 @@ set /p choice="Confirm push?: "
 IF '%choice%' == 'yes' git push
 IF '%choice%' == 'no' GOTO START
 GOTO PUSH _PROMPT
-git push
 
 :EXIT
