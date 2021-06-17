@@ -28,6 +28,14 @@
 <> record sequences
 <> voiceover sequences
 <> finish scripting missing basic commands into the batch file (fetch,full,clone,init,revert,checkout,branch)
+  </> fetch
+  </> full (wt.?) --> pull
+  <> clone
+  <> init
+  <> revert
+  <> checkout
+  <> branch
+  <> stage just 1 file
 <> reformat basic commands in test.bat
 <> find a good name for test.bat
 #SUB
