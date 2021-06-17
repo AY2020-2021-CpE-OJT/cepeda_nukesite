@@ -21,6 +21,8 @@
 <> skipping savepoints
 <> delete branches (pruning?)
 <> figure out a way to stabilise the internet
+<> record sequences
+<> voiceover sequences
 #SUB
 <> pre-requisites
 <> 
