@@ -18,6 +18,7 @@
 #PROBLEMS
 </> switching branches
 <> branching realities
+<> skipping savepoints
 <> delete branches (pruning?)
 #SUB
 <> pre-requisites
