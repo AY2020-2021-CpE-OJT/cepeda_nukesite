@@ -12,11 +12,11 @@
 <> git pull
 <> git merge
 <> rollback
-<> git revert
-<> git reset
-<> git checkout
+</> git revert
+</> git reset
+</> git checkout
 #PROBLEMS
-<> switching branches
+</> switching branches
 <> delete branches (pruning?)
 #SUB
 <> pre-requisites
