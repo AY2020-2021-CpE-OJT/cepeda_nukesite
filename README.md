@@ -15,12 +15,15 @@
 </> git revert
 </> git reset
 </> git checkout
+</> written draft
 #PROBLEMS
 </> switching branches
 <> branching realities
 <> skipping savepoints
 <> delete branches (pruning?)
 <> figure out a way to stabilise the internet
+<> finish and formalise draft
+<> build research documents
 <> record sequences
 <> voiceover sequences
 #SUB
