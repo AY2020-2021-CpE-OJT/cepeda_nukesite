@@ -14,9 +14,9 @@ IF '%command%' == 'cls' CLS
 GOTO START
 
 :ADD
+echo ">>>>>>>>>>>>>>>>> ADDING <<<<<<<<<<<<<<<<<<"
 git add .
 git status
-echo adding
 
 :COMMIT_PROMPT
 set /p commit_choice="Would you like to commit?: "
@@ -25,6 +25,7 @@ IF '%commit_choice%' == 'no' GOTO START
 GOTO COMMIT_PROMPT
 
 :COMMIT_TRIGGER
+echo ">>>>>>>>>>>>>>>>>COMMITING<<<<<<<<<<<<<<<<<<"
 set /p message="Enter message: "
 git commit -m "%message%"
 GOTO START
