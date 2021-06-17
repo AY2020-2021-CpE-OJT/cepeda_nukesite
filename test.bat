@@ -53,5 +53,6 @@ IF '%choice%' == 'no' GOTO START
 GOTO PUSH _PROMPT
 :PUSH
 git push
+GOTO START
 
 :EXIT
