@@ -5,12 +5,16 @@ set /p command="Enter command: "
 IF '%command%' == 'exit' GOTO EXIT
 IF '%command%' == 'add' GOTO ADD
 IF '%command%' == 'commit' GOTO COMMIT_PROMPT
+IF '%command%' == 'force_commit' GOTO COMMIT_TRIGGER
+rem IF '%command%' == 'full_update' GOTO FULL_UPDATE
 IF '%command%' == 'full_reset' GOTO FULL_RESET
 IF '%command%' == 'log' GOTO LOG
 IF '%command%' == 'status' GOTO STATUS
 IF '%command%' == 'test' GOTO TEST
 IF '%command%' == 'push' GOTO PUSH_PROMPT
+IF '%command%' == 'force_push' GOTO PUSH_TRIGGER
 IF '%command%' == 'pull' GOTO PULL_PROMPT
+IF '%command%' == 'force_pull' GOTO PULL_TRIGGER
 IF '%command%' == 'fetch' GOTO FETCH
 IF '%command%' == 'cls' CLS
 GOTO START
