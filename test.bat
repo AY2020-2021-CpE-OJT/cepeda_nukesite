@@ -10,6 +10,8 @@ IF '%command%' == 'log' GOTO LOG
 IF '%command%' == 'status' GOTO STATUS
 IF '%command%' == 'test' GOTO TEST
 IF '%command%' == 'push' GOTO PUSH_PROMPT
+IF '%command%' == 'pull' GOTO PULL_PROMPT
+IF '%command%' == 'fetch' GOTO FETCH
 IF '%command%' == 'cls' CLS
 GOTO START
 
@@ -42,6 +44,22 @@ GOTO PUSH_PROMPT
 git push
 GOTO START
 
+:FETCH
+echo ">>>>>>>>>>>>>>>>> FETCHING <<<<<<<<<<<<<<<<<<"
+git fetch
+GOTO START
+
+:PULL_PROMPT
+echo ">>>>>>>>>>>>>>>>> PULLING <<<<<<<<<<<<<<<<<<"
+git status
+set /p pull_choice="Confirm pull?: "
+IF '%pull_choice%' == 'yes' GOTO PULL_TRIGGER
+IF '%pull_choice%' == 'no' GOTO START
+GOTO PUSH_PROMPT
+
+:PULL_TRIGGER
+git pull
+GOTO START
 
 :TEST
 
