@@ -6,6 +6,7 @@
 set /p command="Enter command: "
 IF '%command%' == 'exit' GOTO EXIT
 IF '%command%' == 'add' GOTO ADD
+IF '%command%' == 'commit' GOTO COMMIT_PROMPT
 IF '%command%' == 'full_reset' GOTO FULL_RESET
 IF '%command%' == 'log' GOTO LOG
 IF '%command%' == 'status' GOTO STATUS
@@ -27,7 +28,7 @@ GOTO COMMIT_PROMPT
 
 :COMMIT_TRIGGER
 set /p message="Enter message: "
-git commit -m %message%
+git commit -m "%message%"
 git log
 GOTO AFT _NIT
 
