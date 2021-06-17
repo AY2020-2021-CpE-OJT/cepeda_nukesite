@@ -1,7 +1,5 @@
 :START
 @echo off
- set tick=0
- echo %tick%
 :START
 set /p command="Enter command: "
 IF '%command%' == 'exit' GOTO EXIT
