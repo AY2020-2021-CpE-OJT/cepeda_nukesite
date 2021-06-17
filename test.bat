@@ -21,9 +21,9 @@ git status
 echo adding
 
 :COMMIT_PROMPT
-set /p choice="Would you like to commit?: "
-IF '%choice%' == 'yes' GOTO COMMIT_TRIGGER
-IF '%choice%' == 'no' GOTO START
+set /p commit_choice="Would you like to commit?: "
+IF '%commit_choice%' == 'yes' GOTO COMMIT_TRIGGER
+IF '%commit_choice%' == 'no' GOTO START
 GOTO COMMIT_PROMPT
 
 :COMMIT_TRIGGER
@@ -47,9 +47,9 @@ GOTO START
 
 :PUSH _PROMPT
 git status
-set /p choice="Confirm push?: "
-IF '%choice%' == 'yes'  GOTO PUSH
-IF '%choice%' == 'no' GOTO START
+set /p push_choice="Confirm push?: "
+IF '%push_choice%' == 'yes'  GOTO PUSH
+IF '%push_choice%' == 'no' GOTO START
 GOTO PUSH _PROMPT
 :PUSH
 git push
