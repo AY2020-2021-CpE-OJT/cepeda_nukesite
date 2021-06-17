@@ -25,33 +25,38 @@ IF '%commit_choice%' == 'no' GOTO START
 GOTO COMMIT_PROMPT
 
 :COMMIT_TRIGGER
-echo ">>>>>>>>>>>>>>>>>COMMITING<<<<<<<<<<<<<<<<<<"
+echo ">>>>>>>>>>>>>>>>> COMMITING <<<<<<<<<<<<<<<<<<"
 set /p message="Enter message: "
 git commit -m "%message%"
+GOTO START
+
+:PUSH_PROMPT
+echo ">>>>>>>>>>>>>>>>> PUSHING <<<<<<<<<<<<<<<<<<"
+git status
+set /p push_choice="Confirm push?: "
+IF '%push_choice%' == 'yes' GOTO PUSH_TRIGGER
+IF '%push_choice%' == 'no' GOTO START
+GOTO PUSH_PROMPT
+
+:PUSH_TRIGGER
+git push
 GOTO START
 
 
 :TEST
 
 :FULL_RESET
+echo ">>>>>>>>>>>>>>>>> RESETTING <<<<<<<<<<<<<<<<<<"
 git reset
 GOTO START
 :LOG
+echo ">>>>>>>>>>>>>>>>> LOG <<<<<<<<<<<<<<<<<<"
 git log
 GOTO START
 
 :STATUS
+echo ">>>>>>>>>>>>>>>>> STATUS <<<<<<<<<<<<<<<<<<"
 git status
-GOTO START
-
-:PUSH _PROMPT
-git status
-set /p push_choice="Confirm push?: "
-IF '%push_choice%' == 'yes'  GOTO PUSH
-IF '%push_choice%' == 'no' GOTO START
-GOTO PUSH _PROMPT
-:PUSH
-git push
 GOTO START
 
 :EXIT
