@@ -21,6 +21,7 @@
 <> branching realities
 <> skipping savepoints
 <> delete branches (pruning?)
+<> new rollback lead : rev-list
 <> figure out a way to stabilise the internet
 <> finish and formalise draft
 <> build research documents
