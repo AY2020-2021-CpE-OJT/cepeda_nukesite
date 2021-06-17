@@ -11,7 +11,7 @@ IF '%command%' == 'full_reset' GOTO FULL_RESET
 IF '%command%' == 'log' GOTO LOG
 IF '%command%' == 'status' GOTO STATUS
 IF '%command%' == 'test' GOTO TEST
-IF '%command%' == 'push' GOTO PUSH
+IF '%command%' == 'push' GOTO PUSH_PROMPT
 IF '%command%' == 'cls' CLS
 GOTO START
 
@@ -44,12 +44,14 @@ GOTO START
 :STATUS
 git status
 GOTO START
-:PUSH
-git status
+
 :PUSH _PROMPT
+git status
 set /p choice="Confirm push?: "
-IF '%choice%' == 'yes' git push
+IF '%choice%' == 'yes'  GOTO PUSH
 IF '%choice%' == 'no' GOTO START
 GOTO PUSH _PROMPT
+:PUSH
+git push
 
 :EXIT
