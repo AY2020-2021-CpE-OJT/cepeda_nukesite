@@ -1,0 +1,3 @@
+- "git revert  <commit_id>" only rollbacks to previous commit, otherwise merging error
+- for skipping use "git reset --hard <commit_id>"
+- for rolling back uncommited change use "git checkout -- <file>"
