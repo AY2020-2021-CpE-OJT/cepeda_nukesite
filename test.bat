@@ -1,20 +1,36 @@
 :START
 @echo off
 :START
-set /p command="Enter command: "
+set /p command="<--------------CLI--------------> ENTER COMMAND: "
 IF '%command%' == 'exit' GOTO EXIT
+
 IF '%command%' == 'add' GOTO ADD
+
 IF '%command%' == 'commit' GOTO COMMIT_PROMPT
 IF '%command%' == 'force_commit' GOTO COMMIT_TRIGGER
+IF '%command%' == 'force_comm' GOTO COMMIT_TRIGGER
+
+IF '%command%' == 'fc' GOTO PUSH_TRIGGER
+
 rem IF '%command%' == 'full_update' GOTO FULL_UPDATE
+
 IF '%command%' == 'full_reset' GOTO FULL_RESET
+
 IF '%command%' == 'log' GOTO LOG
+
 IF '%command%' == 'status' GOTO STATUS
+IF '%command%' == 'stat' GOTO STATUS
+
 IF '%command%' == 'test' GOTO TEST
+
 IF '%command%' == 'push' GOTO PUSH_PROMPT
 IF '%command%' == 'force_push' GOTO PUSH_TRIGGER
+IF '%command%' == 'fpush' GOTO PUSH_TRIGGER
+
 IF '%command%' == 'pull' GOTO PULL_PROMPT
 IF '%command%' == 'force_pull' GOTO PULL_TRIGGER
+IF '%command%' == 'fpull' GOTO PULL_TRIGGER
+
 IF '%command%' == 'fetch' GOTO FETCH
 IF '%command%' == 'cls' CLS
 GOTO START
