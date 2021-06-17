@@ -3,11 +3,11 @@
 6PM - 6/16/21: This is a readme file, please update later.
 #TO DO
 #MAIN
-</> git add
+</> git add 
 </> git commit
 </> git push
 </> git clone
-<> fork
+</> fork
 </> git fetch
 </> git pull
 </> git merge
@@ -17,6 +17,7 @@
 </> git checkout
 #PROBLEMS
 </> switching branches
+<> branching realities
 <> delete branches (pruning?)
 #SUB
 <> pre-requisites
