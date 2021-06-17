@@ -8,10 +8,10 @@
 </> git push
 </> git clone
 <> fork
-<> git fetch
-<> git pull
-<> git merge
-<> rollback
+</> git fetch
+</> git pull
+</> git merge
+</> rollback
 </> git revert
 </> git reset
 </> git checkout
