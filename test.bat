@@ -45,6 +45,7 @@ IF '%push_choice%' == 'no' GOTO START
 GOTO PUSH_PROMPT
 
 :PUSH_TRIGGER
+echo ">>>>>>>>>>>>>>>>> UPLOADING<<<<<<<<<<<<<<<<<<"
 git push
 GOTO START
 
@@ -62,6 +63,7 @@ IF '%pull_choice%' == 'no' GOTO START
 GOTO PUSH_PROMPT
 
 :PULL_TRIGGER
+echo ">>>>>>>>>>>>>>>>> DOWNLOADING <<<<<<<<<<<<<<<<<<"
 git pull
 GOTO START
 
