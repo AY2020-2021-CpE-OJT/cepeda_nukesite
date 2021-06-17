@@ -2,7 +2,7 @@
 @echo off
  set tick=0
  echo %tick%
-:AFT _NIT
+:START
 set /p command="Enter command: "
 IF '%command%' == 'exit' GOTO EXIT
 IF '%command%' == 'add' GOTO ADD
@@ -23,34 +23,33 @@ echo adding
 :COMMIT_PROMPT
 set /p choice="Would you like to commit?: "
 IF '%choice%' == 'yes' GOTO COMMIT_TRIGGER
-IF '%choice%' == 'no' GOTO AFT _NIT
+IF '%choice%' == 'no' GOTO START
 GOTO COMMIT_PROMPT
 
 :COMMIT_TRIGGER
 set /p message="Enter message: "
 git commit -m "%message%"
-git log
-GOTO AFT _NIT
+GOTO START
 
 
 :TEST
 
 :FULL_RESET
 git reset
-GOTO AFT _NIT
+GOTO START
 :LOG
 git log
-GOTO AFT _NIT
+GOTO START
 
 :STATUS
 git status
-GOTO AFT _NIT
+GOTO START
 :PUSH
 git status
 :PUSH _PROMPT
 set /p choice="Confirm push?: "
 IF '%choice%' == 'yes' git push
-IF '%choice%' == 'no' GOTO AFT _NIT
+IF '%choice%' == 'no' GOTO START
 GOTO PUSH _PROMPT
 git push
 
