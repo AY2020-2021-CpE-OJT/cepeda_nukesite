@@ -20,6 +20,7 @@
 <> branching realities
 <> skipping savepoints
 <> delete branches (pruning?)
+<> figure out a way to stabilise the internet
 #SUB
 <> pre-requisites
 <> 
