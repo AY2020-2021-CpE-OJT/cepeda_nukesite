@@ -21,6 +21,7 @@ rem IF '%command%' == 'full_update' GOTO FULL_UPDATE
 IF '%command%' == 'reset' GOTO BASE_RESET
 IF '%command%' == 'undo' GOTO BASE_UNDO
 IF '%command%' == 'undo_all' GOTO BASE_UNDO_ALL
+IF '%command%' == 'revert' GOTO BASE_REVERT
 
 IF '%command%' == 'log' GOTO LOG
 
@@ -69,6 +70,7 @@ git status
 :COMMIT_PROMPT
 echo.
 set /p commit_choice="Would you like to commit?: "
+
 IF '%commit_choice%' == 'yes' GOTO COMMIT_TRIGGER
 IF '%commit_choice%' == 'no' GOTO START
 GOTO COMMIT_PROMPT
@@ -217,6 +219,15 @@ GOTO START
 echo.
 echo ">>>>>>>>>>>>>>>>> UNDO ALL <<<<<<<<<<<<<<<<<<"
 git checkout -- .
+GOTO START
+
+:BASE_REVERT
+echo.
+echo ">>>>>>>>>>>>>>>>> REVERT <<<<<<<<<<<<<<<<<<"
+git log
+echo.
+set /p revert_id="Revert to (ID): "
+git revert %revert_id%
 GOTO START
 
 :LOG
