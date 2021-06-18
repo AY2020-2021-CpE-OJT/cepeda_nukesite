@@ -19,6 +19,8 @@ IF '%command%' == 'fc' GOTO PUSH_TRIGGER
 rem IF '%command%' == 'full_update' GOTO FULL_UPDATE
 
 IF '%command%' == 'reset' GOTO BASE_RESET
+IF '%command%' == 'hard_reset' GOTO HARD_RESET
+
 IF '%command%' == 'undo' GOTO BASE_UNDO
 IF '%command%' == 'undo_all' GOTO BASE_UNDO_ALL
 IF '%command%' == 'revert' GOTO BASE_REVERT
