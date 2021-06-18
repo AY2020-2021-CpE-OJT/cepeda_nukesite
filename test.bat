@@ -18,7 +18,7 @@ IF '%command%' == 'fc' GOTO PUSH_TRIGGER
 
 rem IF '%command%' == 'full_update' GOTO FULL_UPDATE
 
-IF '%command%' == 'full_reset' GOTO FULL_RESET
+IF '%command%' == 'reset' GOTO BASE_RESET
 
 IF '%command%' == 'log' GOTO LOG
 
@@ -198,7 +198,7 @@ echo.
 echo ">>>>>>>>>>>>>>>>> TESTING <<<<<<<<<<<<<<<<<<"
 GOTO START
 
-:FULL_RESET
+:BASE_RESET
 echo.
 echo ">>>>>>>>>>>>>>>>> RESETTING <<<<<<<<<<<<<<<<<<"
 git reset
