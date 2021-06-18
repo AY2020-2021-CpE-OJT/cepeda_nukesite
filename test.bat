@@ -3,6 +3,7 @@
 :START
 echo.
 set /p command="<--------------CLI--------------> ENTER COMMAND: "
+
 IF '%command%' == 'exit' GOTO EXIT
 
 IF '%command%' == 'add' GOTO ADD
@@ -33,6 +34,9 @@ IF '%command%' == 'force_pull' GOTO PULL_TRIGGER
 IF '%command%' == 'fpull' GOTO PULL_TRIGGER
 
 IF '%command%' == 'fetch' GOTO FETCH
+
+IF '%command%' == 'rs_nukesite' GOTO REMOTE_SET_NUKESITE
+
 IF '%command%' == 'cls' CLS
 GOTO START
 
@@ -99,14 +103,43 @@ set /p clone_link="Enter url: "
 git clone %clone_link%
 GOTO START
 
-:REMOTE_SET
+:REMOTE_SET_CUSTOM
 echo.
 echo ">>>>>>>>>>>>>>>>> REMOTE-SET <<<<<<<<<<<<<<<<<<"
 set /p clone_link="Enter url: "
-git clone %clone_link%
+git remote add origin %clone_link%
 GOTO START
 
-:DEF_REMOTE
+:REMOTE_SET_SCHOOL
+echo.
+echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL REMOTE <<<<<<<<<<<<<<<<<<"
+git remote add origin https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git
+GOTO START
+
+:REMOTE_SET_SP_MIRROR
+echo.
+echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL-PERSONAL MIRROR REMOTE <<<<<<<<<<<<<<<<<<"
+git remote add origin https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git
+GOTO START
+
+:REMOTE_SET_NUKESITE
+git remote remove origin
+echo.
+echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT NUKESITE REMOTE <<<<<<<<<<<<<<<<<<"
+git remote add origin https://github.com/KaiEzeckai22/nukesite.git
+GOTO START
+
+:CHECK_BRANCHES
+echo.
+echo ">>>>>>>>>>>>>>>>> CHECKING BRANCHES <<<<<<<<<<<<<<<<<<"
+git branch
+GOTO START
+
+:CHECK_REMOTE_BRANCHES
+echo.
+echo ">>>>>>>>>>>>>>>>> CHECKING BRANCHES <<<<<<<<<<<<<<<<<<"
+git branch -r
+GOTO START
 
 :TEST
 echo.
