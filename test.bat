@@ -7,6 +7,8 @@ set /p command="<--------------CLI--------------> ENTER COMMAND: "
 IF '%command%' == 'exit' GOTO EXIT
 
 IF '%command%' == 'add' GOTO ADD
+IF '%command%' == 'add_file' GOTO ADD_FILE
+
 
 IF '%command%' == 'commit' GOTO COMMIT_PROMPT
 IF '%command%' == 'force_commit' GOTO COMMIT_TRIGGER
@@ -47,6 +49,14 @@ IF '%command%' == 'new_branch' GOTO NEW_BRANCH
 
 IF '%command%' == 'cls' CLS
 GOTO START
+
+:ADD_FILE
+echo.
+echo ">>>>>>>>>>>>>>>>> ADDING <<<<<<<<<<<<<<<<<<"
+set /p file_to_add="Enter file name: "
+git add %file_to_add%
+git status
+GOTO COMMIT_PROMPT
 
 :ADD
 echo.
