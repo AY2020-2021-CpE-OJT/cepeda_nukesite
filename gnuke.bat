@@ -1,8 +1,9 @@
 @echo off
+TITLE Gnuke
 :START
 echo.
-set /p command="<--------------CLI--------------> ENTER COMMAND: "
-
+echo [4;104;97m                                 GNUKE CLI                                 [0m
+set /p command="Enter command: "
 IF '%command%' == 'exit' GOTO EXIT
 
 IF '%command%' == 'init' GOTO GIT_INIT
