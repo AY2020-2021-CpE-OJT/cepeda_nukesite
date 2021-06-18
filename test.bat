@@ -208,6 +208,15 @@ echo ">>>>>>>>>>>>>>>>> RESETTING <<<<<<<<<<<<<<<<<<"
 git reset
 GOTO START
 
+:HARD_RESET
+echo.
+echo ">>>>>>>>>>>>>>>>> HARD RESET <<<<<<<<<<<<<<<<<<"
+git log
+echo.
+set /p hard_reset_id="Revert to (ID): "
+git reset  --hard%hard_reset_id%
+GOTO START
+
 :BASE_UNDO
 echo.
 echo ">>>>>>>>>>>>>>>>> UNDO <<<<<<<<<<<<<<<<<<"
