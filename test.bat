@@ -8,7 +8,7 @@ IF '%command%' == 'exit' GOTO EXIT
 
 IF '%command%' == 'add' GOTO ADD
 IF '%command%' == 'add_file' GOTO ADD_FILE
-
+IF '%command%' == 'addf' GOTO ADD_FILE
 
 IF '%command%' == 'commit' GOTO COMMIT_PROMPT
 IF '%command%' == 'force_commit' GOTO COMMIT_TRIGGER
@@ -19,6 +19,8 @@ IF '%command%' == 'fc' GOTO PUSH_TRIGGER
 rem IF '%command%' == 'full_update' GOTO FULL_UPDATE
 
 IF '%command%' == 'reset' GOTO BASE_RESET
+IF '%command%' == 'undo' GOTO BASE_UNDO
+IF '%command%' == 'undo_all' GOTO BASE_UNDO
 
 IF '%command%' == 'log' GOTO LOG
 
@@ -116,7 +118,7 @@ GOTO START
 
 :CLONE
 echo.
-echo ">>>>>>>>>>>>>>>>> DOWNLOADING <<<<<<<<<<<<<<<<<<"
+echo ">>>>>>>>>>>>>>>>> CLONING <<<<<<<<<<<<<<<<<<"
 set /p clone_link="Enter url: "
 git clone %clone_link%
 GOTO START
@@ -203,6 +205,14 @@ echo.
 echo ">>>>>>>>>>>>>>>>> RESETTING <<<<<<<<<<<<<<<<<<"
 git reset
 GOTO START
+
+:BASE_UNDO
+echo.
+echo ">>>>>>>>>>>>>>>>> UNDO <<<<<<<<<<<<<<<<<<"
+set /p file_to_undo="Undo changes to: "
+git checkout -- %file_to_undo%
+GOTO START
+
 :LOG
 echo.
 echo ">>>>>>>>>>>>>>>>> LOG <<<<<<<<<<<<<<<<<<"
