@@ -36,6 +36,8 @@ IF '%command%' == 'fpull' GOTO PULL_TRIGGER
 IF '%command%' == 'fetch' GOTO FETCH
 
 IF '%command%' == 'rs_nukesite' GOTO REMOTE_SET_NUKESITE
+IF '%command%' == 'rs_school' GOTO REMOTE_SET_SCHOOL
+IF '%command%' == 'rs_school_mirror' GOTO REMOTE_SET_SP_MIRROR
 
 IF '%command%' == 'branch' GOTO CHECK_BRANCHES
 IF '%command%' == 'rbranch' GOTO CHECK_REMOTE_BRANCHES
@@ -109,34 +111,6 @@ set /p clone_link="Enter url: "
 git clone %clone_link%
 GOTO START
 
-:REMOTE_SET_CUSTOM
-echo.
-echo ">>>>>>>>>>>>>>>>> REMOTE-SET <<<<<<<<<<<<<<<<<<"
-set /p clone_link="Enter url: "
-git remote add origin %clone_link%
-GOTO START
-
-:REMOTE_SET_SCHOOL
-echo.
-echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL REMOTE <<<<<<<<<<<<<<<<<<"
-git remote add origin https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git
-git push --set-upstream origin main
-GOTO START
-
-:REMOTE_SET_SP_MIRROR
-echo.
-echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL-PERSONAL MIRROR REMOTE <<<<<<<<<<<<<<<<<<"
-git remote add origin https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git
-git push --set-upstream origin main
-GOTO START
-
-:REMOTE_SET_NUKESITE
-git remote remove origin
-echo.
-echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT NUKESITE REMOTE <<<<<<<<<<<<<<<<<<"
-git remote add origin https://github.com/KaiEzeckai22/nukesite.git
-GOTO START
-
 :CHECK_BRANCHES
 echo.
 echo ">>>>>>>>>>>>>>>>> CHECKING BRANCHES <<<<<<<<<<<<<<<<<<"
@@ -165,6 +139,48 @@ set /p branch_new="Enter branch name: "
 git checkout -b %branch_new%
 echo.
 git branch
+GOTO START
+
+:REMOTE_SET_CUSTOM
+echo.
+echo ">>>>>>>>>>>>>>>>> REMOTE-SET <<<<<<<<<<<<<<<<<<"
+set /p clone_link="Enter url: "
+git remote add origin %clone_link%
+GOTO START
+
+:REMOTE_SET_SCHOOL
+git remote remove origin
+echo.
+echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL REMOTE <<<<<<<<<<<<<<<<<<"
+git remote add origin https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git
+echo.
+git branch
+echo.
+set /p branch_transfer="Which branch?: "
+git checkout %branch_transfer%
+echo.
+git push --set-upstream origin %branch_transfer%
+GOTO START
+
+:REMOTE_SET_SP_MIRROR
+git remote remove origin
+echo.
+echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL-PERSONAL MIRROR REMOTE <<<<<<<<<<<<<<<<<<"
+git remote add origin https://github.com/KaiEzeckai22/school_mirror.git
+echo.
+git branch
+echo.
+set /p branch_transfer="Which branch?: "
+git checkout %branch_transfer%
+echo.
+git push --set-upstream origin %branch_transfer%
+GOTO START
+
+:REMOTE_SET_NUKESITE
+git remote remove origin
+echo.
+echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT NUKESITE REMOTE <<<<<<<<<<<<<<<<<<"
+git remote add origin https://github.com/KaiEzeckai22/nukesite.git
 GOTO START
 
 :TEST
