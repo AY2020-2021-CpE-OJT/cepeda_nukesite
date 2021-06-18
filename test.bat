@@ -1,6 +1,7 @@
 :START
 @echo off
 :START
+echo.
 set /p command="<--------------CLI--------------> ENTER COMMAND: "
 IF '%command%' == 'exit' GOTO EXIT
 
@@ -36,23 +37,27 @@ IF '%command%' == 'cls' CLS
 GOTO START
 
 :ADD
+echo.
 echo ">>>>>>>>>>>>>>>>> ADDING <<<<<<<<<<<<<<<<<<"
 git add .
 git status
 
 :COMMIT_PROMPT
+echo.
 set /p commit_choice="Would you like to commit?: "
 IF '%commit_choice%' == 'yes' GOTO COMMIT_TRIGGER
 IF '%commit_choice%' == 'no' GOTO START
 GOTO COMMIT_PROMPT
 
 :COMMIT_TRIGGER
+echo.
 echo ">>>>>>>>>>>>>>>>> COMMITING <<<<<<<<<<<<<<<<<<"
 set /p message="Enter message: "
 git commit -m "%message%"
 GOTO START
 
 :PUSH_PROMPT
+echo.
 echo ">>>>>>>>>>>>>>>>> PUSHING <<<<<<<<<<<<<<<<<<"
 git status
 set /p push_choice="Confirm push?: "
@@ -61,16 +66,19 @@ IF '%push_choice%' == 'no' GOTO START
 GOTO PUSH_PROMPT
 
 :PUSH_TRIGGER
+echo.
 echo ">>>>>>>>>>>>>>>>> UPLOADING<<<<<<<<<<<<<<<<<<"
 git push
 GOTO START
 
 :FETCH
+echo.
 echo ">>>>>>>>>>>>>>>>> FETCHING <<<<<<<<<<<<<<<<<<"
 git fetch
 GOTO START
 
 :PULL_PROMPT
+echo.
 echo ">>>>>>>>>>>>>>>>> PULLING <<<<<<<<<<<<<<<<<<"
 git status
 set /p pull_choice="Confirm pull?: "
@@ -79,22 +87,45 @@ IF '%pull_choice%' == 'no' GOTO START
 GOTO PUSH_PROMPT
 
 :PULL_TRIGGER
+echo.
 echo ">>>>>>>>>>>>>>>>> DOWNLOADING <<<<<<<<<<<<<<<<<<"
 git pull
 GOTO START
 
+:CLONE
+echo.
+echo ">>>>>>>>>>>>>>>>> DOWNLOADING <<<<<<<<<<<<<<<<<<"
+set /p clone_link="Enter url: "
+git clone %clone_link%
+GOTO START
+
+:REMOTE_SET
+echo.
+echo ">>>>>>>>>>>>>>>>> REMOTE-SET <<<<<<<<<<<<<<<<<<"
+set /p clone_link="Enter url: "
+git clone %clone_link%
+GOTO START
+
+:DEF_REMOTE
+
 :TEST
+echo.
+echo ">>>>>>>>>>>>>>>>> TESTING <<<<<<<<<<<<<<<<<<"
+GOTO START
 
 :FULL_RESET
+echo.
 echo ">>>>>>>>>>>>>>>>> RESETTING <<<<<<<<<<<<<<<<<<"
 git reset
 GOTO START
 :LOG
+echo.
 echo ">>>>>>>>>>>>>>>>> LOG <<<<<<<<<<<<<<<<<<"
 git log
 GOTO START
 
 :STATUS
+echo.
 echo ">>>>>>>>>>>>>>>>> STATUS <<<<<<<<<<<<<<<<<<"
 git status
 GOTO START
