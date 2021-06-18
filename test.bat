@@ -37,6 +37,12 @@ IF '%command%' == 'fetch' GOTO FETCH
 
 IF '%command%' == 'rs_nukesite' GOTO REMOTE_SET_NUKESITE
 
+IF '%command%' == 'branch' GOTO CHECK_BRANCHES
+IF '%command%' == 'rbranch' GOTO CHECK_REMOTE_BRANCHES
+
+IF '%command%' == 'set_branch' GOTO SET_BRANCH
+IF '%command%' == 'new_branch' GOTO NEW_BRANCH
+
 IF '%command%' == 'cls' CLS
 GOTO START
 
@@ -114,12 +120,14 @@ GOTO START
 echo.
 echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL REMOTE <<<<<<<<<<<<<<<<<<"
 git remote add origin https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git
+git push --set-upstream origin main
 GOTO START
 
 :REMOTE_SET_SP_MIRROR
 echo.
 echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL-PERSONAL MIRROR REMOTE <<<<<<<<<<<<<<<<<<"
 git remote add origin https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git
+git push --set-upstream origin main
 GOTO START
 
 :REMOTE_SET_NUKESITE
@@ -137,8 +145,26 @@ GOTO START
 
 :CHECK_REMOTE_BRANCHES
 echo.
-echo ">>>>>>>>>>>>>>>>> CHECKING BRANCHES <<<<<<<<<<<<<<<<<<"
+echo ">>>>>>>>>>>>>>>>> CHECKING REMOTE BRANCHES <<<<<<<<<<<<<<<<<<"
 git branch -r
+GOTO START
+
+:SET_BRANCH
+echo.
+echo ">>>>>>>>>>>>>>>>> SETTING BRANCH <<<<<<<<<<<<<<<<<<"
+git branch
+echo.
+set /p branch_transfer="Enter branch name: "
+git checkout %branch_transfer%
+GOTO START
+
+: NEW_BRANCH
+echo.
+echo ">>>>>>>>>>>>>>>>> NEW BRANCH <<<<<<<<<<<<<<<<<<"
+set /p branch_new="Enter branch name: "
+git checkout -b %branch_new%
+echo.
+git branch
 GOTO START
 
 :TEST
