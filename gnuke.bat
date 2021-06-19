@@ -266,7 +266,7 @@ echo.
 echo [4;104;30m                        REMOTE SHOW URL                  [0m
 git remote show
 echo FROM: 
-git remote get-url --all origin
+git remote get-url --all originsta
 echo.
 
 GOTO START
@@ -288,7 +288,7 @@ git remote add origin %custom_remote_link%
 echo.
 git branch
 echo.
-set  /p  branch-transfer="[4;104;30m WHICH BRANCH? [0m "
+set  /p  branch_transfer="[4;104;30m WHICH BRANCH? [0m "
 git checkout %branch_transfer%
 echo.
 git push --set-upstream origin %branch_transfer%
@@ -302,7 +302,7 @@ git remote add origin %remote_school%
 echo.
 git branch
 echo.
-set  /p  branch-transfer="[4;104;30m WHICH BRANCH? [0m "
+set  /p  branch__transfer="[4;104;30m WHICH BRANCH? [0m "
 git checkout %branch_transfer%
 echo.
 git push --set-upstream origin %branch_transfer%
