@@ -58,6 +58,12 @@ IF '%command%' == 'rbranch' GOTO CHECK_REMOTE_BRANCHES
 
 IF '%command%' == 'set_branch' GOTO SET_BRANCH
 IF '%command%' == 'new_branch' GOTO NEW_BRANCH
+IF '%command%' == 'delete_branch' GOTO DELETE_BRANCH
+IF '%command%' == 'branch_delete' GOTO DELETE_BRANCH
+IF '%command%' == 'chop' GOTO DELETE_BRANCH
+IF '%command%' == 'diverge' GOTO BRANCH_OUT
+IF '%command%' == 'variate' GOTO BRANCH_OUT
+IF '%command%' == 'split' GOTO BRANCH_OUT
 IF '%command%' == 'merge' GOTO BASE_MERGE
 
 IF '%command%' == 'custom_command' GOTO CUSTOM_COMMAND
@@ -208,6 +214,27 @@ set  /p  branch_new="[4;104;30m BRANCH NAME? [0m "
 git checkout -b %branch_new%
 echo.
 git branch
+GOTO START
+
+: BRANCH_OUT
+echo.
+echo [4;104;30m                       VARIATE BRANCH                    [0m
+set  /p  variance_brance="[4;104;30m As <branch_name>:  [0m "
+git branch -c %variance_brance%
+echo.
+echo CURRENTLY:
+git checkout %variance_brance%
+git branch 
+GOTO START
+
+: DELETE_BRANCH
+echo.
+git branch 
+echo.
+echo [4;104;30m                       DELETE BRANCH                     [0m
+set  /p  branch_to_delete="[4;104;30m WHICH BRANCH:  [0m "
+git branch -d %branch_to_delete%
+echo.
 GOTO START
 
 :BASE_MERGE
