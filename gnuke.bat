@@ -6,8 +6,10 @@ set remote_school="https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git"
 
 :START
 echo.
-echo [4;104;97m                                 GNUKE CLI                                 [0m
-set /p command="Enter command: "
+echo [4;43;97m                        GNUKE CLI                        [0m
+set  /p  command="[4;104;30m ENTER COMMAND [0m "
+
+IF '%command%' == 'res' GOTO START
 IF '%command%' == 'exit' GOTO EXIT
 
 IF '%command%' == 'init' GOTO GIT_INIT
@@ -67,125 +69,127 @@ GOTO START
 
 :GIT_INIT
 echo.
-echo ">>>>>>>>>>>>>>>>> GIT INIT <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                          INIT                           [0m
 git init
 GOTO START
 
 :ADD_FILE
 echo.
-echo ">>>>>>>>>>>>>>>>> ADDING <<<<<<<<<<<<<<<<<<"
-set /p file_to_add="Enter file name: "
+echo [4;104;30m                        ADDING FILE                      [0m
+set  /p  file_to_add="[4;104;30m ENTER FILE NAME [0m "
+echo.
 git add %file_to_add%
 git status
 GOTO COMMIT_PROMPT
 
 :ADD
 echo.
-echo ">>>>>>>>>>>>>>>>> ADDING <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        ADDING                           [0m
 git add .
+echo.
 git status
 
 :COMMIT_PROMPT
 echo.
-set /p commit_choice="Would you like to commit?: "
-
+set  /p  commit_choice="[4;104;30m Would you like to commit? [0m "
 IF '%commit_choice%' == 'yes' GOTO COMMIT_TRIGGER
 IF '%commit_choice%' == 'no' GOTO START
 GOTO COMMIT_PROMPT
 
 :COMMIT_TRIGGER
 echo.
-echo ">>>>>>>>>>>>>>>>> COMMITING <<<<<<<<<<<<<<<<<<"
-set /p message="Enter message: "
+echo [4;104;30m                        COMMITING                        [0m
+set  /p  message="[4;104;30m Enter message: [0m "
 git commit -m "%message%"
 GOTO START
 
 :PUSH_PROMPT
 echo.
-echo ">>>>>>>>>>>>>>>>> PUSHING <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        PUSHING                          [0m
 git status
-set /p push_choice="Confirm push?: "
+set  /p  push_choice="[4;104;30m Confirm Push? [0m "
 IF '%push_choice%' == 'yes' GOTO PUSH_TRIGGER
 IF '%push_choice%' == 'no' GOTO START
 GOTO PUSH_PROMPT
 
 :PUSH_TRIGGER
 echo.
-echo ">>>>>>>>>>>>>>>>> UPLOADING<<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        UPLOADING                        [0m
 git push
 GOTO START
 
 :FETCH
 echo.
-echo ">>>>>>>>>>>>>>>>> FETCHING <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        FETCHING                         [0m
 git fetch
 GOTO START
 
 :PULL_PROMPT
 echo.
-echo ">>>>>>>>>>>>>>>>> PULLING <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        PULLING                          [0m
 git status
-set /p pull_choice="Confirm pull?: "
+set  /p  pull_choice="[4;104;30m Confirm Pull? [0m "
 IF '%pull_choice%' == 'yes' GOTO PULL_TRIGGER
 IF '%pull_choice%' == 'no' GOTO START
 GOTO PUSH_PROMPT
 
 :PULL_TRIGGER
 echo.
-echo ">>>>>>>>>>>>>>>>> DOWNLOADING <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        DOWNLOADING                      [0m
 git pull
 GOTO START
 
 :CLONE
 echo.
-echo ">>>>>>>>>>>>>>>>> CLONING <<<<<<<<<<<<<<<<<<"
-set /p clone_link="Enter url: "
+echo [4;104;30m                        CLONING                           [0m
+set  /p  clone_link="[4;104;30m Enter URL: [0m "
 git clone %clone_link%
 GOTO START
 
 :CHECK_BRANCHES
 echo.
-echo ">>>>>>>>>>>>>>>>> CHECKING BRANCHES <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        CHECK BRANCHES                   [0m
 git branch
 GOTO START
 
 :CHECK_REMOTE_BRANCHES
 echo.
-echo ">>>>>>>>>>>>>>>>> CHECKING REMOTE BRANCHES <<<<<<<<<<<<<<<<<<"
-git branch -r
+echo [4;104;30m                        CHECK REMOTE BRANCHES            [0m
+git branch _r
 GOTO START
 
 :SET_BRANCH
 echo.
-echo ">>>>>>>>>>>>>>>>> SETTING BRANCH <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        SET LOCAL BRANCH                 [0m
 git branch
 echo.
-set /p branch_transfer="Enter branch name: "
+set  /p  branch_transfer="[4;104;30mEnter branch name: [0m "
 git checkout %branch_transfer%
 GOTO START
 
+rem YOU ARE CURRENTLY EDITING HERE
 : NEW_BRANCH
 echo.
 echo ">>>>>>>>>>>>>>>>> NEW BRANCH <<<<<<<<<<<<<<<<<<"
-set /p branch_new="Enter branch name: "
-git checkout -b %branch_new%
+set  /p  branch_new="[4;104;30m WHICH BRANCH? [0m "
+git checkout _b %branch_new%
 echo.
 git branch
 GOTO START
 
 :REMOTE_SHOW
 echo.
-echo ">>>>>>>>>>>>>>>>> REMOTE SHOW - URL<<<<<<<<<<<<<<<<<<"
+echo ">>>>>>>>>>>>>>>>> REMOTE SHOW _ URL<<<<<<<<<<<<<<<<<<"
 git remote show
 echo FROM: 
-git remote get-url --all origin
+git remote get_url --all origin
 echo.
 
 GOTO START
 
 :REMOTE_SET_CUSTOM
 echo.
-echo ">>>>>>>>>>>>>>>>> REMOTE-SET <<<<<<<<<<<<<<<<<<"
+echo ">>>>>>>>>>>>>>>>> REMOTE_SET <<<<<<<<<<<<<<<<<<"
 set /p clone_link="Enter url: "
 git remote add origin %clone_link%
 GOTO START
@@ -198,24 +202,24 @@ git remote add origin %remote_school%
 echo.
 git branch
 echo.
-set /p branch_transfer="Which branch?: "
+set  /p  branch_transfer="[4;104;30m WHICH BRANCH? [0m "
 git checkout %branch_transfer%
 echo.
-git push --set-upstream origin %branch_transfer%
+git push --set_upstream origin %branch_transfer%
 GOTO START
 
 :REMOTE_SET_SP_MIRROR
 git remote remove origin
 echo.
-echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL-PERSONAL MIRROR REMOTE <<<<<<<<<<<<<<<<<<"
+echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL_PERSONAL MIRROR REMOTE <<<<<<<<<<<<<<<<<<"
 git remote add origin %remote_school_mirror%
 echo.
 git branch
 echo.
-set /p branch_transfer="Which branch?: "
+set  /p  branch_transfer="[4;104;30m WHICH BRANCH? [0m "
 git checkout %branch_transfer%
 echo.
-git push --set-upstream origin %branch_transfer%
+git push --set_upstream origin %branch_transfer%
 GOTO START
 
 :REMOTE_SET_NUKESITE
@@ -226,23 +230,40 @@ git remote add origin %remote_nuksite%
 echo.
 git branch
 echo.
-set /p branch_transfer="Which branch?: "
+set  /p  branch_transfer="[4;104;30m WHICH BRANCH? [0m "
 git checkout %branch_transfer%
 echo.
-git push --set-upstream origin %branch_transfer%
+git push --set_upstream origin %branch_transfer%
 GOTO START
 
 :TEST
 echo.
-echo ">>>>>>>>>>>>>>>>> TESTING <<<<<<<<<<<<<<<<<<"
+echo [4;40;97m                          TEST                           [0m
+echo [4;41;97m                          TEST                           [0m
+echo [4;42;97m                          TEST                           [0m
+echo [4;43;97m                        GNUKE CLI                        [0m
+echo [4;44;97m                        GNUKE CLI                        [0m
+echo [4;46;97m                          TEST                           [0m
+echo [4;47;97m                          TEST                           [0m
+echo.
+echo [4;100;30m                          TEST                           [0m
+echo [4;101;30m                          TEST                           [0m
+echo [4;102;30m                          TEST                           [0m
+echo [4;103;30m                          TEST                           [0m
+
+echo [4;104;30m                        GNUKE CLI                        [0m
+echo [4;105;30m                          TEST                           [0m
+echo [4;106;30m                          TEST                           [0m
+echo [4;107;30m                          TEST                           [0m
 GOTO START
 
 :CUSTOM_COMMAND
 echo.
-echo ">>>>>>>>>>>>>>>>> CUSTOM <<<<<<<<<<<<<<<<<<"
-set /p custom_command="Enter command: "
+echo [4;104;30m                         CUSTOM                          [0m
+echo.
+set  /p  custom_command="[4;104;30m ENTER COMMAND [0m "
 %custom_command%
-GOTO START
+GOTO START 
 
 :BASE_RESET
 echo.
@@ -289,7 +310,7 @@ GOTO START
 
 :STATUS
 echo.
-echo ">>>>>>>>>>>>>>>>> STATUS <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                         STATUS                          [0m
 git status
 GOTO START
 
