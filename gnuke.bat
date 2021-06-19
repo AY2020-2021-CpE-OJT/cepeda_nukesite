@@ -52,6 +52,8 @@ IF '%command%' == 'rs_nukesite' GOTO REMOTE_SET_NUKESITE
 IF '%command%' == 'rs_school' GOTO REMOTE_SET_SCHOOL
 IF '%command%' == 'rs_school_mirror' GOTO REMOTE_SET_SP_MIRROR
 
+IF '%command%' == 'rshow' GOTO REMOTE_SHOW
+
 IF '%command%' == 'branch' GOTO CHECK_BRANCHES
 IF '%command%' == 'rbranch' GOTO CHECK_REMOTE_BRANCHES
 
@@ -169,6 +171,16 @@ set /p branch_new="Enter branch name: "
 git checkout -b %branch_new%
 echo.
 git branch
+GOTO START
+
+:REMOTE_SHOW
+echo.
+echo ">>>>>>>>>>>>>>>>> REMOTE SHOW - URL<<<<<<<<<<<<<<<<<<"
+git remote show
+echo FROM: 
+git remote get-url --all origin
+echo.
+
 GOTO START
 
 :REMOTE_SET_CUSTOM
