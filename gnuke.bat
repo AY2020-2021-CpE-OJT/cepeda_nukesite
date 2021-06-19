@@ -56,6 +56,7 @@ IF '%command%' == 'rshow' GOTO REMOTE_SHOW
 IF '%command%' == 'branch' GOTO CHECK_BRANCHES
 IF '%command%' == 'rbranch' GOTO CHECK_REMOTE_BRANCHES
 
+IF '%command%' == 'travel' GOTO SET_BRANCH
 IF '%command%' == 'set_branch' GOTO SET_BRANCH
 IF '%command%' == 'new_branch' GOTO NEW_BRANCH
 IF '%command%' == 'delete_branch' GOTO DELETE_BRANCH
@@ -198,6 +199,15 @@ git branch _r
 GOTO START
 
 :SET_BRANCH
+echo.
+echo [4;104;30m                        SET LOCAL BRANCH                 [0m
+git branch
+echo.
+set  /p  branch_transfer="[4;104;30mEnter branch name: [0m "
+git checkout %branch_transfer%
+GOTO START
+
+:FORCE_SET_BRANCH
 echo.
 echo [4;104;30m                        SET LOCAL BRANCH                 [0m
 git branch
