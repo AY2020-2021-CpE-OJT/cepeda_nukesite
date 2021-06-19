@@ -167,51 +167,53 @@ set  /p  branch_transfer="[4;104;30mEnter branch name: [0m "
 git checkout %branch_transfer%
 GOTO START
 
-rem YOU ARE CURRENTLY EDITING HERE
+
 : NEW_BRANCH
 echo.
-echo ">>>>>>>>>>>>>>>>> NEW BRANCH <<<<<<<<<<<<<<<<<<"
-set  /p  branch_new="[4;104;30m WHICH BRANCH? [0m "
-git checkout _b %branch_new%
+echo [4;104;30m                        NEW BRANCH                       [0m
+set  /p  branch_new="[4;104;30m BRANCH NAME? [0m "
+git checkout -b %branch_new%
 echo.
 git branch
 GOTO START
 
+rem YOU ARE CURRENTLY EDITING HERE
 :REMOTE_SHOW
 echo.
-echo ">>>>>>>>>>>>>>>>> REMOTE SHOW _ URL<<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        REMOTE SHOW URL                  [0m
 git remote show
 echo FROM: 
-git remote get_url --all origin
+git remote get-url --all origin
 echo.
 
 GOTO START
 
 :REMOTE_SET_CUSTOM
 echo.
-echo ">>>>>>>>>>>>>>>>> REMOTE_SET <<<<<<<<<<<<<<<<<<"
-set /p clone_link="Enter url: "
+git remote remove origin
+echo [4;104;30m                        REMOTE SET                       [0m
+set  /p  clone_link="[4;104;30m Clone URL [0m "
 git remote add origin %clone_link%
 GOTO START
 
 :REMOTE_SET_SCHOOL
 git remote remove origin
 echo.
-echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL REMOTE <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        SET SCHOOL REMOTE                [0m
 git remote add origin %remote_school%
 echo.
 git branch
 echo.
-set  /p  branch_transfer="[4;104;30m WHICH BRANCH? [0m "
+set  /p  branch-transfer="[4;104;30m WHICH BRANCH? [0m "
 git checkout %branch_transfer%
 echo.
-git push --set_upstream origin %branch_transfer%
+git push --set-upstream origin %branch_transfer%
 GOTO START
 
 :REMOTE_SET_SP_MIRROR
 git remote remove origin
 echo.
-echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL_PERSONAL MIRROR REMOTE <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        SET SCHOOL MIRROR REMOTE         [0m
 git remote add origin %remote_school_mirror%
 echo.
 git branch
@@ -219,21 +221,21 @@ echo.
 set  /p  branch_transfer="[4;104;30m WHICH BRANCH? [0m "
 git checkout %branch_transfer%
 echo.
-git push --set_upstream origin %branch_transfer%
+git push --set-upstream origin %branch_transfer%
 GOTO START
 
 :REMOTE_SET_NUKESITE
 git remote remove origin
 echo.
-echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT NUKESITE REMOTE <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        SET DEFAULT NUKESITE REMOTE      [0m
 git remote add origin %remote_nuksite%
 echo.
 git branch
 echo.
-set  /p  branch_transfer="[4;104;30m WHICH BRANCH? [0m "
+set  /p  branch-transfer="[4;104;30m WHICH BRANCH? [0m "
 git checkout %branch_transfer%
 echo.
-git push --set_upstream origin %branch_transfer%
+git push --set-upstream origin %branch_transfer%
 GOTO START
 
 :TEST
@@ -267,44 +269,44 @@ GOTO START
 
 :BASE_RESET
 echo.
-echo ">>>>>>>>>>>>>>>>> RESETTING <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        RESETTING                        [0m
 git reset
 GOTO START
 
 :HARD_RESET
 echo.
-echo ">>>>>>>>>>>>>>>>> HARD RESET <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        HARD RESET                       [0m
 git log
 echo.
-set /p hard_reset_id="Revert to (ID): "
+set  /p  hard_reset_id="[4;104;30m HARD RESET TO (ID) [0m "
 git reset  --hard %hard_reset_id%
 GOTO START
 
 :BASE_UNDO
 echo.
-echo ">>>>>>>>>>>>>>>>> UNDO <<<<<<<<<<<<<<<<<<"
-set /p file_to_undo="Undo changes to: "
+echo [4;104;30m                        UNDO STAGED                      [0m
+set  /p  file_to_undo="[4;104;30m UNDO CHANGES TO (FILENAME) [0m "
 git checkout -- %file_to_undo%
 GOTO START
 
 :BASE_UNDO_ALL
 echo.
-echo ">>>>>>>>>>>>>>>>> UNDO ALL <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        UNDO ALL STAGED                  [0m
 git checkout -- .
 GOTO START
 
 :BASE_REVERT
 echo.
-echo ">>>>>>>>>>>>>>>>> REVERT <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        REVERTING                       [0m
 git log
 echo.
-set /p revert_id="Revert to (ID): "
+set  /p  revert_id="[4;104;30m REVERT TO (ID) [0m "
 git revert %revert_id%
 GOTO START
 
 :LOG
 echo.
-echo ">>>>>>>>>>>>>>>>> LOG <<<<<<<<<<<<<<<<<<"
+echo [4;104;30m                        LOG                              [0m
 git log
 GOTO START
 
