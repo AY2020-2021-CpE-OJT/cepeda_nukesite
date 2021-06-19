@@ -58,6 +58,7 @@ IF '%command%' == 'rbranch' GOTO CHECK_REMOTE_BRANCHES
 
 IF '%command%' == 'set_branch' GOTO SET_BRANCH
 IF '%command%' == 'new_branch' GOTO NEW_BRANCH
+IF '%command%' == 'merge' GOTO BASE_MERGE
 
 IF '%command%' == 'custom_command' GOTO CUSTOM_COMMAND
 IF '%command%' == 'xcom' GOTO CUSTOM_COMMAND
@@ -65,6 +66,11 @@ IF '%command%' == 'xcom' GOTO CUSTOM_COMMAND
 IF '%command%' == 'cls' CLS
 IF '%command%' == 'test' GOTO TEST
 IF '%command%' == 'ghelp' GOTO GNUKE_HELP
+IF '%command%' == 'nuke_help' GOTO GNUKE_HELP
+IF '%command%' == 'git_help' GOTO GIT_HELP
+IF '%command%' == 'githelp' GOTO GIT_HELP
+IF '%command%' == 'gethelp' GOTO GIT_HELP
+IF '%command%' == 'get_help' GOTO GIT_HELP
 
 
 GOTO START
@@ -201,6 +207,20 @@ set  /p  branch_new="[4;104;30m BRANCH NAME? [0m "
 git checkout -b %branch_new%
 echo.
 git branch
+GOTO START
+
+:BASE_MERGE
+echo.
+echo [4;104;30m                        MERGE BRANCH                     [0m
+echo REMOTE:
+git branch -r
+echo.
+echo LOCAL:
+git branch
+echo.
+set  /p  other_branch="[4;104;30m MERGE WHAT <REMOTE/OTHER BRANCH> : [0m "
+set  /p  with_branch="[4;104;30m WITH WHAT BRANCH? [0m "
+git merge %other_branch%  %with_branch%
 GOTO START
 
 :REMOTE_SHOW
@@ -376,8 +396,13 @@ echo "rs functions = git remote add origin <URL>"
 echo "rs defaults are SCHOOL/SCHOOL_MIRROR/NUKESITE"
 echo "branch/rbranch= git branch /-r"
 echo "custom_command/xcom = direct to command line"
+GOTO START
 
-
+:GIT_HELP
+echo.
+echo [4;104;30m                        GIT HELP                        [0m
+set  /p  help_id="[4;104;30m GET HELP ON? [0m "
+git --help %help_id%
 GOTO START
 
 :EXIT
