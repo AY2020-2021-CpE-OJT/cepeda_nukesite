@@ -92,8 +92,16 @@ git status
 :COMMIT_PROMPT
 echo.
 set  /p  commit_choice="[4;104;30m Would you like to commit? [0m "
+IF '%commit_choice%' == 'YES' GOTO COMMIT_TRIGGER
+IF '%commit_choice%' == 'Yes' GOTO COMMIT_TRIGGER
 IF '%commit_choice%' == 'yes' GOTO COMMIT_TRIGGER
+IF '%commit_choice%' == 'Y' GOTO COMMIT_TRIGGER
+IF '%commit_choice%' == 'y' GOTO COMMIT_TRIGGER
+IF '%commit_choice%' == 'NO' GOTO START
+IF '%commit_choice%' == 'No' GOTO START
 IF '%commit_choice%' == 'no' GOTO START
+IF '%commit_choice%' == 'N' GOTO START
+IF '%commit_choice%' == 'n' GOTO START
 GOTO COMMIT_PROMPT
 
 :COMMIT_TRIGGER
@@ -108,8 +116,16 @@ echo.
 echo [4;104;30m                        PUSHING                          [0m
 git status
 set  /p  push_choice="[4;104;30m Confirm Push? [0m "
-IF '%push_choice%' == 'yes' GOTO PUSH_TRIGGER
+IF '%push_choice%' == 'YES' GOTO  PUSH_TRIGGER
+IF '%push_choice%' == 'Yes' GOTO  PUSH_TRIGGER
+IF '%push_choice%' == 'yes' GOTO  PUSH_TRIGGER
+IF '%push_choice%' == 'Y' GOTO  PUSH_TRIGGER
+IF '%push_choice%' == 'y' GOTO  PUSH_TRIGGER
+IF '%push_choice%' == 'NO' GOTO START
+IF '%push_choice%' == 'No' GOTO START
 IF '%push_choice%' == 'no' GOTO START
+IF '%push_choice%' == 'N' GOTO START
+IF '%push_choice%' == 'n' GOTO START
 GOTO PUSH_PROMPT
 
 :PUSH_TRIGGER
@@ -129,8 +145,16 @@ echo.
 echo [4;104;30m                        PULLING                          [0m
 git status
 set  /p  pull_choice="[4;104;30m Confirm Pull? [0m "
-IF '%pull_choice%' == 'yes' GOTO PULL_TRIGGER
+IF '%pull_choice%' == 'YES' GOTO  PULL_TRIGGER
+IF '%pull_choice%' == 'Yes' GOTO  PULL_TRIGGER
+IF '%pull_choice%' == 'yes' GOTO  PULL_TRIGGER
+IF '%pull_choice%' == 'Y' GOTO  PULL_TRIGGER
+IF '%pull_choice%' == 'y' GOTO  PULL_TRIGGER
+IF '%pull_choice%' == 'NO' GOTO START
+IF '%pull_choice%' == 'No' GOTO START
 IF '%pull_choice%' == 'no' GOTO START
+IF '%pull_choice%' == 'N' GOTO START
+IF '%pull_choice%' == 'n' GOTO START
 GOTO PUSH_PROMPT
 
 :PULL_TRIGGER
