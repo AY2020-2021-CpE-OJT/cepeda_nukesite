@@ -1,5 +1,9 @@
 @echo off
 TITLE Gnuke
+set remote_nukesite="https://github.com/KaiEzeckai22/nukesite.git"
+set remote_school_mirror="https://github.com/KaiEzeckai22/school_mirror.git"
+set remote_school="https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git"
+
 :START
 echo.
 echo [4;104;97m                                 GNUKE CLI                                 [0m
@@ -178,7 +182,7 @@ GOTO START
 git remote remove origin
 echo.
 echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL REMOTE <<<<<<<<<<<<<<<<<<"
-git remote add origin https://github.com/AY2020-2021-CpE-OJT/cepeda_nukesite.git
+git remote add origin %remote_school%
 echo.
 git branch
 echo.
@@ -192,7 +196,7 @@ GOTO START
 git remote remove origin
 echo.
 echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT SCHOOL-PERSONAL MIRROR REMOTE <<<<<<<<<<<<<<<<<<"
-git remote add origin https://github.com/KaiEzeckai22/school_mirror.git
+git remote add origin %remote_school_mirror%
 echo.
 git branch
 echo.
@@ -206,7 +210,14 @@ GOTO START
 git remote remove origin
 echo.
 echo ">>>>>>>>>>>>>>>>> SETTING DEFAULT NUKESITE REMOTE <<<<<<<<<<<<<<<<<<"
-git remote add origin https://github.com/KaiEzeckai22/nukesite.git
+git remote add origin %remote_nuksite%
+echo.
+git branch
+echo.
+set /p branch_transfer="Which branch?: "
+git checkout %branch_transfer%
+echo.
+git push --set-upstream origin %branch_transfer%
 GOTO START
 
 :TEST
