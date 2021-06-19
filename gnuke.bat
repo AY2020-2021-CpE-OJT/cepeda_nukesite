@@ -201,7 +201,6 @@ echo.
 git branch
 GOTO START
 
-rem YOU ARE CURRENTLY EDITING HERE
 :REMOTE_SHOW
 echo.
 echo [4;104;30m                        REMOTE SHOW URL                  [0m
@@ -262,27 +261,6 @@ echo.
 git push --set-upstream origin %branch_transfer%
 GOTO START
 
-:TEST
-echo.
-echo [4;40;97m                          TEST                           [0m
-echo [4;41;97m                          TEST                           [0m
-echo [4;42;97m                          TEST                           [0m
-echo [4;43;97m                        GNUKE CLI                        [0m
-echo [4;44;97m                        GNUKE CLI                        [0m
-echo [4;46;97m                          TEST                           [0m
-echo [4;47;97m                          TEST                           [0m
-echo.
-echo [4;100;30m                          TEST                           [0m
-echo [4;101;30m                          TEST                           [0m
-echo [4;102;30m                          TEST                           [0m
-echo [4;103;30m                          TEST                           [0m
-
-echo [4;104;30m                        GNUKE CLI                        [0m
-echo [4;105;30m                          TEST                           [0m
-echo [4;106;30m                          TEST                           [0m
-echo [4;107;30m                          TEST                           [0m
-GOTO START
-
 :CUSTOM_COMMAND
 echo.
 echo [4;104;30m                         CUSTOM                          [0m
@@ -338,6 +316,27 @@ GOTO START
 echo.
 echo [4;104;30m                         STATUS                          [0m
 git status
+GOTO START
+
+:TEST
+echo.
+echo [4;40;97m                          TEST                           [0m
+echo [4;41;97m                          TEST                           [0m
+echo [4;42;97m                          TEST                           [0m
+echo [4;43;97m                        GNUKE CLI                        [0m
+echo [4;44;97m                        GNUKE CLI                        [0m
+echo [4;46;97m                          TEST                           [0m
+echo [4;47;97m                          TEST                           [0m
+echo.
+echo [4;100;30m                          TEST                           [0m
+echo [4;101;30m                          TEST                           [0m
+echo [4;102;30m                          TEST                           [0m
+echo [4;103;30m                          TEST                           [0m
+
+echo [4;104;30m                        GNUKE CLI                        [0m
+echo [4;105;30m                          TEST                           [0m
+echo [4;106;30m                          TEST                           [0m
+echo [4;107;30m                          TEST                           [0m
 GOTO START
 
 :EXIT
