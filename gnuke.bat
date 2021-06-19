@@ -54,6 +54,8 @@ IF '%command%' == 'rbranch' GOTO CHECK_REMOTE_BRANCHES
 IF '%command%' == 'set_branch' GOTO SET_BRANCH
 IF '%command%' == 'new_branch' GOTO NEW_BRANCH
 
+IF '%command%' == 'custom_command' GOTO CUSTOM_COMMAND
+IF '%command%' == 'xcom' GOTO CUSTOM_COMMAND
 IF '%command%' == 'cls' CLS
 GOTO START
 
@@ -210,6 +212,13 @@ GOTO START
 :TEST
 echo.
 echo ">>>>>>>>>>>>>>>>> TESTING <<<<<<<<<<<<<<<<<<"
+GOTO START
+
+:CUSTOM_COMMAND
+echo.
+echo ">>>>>>>>>>>>>>>>> CUSTOM <<<<<<<<<<<<<<<<<<"
+set /p custom_command="Enter command: "
+%custom_command%
 GOTO START
 
 :BASE_RESET
