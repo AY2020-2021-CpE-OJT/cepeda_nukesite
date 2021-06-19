@@ -65,8 +65,9 @@ IF '%command%' == 'xcom' GOTO CUSTOM_COMMAND
 
 IF '%command%' == 'cls' CLS
 IF '%command%' == 'test' GOTO TEST
-IF '%command%' == 'ghelp' GOTO GNUKE_HELP
+IF '%command%' == 'help' GOTO GNUKE_HELP
 IF '%command%' == 'nuke_help' GOTO GNUKE_HELP
+IF '%command%' == 'ghelp' GOTO GIT_HELP
 IF '%command%' == 'git_help' GOTO GIT_HELP
 IF '%command%' == 'githelp' GOTO GIT_HELP
 IF '%command%' == 'gethelp' GOTO GIT_HELP
