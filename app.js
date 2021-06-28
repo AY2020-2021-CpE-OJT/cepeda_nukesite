@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const app = express();
 
 // <<<<<<<<<<<<<<<< DATABASE >>>>>>>>>>>>>>>>> //
-mongoose.connect('mongodb://localhost/nukesite3', {
+const localHost = 'mongodb://localhost/nukesite3';
+const remoteHost = 'mongodb+srv://nobody:nuke3@local-cluster.ufwwa.mongodb.net/nukeTest';
+mongoose.connect(remoteHost, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
 });
@@ -21,7 +23,7 @@ app.use(bodyParser.json());
 // <<<<<<<<<<<<<<<< ROUTES >>>>>>>>>>>>>>>>> //
 
 app.get('/', (req, res) => {
-	res.send("Hello, World!");
+	res.send("THIS IS VERSION 4");
 });
 
 const reroute = require('./routes/routes');

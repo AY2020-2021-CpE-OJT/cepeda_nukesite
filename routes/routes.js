@@ -36,10 +36,12 @@ router.get('/all', async (req, res) => {
 	const profile = await Profile.find();
 	res.json(profile);
 });
-// <<<<<<<<<<<<<<<< FIND ALL >>>>>>>>>>>>>>>>> //
-router.get('/search/:via', async (req, res) => {
-	const profile = await Profile.find({ user : req.params.via });
-	res.json(profile);
+// <<<<<<<<<<<<<<<< SEARCH NAMES >>>>>>>>>>>>>>>>> //
+router.get('/search/:via', function(req,res){
+    var regex = new RegExp(req.params.via, 'i');  // 'i' makes it case insensitive
+    return Profile.find({user: regex}, function(err,profile){
+        return res.send(profile);
+    });
 });
 
 module.exports = router;
