@@ -7,7 +7,7 @@ const app = express();
 // <<<<<<<<<<<<<<<< DATABASE >>>>>>>>>>>>>>>>> //
 const localHost = 'mongodb://localhost/nukesite3';
 const remoteHost = 'mongodb+srv://nobody:nuke3@local-cluster.ufwwa.mongodb.net/nukeTest';
-mongoose.connect(localHost, {
+mongoose.connect(remoteHost, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
 });
