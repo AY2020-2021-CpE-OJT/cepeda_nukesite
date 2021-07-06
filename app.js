@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const app = express();
-let port = prcess.env.PORT || 2077;
 
 // <<<<<<<<<<<<<<<< DATABASE >>>>>>>>>>>>>>>>> //
 const localHost = 'mongodb://localhost/nukesite3';
@@ -31,6 +30,5 @@ const reroute = require('./routes/routes');
 app.use('/',reroute);
 
 // Starting server
-app.listen(port, () => {
-	console.log("Eavesdropping at Port 2077");
-});
+const port = process.env.PORT || 2077;
+app.listen(port, () => console.log(`Eavesdropping at Port ${port}`));
