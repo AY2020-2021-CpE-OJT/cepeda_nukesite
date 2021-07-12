@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'model/contact.dart';
+import 'modules/add_contact.dart';
 import 'modules/contacts_list.dart';
 
 void main() {
@@ -10,12 +10,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Contacts',
-      theme: ThemeData(
-        primaryColor: Colors.black,
-        primarySwatch: Colors.grey,
-      ),
-      home: ContactList(),
-    );
+        title: 'Contacts',
+        theme: ThemeData(
+          primaryColor: Colors.black,
+          primarySwatch: Colors.grey,
+          fontFamily: 'LexendDeca',
+        ),
+        home: ContactList(),
+        routes: <String, WidgetBuilder>{
+          '/contacts_list': (BuildContext context) => new ContactList(),
+          '/add_contact': (BuildContext context) => new CreateNewContact(),
+        });
   }
 }
