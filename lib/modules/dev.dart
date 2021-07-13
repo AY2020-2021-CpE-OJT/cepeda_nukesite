@@ -9,7 +9,7 @@ Color color(String id) {
     case ('lblue'):
       return Colors.lightBlue;
     case ('dblue'):
-      return Color(0xFF00005E);
+      return Color(0xFF01579B);
     case ('grey'):
       return Colors.grey;
     case ('def'):
@@ -61,18 +61,18 @@ Widget ctrlrField(
       disabledBorder: InputBorder.none,
       contentPadding: EdgeInsets.symmetric(horizontal: 15),
       labelText: fieldPrompt,
-      labelStyle: idTextStyle('bold', selectedColor, 15),
+      labelStyle: cxTextStyle('bold', selectedColor, 15),
       //errorText: (ctrlrID.text.isEmpty) ? "Field is Required" : null,
     ),
-    style: idTextStyle('bold', defaultColor, 15),
+    style: cxTextStyle('bold', defaultColor, 15),
   );
 }
 
 Widget cText(String text, Color? colour, double? size, String? style) {
-  return Text(text, style: idTextStyle(style, colour, size));
+  return Text(text, style: cxTextStyle(style, colour, size));
 }
 
-TextStyle idTextStyle(String? style, Color? colour, double? size) {
+TextStyle cxTextStyle(String? style, Color? colour, double? size) {
   double defaultSize = 20;
   switch (style) {
     case 'bold':
@@ -106,6 +106,6 @@ TextStyle idTextStyle(String? style, Color? colour, double? size) {
   }
 }
 
-  Widget hfill(double height) {
-    return SizedBox(height: height);
-  }
+Widget hfill(double height) {
+  return SizedBox(height: height);
+}

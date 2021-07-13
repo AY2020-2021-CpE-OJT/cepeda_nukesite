@@ -32,6 +32,7 @@ class _ContactListState extends State<ContactList> {
     });
   }
 
+  // TO_DO IMPLEMENT IN LOCAL
   Future<http.Response> deleteContact(String id) {
     print("Status Deleted [" + id + "]");
     return http.delete(
@@ -100,6 +101,7 @@ class _ContactListState extends State<ContactList> {
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
                                   onTap: () async {
+                                    // >>>>>>>>>>>>>>>>>>>>>>>>>>>> PUSH TO NEXT UPDATE SCREEN HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                                     final value = await Navigator.push(
                                         context,
                                         MaterialPageRoute(

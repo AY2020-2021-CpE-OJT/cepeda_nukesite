@@ -153,7 +153,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
                 alignment: Alignment.centerRight,
                 padding: EdgeInsets.only(bottom: 8, left: 8),
                 child: Text("#s: $_count",
-                    style: idTextStyle('italic', Colors.grey, 12)),
+                    style: cxTextStyle('italic', Colors.grey, 12)),
               ),
               hfill(5),
               Flexible(
@@ -245,10 +245,10 @@ class _CreateNewContactState extends State<CreateNewContact> {
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 labelText: 'Contact Number',
-                labelStyle: idTextStyle('bold', color('sel'), 15),
+                labelStyle: cxTextStyle('bold', color('sel'), 15),
                 //errorBorder:
               ),
-              style: idTextStyle('bold', color('def'), 15),
+              style: cxTextStyle('bold', color('def'), 15),
             ),
           ),
         ],

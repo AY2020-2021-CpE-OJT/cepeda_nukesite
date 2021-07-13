@@ -3,6 +3,7 @@ import 'package:pb_v5/model/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'dev.dart';
 
 class UpdateContact extends StatefulWidget {
   final String initialFirstName, initialLastName, contactID;
@@ -153,10 +154,10 @@ class _UpdateContactState extends State<UpdateContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: _color("black"),
+        backgroundColor: color("black"),
         appBar: AppBar(
           centerTitle: true,
-          title: _cText("Update Contact", _color('def'), null, null),
+          title: cText("Update Contact", color('def'), null, null),
           actions: [
             IconButton(
               icon: Icon(Icons.clear),
@@ -190,26 +191,26 @@ class _UpdateContactState extends State<UpdateContact> {
                     "First Name",
                     /*widget.initialFirstName,*/
                     firstNameCtrlr,
-                    _color('sel'),
-                    _color('def'),
+                    color('sel'),
+                    color('def'),
                     Colors.red),
-                _hfill(10),
+                hfill(10),
                 ctrlrField(
                     context,
                     "Last Name",
                     /*widget.initialLastName,*/
                     lastNameCtrlr,
-                    _color('sel'),
-                    _color('def'),
+                    color('sel'),
+                    color('def'),
                     Colors.red),
-                _hfill(10),
+                hfill(10),
                 Container(
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.only(bottom: 8, left: 8),
                   child: Text("#s: $_count",
-                      style: _idTextStyle('italic', Colors.grey, 12)),
+                      style: cxTextStyle('italic', Colors.grey, 12)),
                 ),
-                _hfill(5),
+                hfill(5),
                 Flexible(
                   child: ListView.builder(
                       reverse: true,
@@ -219,12 +220,12 @@ class _UpdateContactState extends State<UpdateContact> {
                         return _contactsInput(index, context);
                       }),
                 ),
-                _hfill(10),
+                hfill(10),
                 /*
               Container(
                 alignment: Alignment.bottomRight,
                 child: Text("Number of Contacts: $_count",
-                    style: _idTextStyle('italic', Colors.grey, 15)),
+                    style: cxTextStyle('italic', Colors.grey, 15)),
               ),
               //Text(_result),*/
               ],
@@ -301,12 +302,12 @@ class _UpdateContactState extends State<UpdateContact> {
                 border: InputBorder.none,
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: _color('sel'),
+                    color: color('sel'),
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: _color('def'),
+                    color: color('def'),
                   ),
                 ),
 
@@ -319,20 +320,16 @@ class _UpdateContactState extends State<UpdateContact> {
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 labelText: 'Contact Number',
-                labelStyle: _idTextStyle('bold', _color('sel'), 15),
+                labelStyle: cxTextStyle('bold', color('sel'), 15),
                 //errorBorder:
               ),
-              style: _idTextStyle('bold', _color('def'), 15),
+              style: cxTextStyle('bold', color('def'), 15),
             ),
           ),
         ],
       ),
       SizedBox(height: 12),
     ]);
-  }
-
-  Widget _hfill(double height) {
-    return SizedBox(height: height);
   }
 
   Widget _removeButton(int index) {
@@ -364,105 +361,5 @@ class _UpdateContactState extends State<UpdateContact> {
             )
           : null,
     );
-  }
-}
-
-Widget ctrlrField(
-    BuildContext context,
-    String fieldPrompt,
-    //String initialValue,
-    TextEditingController ctrlrID,
-    Color selectedColor,
-    Color defaultColor,
-    Color errorColor) {
-  return TextFormField(
-    //initialValue: initialValue,
-    controller: ctrlrID,
-    textInputAction: TextInputAction.next,
-    textCapitalization: TextCapitalization.sentences,
-    //focusNode: currentNodeID,
-    /*
-    onFieldSubmitted: (term) {
-      _fieldFocusChange(context, currentNodeID, nextNodeID);
-    },*/
-    decoration: new InputDecoration(
-      border: InputBorder.none,
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: selectedColor,
-        ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: defaultColor,
-        ),
-      ),
-      disabledBorder: InputBorder.none,
-      contentPadding: EdgeInsets.symmetric(horizontal: 15),
-      labelText: fieldPrompt,
-      labelStyle: _idTextStyle('bold', selectedColor, 15),
-      //errorText: (ctrlrID.text.isEmpty) ? "Field is Required" : null,
-    ),
-    style: _idTextStyle('bold', defaultColor, 15),
-  );
-}
-
-Color _color(String id) {
-  switch (id) {
-    case ('black'):
-      return Colors.black;
-    case ('lblue'):
-      return Colors.lightBlue;
-    case ('grey'):
-      return Colors.grey;
-    case ('def'):
-      return Color(0xFFFFFFFF);
-    case ('sel'):
-      return Color(0xFF00ABFF);
-    case ('sub'):
-      return Color(0xFF6F6F6F);
-    case ('high'):
-      return Colors.deepOrange;
-    default:
-      print('colorNot Identifed');
-      return Colors.white;
-  }
-}
-
-Widget _cText(String text, Color? colour, double? size, String? style) {
-  return Text(text, style: _idTextStyle(style, colour, size));
-}
-
-TextStyle _idTextStyle(String? style, Color? colour, double? size) {
-  double defaultSize = 20;
-  switch (style) {
-    case 'bold':
-      return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
-        fontStyle: FontStyle.normal,
-        fontWeight: FontWeight.bold,
-        fontSize: (size != null) ? size : defaultSize,
-      );
-    case 'italic':
-      return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
-        fontStyle: FontStyle.italic,
-        fontWeight: FontWeight.normal,
-        fontSize: (size != null) ? size : defaultSize,
-      );
-    case 'boldItalic':
-      return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
-        fontStyle: FontStyle.italic,
-        fontWeight: FontWeight.bold,
-        fontSize: (size != null) ? size : defaultSize,
-      );
-    default:
-      return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
-        fontStyle: FontStyle.normal,
-        fontWeight: FontWeight.normal,
-        fontSize: (size != null) ? size : defaultSize,
-      );
   }
 }
