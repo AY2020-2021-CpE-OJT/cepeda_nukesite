@@ -6,6 +6,7 @@ import 'package:pb_v5/modules/add_contact.dart';
 import 'package:pb_v5/modules/nuke.dart';
 import 'contacts_import.dart';
 import 'update_contact.dart';
+import 'dev.dart';
 
 class ContactList extends StatefulWidget {
   @override
@@ -129,7 +130,7 @@ class _ContactListState extends State<ContactList> {
                                     color: Colors.black,
                                     shape: BeveledRectangleBorder(
                                         side: BorderSide(
-                                            color: Colors.blue, width: 1.5),
+                                            color: color('blue'), width: 1.5),
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     child: Column(
@@ -162,9 +163,11 @@ class _ContactListState extends State<ContactList> {
               reloadList();
             },
             icon: Icon(Icons.refresh),
-            label: Text("Refresh",),
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.teal[900],
+            label: Text(
+              "Refresh",
+            ),
+            foregroundColor: color('white'),
+            backgroundColor: color('dblue'),
           ),
           SizedBox(width: 12),
           FloatingActionButton.extended(
@@ -177,8 +180,8 @@ class _ContactListState extends State<ContactList> {
             },
             icon: Icon(Icons.phone),
             label: Text("Add New"),
-            foregroundColor: Colors.teal[200],
-            backgroundColor: Colors.teal[900],
+            foregroundColor: color('white'),
+            backgroundColor: color('dblue'),
           ),
         ],
       ),
