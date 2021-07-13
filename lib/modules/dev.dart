@@ -4,6 +4,8 @@ Color color(String id) {
   switch (id) {
     case ('black'):
       return Colors.black;
+    case ('blue'):
+      return Colors.blue;
     case ('lblue'):
       return Colors.lightBlue;
     case ('dblue'):
@@ -103,3 +105,7 @@ TextStyle idTextStyle(String? style, Color? colour, double? size) {
       );
   }
 }
+
+  Widget hfill(double height) {
+    return SizedBox(height: height);
+  }

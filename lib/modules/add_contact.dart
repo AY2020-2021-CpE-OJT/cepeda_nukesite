@@ -3,6 +3,7 @@ import 'package:pb_v5/model/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'dev.dart';
 
 class CreateNewContact extends StatefulWidget {
   @override
@@ -110,13 +111,13 @@ class _CreateNewContactState extends State<CreateNewContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _color("black"),
+      backgroundColor: color("black"),
       appBar: AppBar(
         centerTitle: true,
-        title: _cText("Create New", _color('def'), null, null),
+        title: cText("Create New", color('def'), null, null),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: Icon(Icons.undo),
             onPressed: () async {
               FocusManager.instance.primaryFocus?.unfocus();
               setState(() {
@@ -142,19 +143,19 @@ class _CreateNewContactState extends State<CreateNewContact> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              ctrlrField(context, "First Name", firstNameCtrlr, _color('sel'),
-                  _color('def'), Colors.red),
-              _hfill(10),
-              ctrlrField(context, "Last Name", lastNameCtrlr, _color('sel'),
-                  _color('def'), Colors.red),
-              _hfill(10),
+              ctrlrField(context, "First Name", firstNameCtrlr, color('sel'),
+                  color('def'), Colors.red),
+              hfill(10),
+              ctrlrField(context, "Last Name", lastNameCtrlr, color('sel'),
+                  color('def'), Colors.red),
+              hfill(10),
               Container(
                 alignment: Alignment.centerRight,
                 padding: EdgeInsets.only(bottom: 8, left: 8),
                 child: Text("#s: $_count",
-                    style: _idTextStyle('italic', Colors.grey, 12)),
+                    style: idTextStyle('italic', Colors.grey, 12)),
               ),
-              _hfill(5),
+              hfill(5),
               Flexible(
                 child: ListView.builder(
                     reverse: true,
@@ -183,8 +184,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
             },
             icon: Icon(Icons.add),
             label: Text("Add"),
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.teal[900],
+            foregroundColor: color('white'),
+            backgroundColor: color('blue'),
           ),
           SizedBox(width: 12),
           FloatingActionButton.extended(
@@ -194,8 +195,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
             },
             icon: Icon(Icons.save),
             label: Text("Save"),
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.teal[900],
+            foregroundColor: color('white'),
+            backgroundColor: color('dblue'),
           ),
         ],
       ),
@@ -226,12 +227,12 @@ class _CreateNewContactState extends State<CreateNewContact> {
                 border: InputBorder.none,
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: _color('sel'),
+                    color: color('sel'),
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: _color('def'),
+                    color: color('def'),
                   ),
                 ),
 
@@ -244,26 +245,16 @@ class _CreateNewContactState extends State<CreateNewContact> {
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 labelText: 'Contact Number',
-                labelStyle: _idTextStyle('bold', _color('sel'), 15),
+                labelStyle: idTextStyle('bold', color('sel'), 15),
                 //errorBorder:
               ),
-              style: _idTextStyle('bold', _color('def'), 15),
+              style: idTextStyle('bold', color('def'), 15),
             ),
           ),
         ],
       ),
       SizedBox(height: 12),
     ]);
-  }
-
-  void setValidator(valid) {
-    setState(() {
-      isANumber = valid;
-    });
-  }
-
-  Widget _hfill(double height) {
-    return SizedBox(height: height);
   }
 
   Widget _removeButton(int index) {
@@ -295,103 +286,5 @@ class _CreateNewContactState extends State<CreateNewContact> {
             )
           : null,
     );
-  }
-}
-
-Widget ctrlrField(
-    BuildContext context,
-    String fieldPrompt,
-    TextEditingController ctrlrID,
-    Color selectedColor,
-    Color defaultColor,
-    Color errorColor) {
-  return TextFormField(
-    controller: ctrlrID,
-    textInputAction: TextInputAction.next,
-    textCapitalization: TextCapitalization.sentences,
-    //focusNode: currentNodeID,
-    /*
-    onFieldSubmitted: (term) {
-      _fieldFocusChange(context, currentNodeID, nextNodeID);
-    },*/
-    decoration: new InputDecoration(
-      border: InputBorder.none,
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: selectedColor,
-        ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: defaultColor,
-        ),
-      ),
-      disabledBorder: InputBorder.none,
-      contentPadding: EdgeInsets.symmetric(horizontal: 15),
-      labelText: fieldPrompt,
-      labelStyle: _idTextStyle('bold', selectedColor, 15),
-      //errorText: (ctrlrID.text.isEmpty) ? "Field is Required" : null,
-    ),
-    style: _idTextStyle('bold', defaultColor, 15),
-  );
-}
-
-Color _color(String id) {
-  switch (id) {
-    case ('black'):
-      return Colors.black;
-    case ('lblue'):
-      return Colors.lightBlue;
-    case ('grey'):
-      return Colors.grey;
-    case ('def'):
-      return Color(0xFFFFFFFF);
-    case ('sel'):
-      return Color(0xFF00ABFF);
-    case ('sub'):
-      return Color(0xFF6F6F6F);
-    case ('high'):
-      return Colors.deepOrange;
-    default:
-      print('colorNot Identifed');
-      return Colors.white;
-  }
-}
-
-Widget _cText(String text, Color? colour, double? size, String? style) {
-  return Text(text, style: _idTextStyle(style, colour, size));
-}
-
-TextStyle _idTextStyle(String? style, Color? colour, double? size) {
-  double defaultSize = 20;
-  switch (style) {
-    case 'bold':
-      return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
-        fontStyle: FontStyle.normal,
-        fontWeight: FontWeight.bold,
-        fontSize: (size != null) ? size : defaultSize,
-      );
-    case 'italic':
-      return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
-        fontStyle: FontStyle.italic,
-        fontWeight: FontWeight.normal,
-        fontSize: (size != null) ? size : defaultSize,
-      );
-    case 'boldItalic':
-      return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
-        fontStyle: FontStyle.italic,
-        fontWeight: FontWeight.bold,
-        fontSize: (size != null) ? size : defaultSize,
-      );
-    default:
-      return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
-        fontStyle: FontStyle.normal,
-        fontWeight: FontWeight.normal,
-        fontSize: (size != null) ? size : defaultSize,
-      );
   }
 }
