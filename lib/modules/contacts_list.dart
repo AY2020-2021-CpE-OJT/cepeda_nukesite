@@ -26,7 +26,6 @@ class _ContactListState extends State<ContactList> {
   ];
   String _selectedChoices = "none";
   void _select(String choice) {
-    String temp = 'dead';
     setState(() {
       _selectedChoices = choice;
     });
@@ -45,13 +44,12 @@ class _ContactListState extends State<ContactList> {
         print(tokenStore.getString('token'));
         break;
       case 'DevTest-sb':
-        /*
         disguisedToast(
           context: context,
-          message: temp,
+          message: 'TESTING FLUSHBAR',
           msgColor: color('red'),
           secDur: 2,
-        );*/
+        );
         break;
       default:
         print(_selectedChoices);
