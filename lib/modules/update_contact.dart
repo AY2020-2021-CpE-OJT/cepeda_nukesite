@@ -187,22 +187,24 @@ class _UpdateContactState extends State<UpdateContact> {
             child: Column(
               children: [
                 ctrlrField(
-                    context,
-                    "First Name",
-                    /*widget.initialFirstName,*/
-                    firstNameCtrlr,
-                    color('sel'),
-                    color('def'),
-                    Colors.red),
+                    context: context,
+                    fieldPrompt: "First Name",
+                    ctrlrID: firstNameCtrlr,
+                    defaultColor: color('def'),
+                    selectedColor: color('sel'),
+                    errorColor: Colors.red,
+                    next: true,
+                    autoFocus: true),
                 hfill(10),
                 ctrlrField(
-                    context,
-                    "Last Name",
-                    /*widget.initialLastName,*/
-                    lastNameCtrlr,
-                    color('sel'),
-                    color('def'),
-                    Colors.red),
+                    context: context,
+                    fieldPrompt: "Last Name",
+                    ctrlrID: lastNameCtrlr,
+                    defaultColor: color('def'),
+                    selectedColor: color('sel'),
+                    errorColor: Colors.red,
+                    next: true,
+                    autoFocus: true),
                 hfill(10),
                 Container(
                   alignment: Alignment.centerRight,

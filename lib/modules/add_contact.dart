@@ -12,11 +12,6 @@ class CreateNewContact extends StatefulWidget {
 
 class _CreateNewContactState extends State<CreateNewContact> {
   int key = 0, increments = 0, contactsSize = 1, _count = 1;
-  String val = '';
-  RegExp digitValidator = RegExp("[0-9]+");
-
-  bool isANumber = true;
-  String fname = '', lname = '';
 
   final firstNameCtrlr = TextEditingController();
   final lastNameCtrlr = TextEditingController();
@@ -25,8 +20,9 @@ class _CreateNewContactState extends State<CreateNewContact> {
     TextEditingController()
   ];
 
-  final FocusNode fnameFocus = FocusNode();
-  final FocusNode lnameFocus = FocusNode();
+  final FocusNode firstNameFocus = FocusNode();
+  final FocusNode lnameNameFocus = FocusNode();
+  final List<FocusNode> contactsFocus = <FocusNode>[];
 
   List<Contact> newContact = <Contact>[];
 
@@ -73,12 +69,13 @@ class _CreateNewContactState extends State<CreateNewContact> {
         listedContacts.reversed.toList().toString());
 
     if (!emptyDetect) {
+      //disguisedToast(context: context, message: 'Adding...');
       uploadContact(newContact[0].first_name, newContact[0].last_name,
           listedContacts.reversed.toList());
     } else {
       message = Text(
         'Please Fill All Fields',
-        style: TextStyle(color: Colors.red),
+        style: cxTextStyle('bold', Colors.deepOrange, 16),
       );
     }
 
@@ -143,11 +140,28 @@ class _CreateNewContactState extends State<CreateNewContact> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              ctrlrField(context, "First Name", firstNameCtrlr, color('sel'),
-                  color('def'), Colors.red),
+              ctrlrField(
+                  context: context,
+                  fieldPrompt: "First Name",
+                  ctrlrID: firstNameCtrlr,
+                  defaultColor: color('def'),
+                  selectedColor: color('sel'),
+                  errorColor: Colors.red,
+                  next: true,
+                  autoFocus: true),
               hfill(10),
+              ctrlrField(
+                  context: context,
+                  fieldPrompt: "Last Name",
+                  ctrlrID: lastNameCtrlr,
+                  defaultColor: color('def'),
+                  selectedColor: color('sel'),
+                  errorColor: Colors.red,
+                  next: true,
+                  autoFocus: true),
+              /*
               ctrlrField(context, "Last Name", lastNameCtrlr, color('sel'),
-                  color('def'), Colors.red),
+                  color('def'), Colors.red, null, false, true, true),*/
               hfill(10),
               Container(
                 alignment: Alignment.centerRight,
@@ -217,39 +231,28 @@ class _CreateNewContactState extends State<CreateNewContact> {
             ),
           ),
           Expanded(
-            child: TextFormField(
-              //maxLength: 12,
-              controller: contactNumCtrlr[index],
-              textCapitalization: TextCapitalization.sentences,
-              keyboardType: TextInputType.phone,
-              textInputAction: TextInputAction.done,
-              decoration: new InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: color('sel'),
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: color('def'),
-                  ),
-                ),
+            child: ctrlrField(
+                context: context,
+                fieldPrompt: "Contact Number",
+                ctrlrID: contactNumCtrlr[index],
+                defaultColor: color('def'),
+                selectedColor: color('sel'),
+                errorColor: Colors.red,
+                next: true,
+                autoFocus: true,
+                inputType: TextInputType.phone),
 
-                disabledBorder: InputBorder.none,
-                /*
-                  errorText: (contactNumCtrlr[index].text.isNotEmpty)
-                  ? null
-                  : "Please enter a number",
-                   errorBorder: OtlinedInputBorder, */
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                labelText: 'Contact Number',
-                labelStyle: cxTextStyle('bold', color('sel'), 15),
-                //errorBorder:
-              ),
-              style: cxTextStyle('bold', color('def'), 15),
-            ),
+            /*ctrlrField(
+                context,
+                "Contact Number",
+                contactNumCtrlr[index],
+                color('sel'),
+                color('def'),
+                Colors.red,
+                TextInputType.phone,
+                false,
+                true,
+                true),*/
           ),
         ],
       ),

@@ -16,12 +16,49 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   List<Contact> contactsList = [];
   var target = -1;
-  List<String> choices = <String>[
-    "Index",
-    "Update",
-    "Delete",
+  List<PopupItem> menu = [
+    PopupItem(1, "Log-in"),
+    PopupItem(2, "Log-out"),
+    PopupItem(3, "DevTest-sp"),
+    PopupItem(4, "DevTest-sb"),
   ];
   String _selectedChoices = "none";
+  void _select(String choice) {
+    String temp = 'dead';
+    setState(() {
+      _selectedChoices = choice;
+    });
+    //print("Onstart: " + target.toString());
+    switch (_selectedChoices) {
+      case 'Log-in':
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        break;
+      case 'Log-out':
+        print("Log-out OTW");
+        break;
+      case 'DevTest-sp':
+        /*
+        prefSetup()
+            .then((value) => {print("TOKEN FROM PREFERENCES: " + value!)});
+        //print(tokenStore.getString('token'));*/
+        break;
+      case 'DevTest-sb':
+        /*
+        disguisedToast(
+          context: context,
+          message: temp,
+          msgColor: color('red'),
+          secDur: 2,
+        );*/
+        break;
+      default:
+        print(_selectedChoices);
+        _selectedChoices = "none";
+        print(_selectedChoices);
+        target = -1;
+    }
+  }
 
   void extractContacts() async {
     ImportAPIContacts.getContacts().then((response) {
@@ -38,7 +75,7 @@ class _ContactListState extends State<ContactList> {
     return http.delete(
         Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id));
   }
-
+  /*
   void _select(String choice) {
     setState(() {
       _selectedChoices = choice;
@@ -47,11 +84,11 @@ class _ContactListState extends State<ContactList> {
     switch (_selectedChoices) {
       case 'Nuke':
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Nuke()));
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
         break;
       case 'Update':
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Nuke()));
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
         break;
       case 'Delete':
         deleteContact(contactsList[target].id);
@@ -69,7 +106,7 @@ class _ContactListState extends State<ContactList> {
         _selectedChoices = "none";
         target = -1;
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +115,14 @@ class _ContactListState extends State<ContactList> {
       appBar: AppBar(
         backgroundColor: Colors.white10,
         title: Text("Contacts"),
-        actions: [],
+        actions: [
+          SelectionMenu(
+            selectables: menu,
+            onSelection: (String value) => setState(() {
+              _select(value);
+            }),
+          )
+        ],
       ),
       body: Container(
           padding: EdgeInsets.only(bottom: 60),
