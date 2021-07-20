@@ -168,6 +168,21 @@ class _ContactListState extends State<ContactList> {
                                                       .id
                                                       .toString(),
                                                 )));
+                                    print("RETURNED VALUE" + value.toString());
+                                    await Future.delayed(
+                                        Duration(seconds: 5), () {});
+                                    if (value == 403) {
+                                      disguisedToast(
+                                          context: context,
+                                          message:
+                                              "Forbidden Access, Please Log-In");
+                                    } else if (value == 200) {
+                                      disguisedToast(
+                                          context: context,
+                                          message: "Successful Update");
+                                    }
+                                    await Future.delayed(
+                                        Duration(seconds: 3), () {});
                                     setState(() {
                                       reloadList();
                                     });
@@ -265,6 +280,7 @@ class _ContactListState extends State<ContactList> {
 
   Future<void> reloadList() async {
     extractContacts();
+    disguisedToast(context: context, message: "Reloading...");
   }
 
   Future<String?> prefSetup() async {

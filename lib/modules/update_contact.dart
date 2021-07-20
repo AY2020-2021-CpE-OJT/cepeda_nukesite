@@ -201,7 +201,7 @@ class _UpdateContactState extends State<UpdateContact> {
                     selectedColor: color('sel'),
                     errorColor: Colors.red,
                     next: true,
-                    autoFocus: true),
+                    autoFocus: false),
                 hfill(10),
                 ctrlrField(
                     context: context,
@@ -211,7 +211,7 @@ class _UpdateContactState extends State<UpdateContact> {
                     selectedColor: color('sel'),
                     errorColor: Colors.red,
                     next: true,
-                    autoFocus: true),
+                    autoFocus: false),
                 hfill(10),
                 Container(
                   alignment: Alignment.centerRight,
