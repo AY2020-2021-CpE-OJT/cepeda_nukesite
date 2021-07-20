@@ -301,7 +301,17 @@ class _UpdateContactState extends State<UpdateContact> {
             ),
           ),
           Expanded(
-            child: TextFormField(
+            child: ctrlrField(
+                context: context,
+                fieldPrompt: "Contact Number",
+                ctrlrID: contactNumCtrlr[index],
+                defaultColor: color('def'),
+                selectedColor: color('sel'),
+                errorColor: Colors.red,
+                next: true,
+                autoFocus: true,
+                inputType: TextInputType
+                    .phone), /*TextFormField(
               //maxLength: 12,
               controller: contactNumCtrlr[index],
               textCapitalization: TextCapitalization.sentences,
@@ -333,7 +343,7 @@ class _UpdateContactState extends State<UpdateContact> {
                 //errorBorder:
               ),
               style: cxTextStyle('bold', color('def'), 15),
-            ),
+            ),*/
           ),
         ],
       ),
