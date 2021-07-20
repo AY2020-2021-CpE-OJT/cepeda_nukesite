@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:pb_v5/model/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dev.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateNewContact extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
   final List<FocusNode> contactsFocus = <FocusNode>[];
 
   List<Contact> newContact = <Contact>[];
+  late SharedPreferences tokenStore;
 
   Future<http.Response> uploadContact(
       String firstName, String lastName, List contactNumbers) {
@@ -40,6 +43,26 @@ class _CreateNewContactState extends State<CreateNewContact> {
       }),
       // RETURN ERROR CATCH
     );
+  }
+
+  Future<int> newGet() async {
+    String retrievedToken = '';
+    await prefSetup().then((value) =>
+        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    final response = await http.patch(
+      Uri.parse('https://nukesite-phonebook-api.herokuapp.com/all/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
+      },
+    );
+    print(response);
+    return (response.statusCode);
+  }
+
+  Future<String?> prefSetup() async {
+    tokenStore = await SharedPreferences.getInstance();
+    return tokenStore.getString('token');
   }
 
   void saveContact() {
@@ -186,6 +209,17 @@ class _CreateNewContactState extends State<CreateNewContact> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
+          FloatingActionButton.extended(
+            onPressed: () {
+              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+              newGet();
+            },
+            icon: Icon(Icons.exit_to_app),
+            label: Text("DEBUG"),
+            foregroundColor: color('white'),
+            backgroundColor: color('blue'),
+          ),
+          SizedBox(width: 12),
           FloatingActionButton.extended(
             onPressed: () {
               // >>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<

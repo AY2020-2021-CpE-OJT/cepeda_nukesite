@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pb_v5/model/contact.dart';
 import 'dart:convert';
@@ -23,6 +25,7 @@ class _ContactListState extends State<ContactList> {
     PopupItem(2, "Log-out"),
     PopupItem(3, "DevTest-sp"),
     PopupItem(4, "DevTest-sb"),
+    PopupItem(5, "DevTest-newGet"),
   ];
   String _selectedChoices = "none";
   void _select(String choice) {
@@ -55,6 +58,9 @@ class _ContactListState extends State<ContactList> {
         }
         function();
         break;
+      case 'DevTest-newGet':
+        //newGet();
+        break;
       default:
         print(_selectedChoices);
         _selectedChoices = "none";
@@ -63,6 +69,30 @@ class _ContactListState extends State<ContactList> {
     }
   }
 
+  Future<int> extractContacts() async {
+    String retrievedToken = '';
+    await prefSetup().then((value) =>
+        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    final response = await http.get(
+      Uri.parse('https://nukesite-phonebook-api.herokuapp.com/all/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
+      },
+    );
+    setState(() {
+      Iterable list = json.decode(response.body);
+      contactsList = list.map((model) => Contact.fromJson(model)).toList();
+    });
+    print(response.body.toString());
+    return (response.statusCode);
+  }
+
+  Future<String?> prefSetup() async {
+    tokenStore = await SharedPreferences.getInstance();
+    return tokenStore.getString('token');
+  }
+  /*
   void extractContacts() async {
     ImportAPIContacts.getContacts().then((response) {
       setState(() {
@@ -70,7 +100,7 @@ class _ContactListState extends State<ContactList> {
         contactsList = list.map((model) => Contact.fromJson(model)).toList();
       });
     });
-  }
+  }*/
 
   // TO_DO IMPLEMENT IN LOCAL
   Future<http.Response> deleteContact(String id) {
@@ -288,11 +318,6 @@ class _ContactListState extends State<ContactList> {
   Future<void> reloadList() async {
     extractContacts();
     disguisedToast(context: context, message: "Reloading...");
-  }
-
-  Future<String?> prefSetup() async {
-    tokenStore = await SharedPreferences.getInstance();
-    return tokenStore.getString('token');
   }
 
   delayedLogin() async {
