@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: color("black"),
       appBar: AppBar(
         centerTitle: true,
-        title: cText("Create New", color('def'), null, null),
+        title: cText("Log-in", color('def'), null, null),
         actions: [
           IconButton(
             icon: Icon(Icons.undo),
@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
         behavior: HitTestBehavior.opaque,
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Container(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(top: 90, right: 30, left: 30),
           child: Column(
             children: [
               ctrlrField(
