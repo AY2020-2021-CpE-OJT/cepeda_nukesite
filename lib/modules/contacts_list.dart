@@ -180,6 +180,12 @@ class _ContactListState extends State<ContactList> {
                                       disguisedToast(
                                           context: context,
                                           message: "Successful Update");
+                                    } else {
+                                      disguisedToast(
+                                          context: context,
+                                          message:
+                                              "Something else happened\n Error Code: " +
+                                                  value.toString());
                                     }
                                     await Future.delayed(
                                         Duration(seconds: 3), () {});
