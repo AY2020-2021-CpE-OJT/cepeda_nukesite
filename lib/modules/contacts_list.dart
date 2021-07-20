@@ -282,6 +282,7 @@ class _ContactListState extends State<ContactList> {
     super.initState();
     extractContacts();
     prefSetup();
+    delayedLogin();
   }
 
   Future<void> reloadList() async {
@@ -292,5 +293,15 @@ class _ContactListState extends State<ContactList> {
   Future<String?> prefSetup() async {
     tokenStore = await SharedPreferences.getInstance();
     return tokenStore.getString('token');
+  }
+
+  delayedLogin() async {
+    await Future.delayed(Duration(seconds: 3), () {});
+    print("TOKEN DELAY:" + tokenStore.getString('token').toString());
+    if (tokenStore.getString('token').toString().isEmpty ||
+        tokenStore.getString('token').toString() == 'rejected') {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    }
   }
 }
