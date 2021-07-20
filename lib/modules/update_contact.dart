@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:pb_v5/model/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dev.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateContact extends StatefulWidget {
   final String initialFirstName, initialLastName, contactID;
@@ -22,8 +24,7 @@ class UpdateContact extends StatefulWidget {
 
 class _UpdateContactState extends State<UpdateContact> {
   int key = 0, increments = 0, contactsSize = 1, _count = 1;
-  RegExp digitValidator = RegExp("[0-9]+");
-  bool isANumber = true;
+  late SharedPreferences tokenStore;
 
   TextEditingController firstNameCtrlr = TextEditingController();
   TextEditingController lastNameCtrlr = TextEditingController();
@@ -32,10 +33,7 @@ class _UpdateContactState extends State<UpdateContact> {
     TextEditingController()
   ];
 
-  //final FocusNode firstNameNode = FocusNode();
-  //final FocusNode lastNameNode = FocusNode();
-
-  List<Contact> updatedContact = <Contact>[];
+  late Contact updatedContact;
   String contactIdentifier = '';
 
   Future<http.Response> deleteContact(String id) {
@@ -47,23 +45,33 @@ class _UpdateContactState extends State<UpdateContact> {
         Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id));
   }
 
-  Future<http.Response> uploadUpdated(
-      String firstName, String lastName, List contactNumbers, String id) {
-    return http.patch(
+  Future<int> uploadUpdated(
+      String firstName, String lastName, List contactNumbers, String id) async {
+    String retrievedToken = '';
+    await prefSetup().then((value) =>
+        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    final response = await http.patch(
       Uri.parse('https://nukesite-phonebook-api.herokuapp.com/update/' + id),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
       },
       body: jsonEncode({
         'first_name': firstName,
         'last_name': lastName,
         'contact_numbers': contactNumbers,
       }),
-      // RETURN ERROR CATCH
     );
+    return (response.statusCode);
   }
 
-  void saveContact() {
+  Future<String?> prefSetup() async {
+    tokenStore = await SharedPreferences.getInstance();
+    return tokenStore.getString('token');
+  }
+
+  void saveContact() async {
+    int statusCode = 0;
     bool emptyDetect = false;
     List<String> listedContacts = <String>[];
     for (int i = 0; i < _count; i++) {
@@ -73,34 +81,33 @@ class _UpdateContactState extends State<UpdateContact> {
       }
     }
     setState(() {
-      updatedContact.insert(
-          0,
-          Contact(firstNameCtrlr.text, lastNameCtrlr.text,
-              listedContacts.reversed.toList()));
+      updatedContact = new Contact(firstNameCtrlr.text, lastNameCtrlr.text,
+          listedContacts.reversed.toList());
     });
-    if (updatedContact[0].first_name.isEmpty ||
-        updatedContact[0].last_name.isEmpty) {
+    if (updatedContact.first_name.isEmpty || updatedContact.last_name.isEmpty) {
       emptyDetect = true;
     }
 
-    Text message = Text('Contact Updated: \n\n' +
-        updatedContact[0].first_name +
+    Text message = Text('Contact Updating: \n\n' +
+        updatedContact.first_name +
         " " +
-        updatedContact[0].last_name +
+        updatedContact.last_name +
         "\n" +
         listedContacts.reversed.toList().toString());
 
     if (!emptyDetect) {
-      uploadUpdated(
-        updatedContact[0].first_name,
-        updatedContact[0].last_name,
+      statusCode = await uploadUpdated(
+        updatedContact.first_name,
+        updatedContact.last_name,
         listedContacts.reversed.toList(),
         contactIdentifier,
       );
+      print(statusCode);
+      //return statusCode;
     } else {
       message = Text(
         'Please Fill All Fields',
-        style: TextStyle(color: Colors.red),
+        style: cxTextStyle('bold', color('red'), 15),
       );
     }
 
@@ -110,9 +117,9 @@ class _UpdateContactState extends State<UpdateContact> {
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    if (!emptyDetect) {
-      Navigator.pop(context);
-    } else {
+    if ((statusCode == 200) || (statusCode == 403)) {
+      Navigator.pop(context, statusCode);
+    } else if (emptyDetect) {
       emptyDetect = false;
     }
   }
