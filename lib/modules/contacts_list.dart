@@ -44,12 +44,16 @@ class _ContactListState extends State<ContactList> {
         print(tokenStore.getString('token'));
         break;
       case 'DevTest-sb':
-        disguisedToast(
-          context: context,
-          message: 'TESTING FLUSHBAR',
-          msgColor: color('red'),
-          secDur: 2,
-        );
+        function() async {
+          await Future.delayed(Duration(seconds: 3), () {});
+          disguisedToast(
+            context: context,
+            message: 'TESTING FLUSHBAR',
+            msgColor: color('red'),
+            secDur: 2,
+          );
+        }
+        function();
         break;
       default:
         print(_selectedChoices);

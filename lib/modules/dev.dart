@@ -207,7 +207,7 @@ void disguisedToast({
     ),
   )..show(context).then((r) => atEnd);
 }
-/*
+/*  THIS DELAY ISN'T WORKING AS A METHOD BUT WORKS IF PUT IN CODE AS IT, NO PASS
 void delay(int dur) async {
   await Future.delayed(Duration(seconds: dur), () {});
 }*/
