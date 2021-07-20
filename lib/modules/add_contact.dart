@@ -22,9 +22,9 @@ class _CreateNewContactState extends State<CreateNewContact> {
     TextEditingController()
   ];
 
-  List<Contact> newContact = <Contact>[];
+  late Contact newContact;
   late SharedPreferences tokenStore;
-
+  /*
   Future<http.Response> uploadContact(
       String firstName, String lastName, List contactNumbers) {
     return http.post(
@@ -39,9 +39,35 @@ class _CreateNewContactState extends State<CreateNewContact> {
       }),
       // RETURN ERROR CATCH
     );
+  }*/
+
+  Future<int> uploadContact(
+      String firstName, String lastName, List contactNumbers) async {
+    String retrievedToken = '';
+    await prefSetup().then((value) =>
+        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    final response = await http.post(
+      Uri.parse('https://nukesite-phonebook-api.herokuapp.com/new'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
+      },
+      body: jsonEncode({
+        'first_name': firstName,
+        'last_name': lastName,
+        'contact_numbers': contactNumbers,
+      }),
+    );
+    print("RESPONSE UPLOAD: " + response.statusCode.toString());
+    return (response.statusCode);
   }
 
-  void saveContact() {
+  Future<String?> prefSetup() async {
+    tokenStore = await SharedPreferences.getInstance();
+    return tokenStore.getString('token');
+  }
+
+  void saveContact() async {
     bool emptyDetect = false;
     List<String> listedContacts = <String>[];
     for (int i = 0; i < _count; i++) {
@@ -51,25 +77,23 @@ class _CreateNewContactState extends State<CreateNewContact> {
       }
     }
     setState(() {
-      newContact.insert(
-          0,
-          Contact(firstNameCtrlr.text, lastNameCtrlr.text,
-              listedContacts.reversed.toList()));
+      newContact = Contact(firstNameCtrlr.text, lastNameCtrlr.text,
+          listedContacts.reversed.toList());
     });
-    if (newContact[0].first_name.isEmpty || newContact[0].last_name.isEmpty) {
+    if (newContact.first_name.isEmpty || newContact.last_name.isEmpty) {
       emptyDetect = true;
     }
 
     Text message = Text('New Contact Added: \n\n' +
-        newContact[0].first_name +
+        newContact.first_name +
         " " +
-        newContact[0].last_name +
+        newContact.last_name +
         "\n" +
         listedContacts.reversed.toList().toString());
 
     if (!emptyDetect) {
       //disguisedToast(context: context, message: 'Adding...');
-      uploadContact(newContact[0].first_name, newContact[0].last_name,
+      await uploadContact(newContact.first_name, newContact.last_name,
           listedContacts.reversed.toList());
     } else {
       message = Text(
