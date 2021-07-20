@@ -35,8 +35,7 @@ class _ContactListState extends State<ContactList> {
     //print("Onstart: " + target.toString());
     switch (_selectedChoices) {
       case 'Log-in':
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        loginTrigger();
         break;
       case 'Log-out':
         print("Log-out OTW");
@@ -80,11 +79,19 @@ class _ContactListState extends State<ContactList> {
         HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
       },
     );
-    setState(() {
-      Iterable list = json.decode(response.body);
-      contactsList = list.map((model) => Contact.fromJson(model)).toList();
-    });
-    print(response.body.toString());
+    print("RESPONSE BODY: " + response.body.toString());
+    if (response.body.toString() == 'Forbidden') {
+      disguisedToast(
+          context: context, message: "Forbidden Access, Please Log-in...");
+      setState(() {
+        contactsList.clear();
+      });
+    } else {
+      setState(() {
+        Iterable list = json.decode(response.body);
+        contactsList = list.map((model) => Contact.fromJson(model)).toList();
+      });
+    }
     return (response.statusCode);
   }
 
@@ -325,8 +332,21 @@ class _ContactListState extends State<ContactList> {
     print("TOKEN DELAY:" + tokenStore.getString('token').toString());
     if (tokenStore.getString('token').toString().isEmpty ||
         tokenStore.getString('token').toString() == 'rejected') {
-      Navigator.push(
+      final value = await Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      await Future.delayed(Duration(seconds: 3), () {});
+      setState(() {
+        reloadList();
+      });
     }
+  }
+
+  loginTrigger() async {
+    final value = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    await Future.delayed(Duration(seconds: 3), () {});
+    setState(() {
+      reloadList();
+    });
   }
 }

@@ -22,10 +22,6 @@ class _CreateNewContactState extends State<CreateNewContact> {
     TextEditingController()
   ];
 
-  final FocusNode firstNameFocus = FocusNode();
-  final FocusNode lnameNameFocus = FocusNode();
-  final List<FocusNode> contactsFocus = <FocusNode>[];
-
   List<Contact> newContact = <Contact>[];
   late SharedPreferences tokenStore;
 
@@ -43,26 +39,6 @@ class _CreateNewContactState extends State<CreateNewContact> {
       }),
       // RETURN ERROR CATCH
     );
-  }
-
-  Future<int> newGet() async {
-    String retrievedToken = '';
-    await prefSetup().then((value) =>
-        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
-    final response = await http.patch(
-      Uri.parse('https://nukesite-phonebook-api.herokuapp.com/all/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
-      },
-    );
-    print(response);
-    return (response.statusCode);
-  }
-
-  Future<String?> prefSetup() async {
-    tokenStore = await SharedPreferences.getInstance();
-    return tokenStore.getString('token');
   }
 
   void saveContact() {
@@ -209,17 +185,6 @@ class _CreateNewContactState extends State<CreateNewContact> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton.extended(
-            onPressed: () {
-              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-              newGet();
-            },
-            icon: Icon(Icons.exit_to_app),
-            label: Text("DEBUG"),
-            foregroundColor: color('white'),
-            backgroundColor: color('blue'),
-          ),
-          SizedBox(width: 12),
           FloatingActionButton.extended(
             onPressed: () {
               // >>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
