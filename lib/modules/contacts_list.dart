@@ -7,6 +7,7 @@ import 'package:pb_v5/modules/nuke.dart';
 import 'contacts_import.dart';
 import 'update_contact.dart';
 import 'dev.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ContactList extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class ContactList extends StatefulWidget {
 }
 
 class _ContactListState extends State<ContactList> {
+  late SharedPreferences tokenStore;
   List<Contact> contactsList = [];
   var target = -1;
   List<PopupItem> menu = [
@@ -38,10 +40,9 @@ class _ContactListState extends State<ContactList> {
         print("Log-out OTW");
         break;
       case 'DevTest-sp':
-        /*
         prefSetup()
             .then((value) => {print("TOKEN FROM PREFERENCES: " + value!)});
-        //print(tokenStore.getString('token'));*/
+        print(tokenStore.getString('token'));
         break;
       case 'DevTest-sb':
         /*
@@ -257,9 +258,15 @@ class _ContactListState extends State<ContactList> {
   void initState() {
     super.initState();
     extractContacts();
+    prefSetup();
   }
 
   Future<void> reloadList() async {
     extractContacts();
+  }
+
+  Future<String?> prefSetup() async {
+    tokenStore = await SharedPreferences.getInstance();
+    return tokenStore.getString('token');
   }
 }

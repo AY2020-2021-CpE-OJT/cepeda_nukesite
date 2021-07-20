@@ -45,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
         'password': password,
       }),
     );
+    print(json.decode(response.body)['token']);
     SharedPreferences tokenStore = await SharedPreferences.getInstance();
     tokenStore.setString('token', json.decode(response.body)['token']);
     //print(tokenStore);
