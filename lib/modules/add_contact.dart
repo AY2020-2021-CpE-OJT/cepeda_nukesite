@@ -98,7 +98,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
     } else {
       message = Text(
         'Please Fill All Fields',
-        style: cxTextStyle('bold', Colors.deepOrange, 16),
+        style: cxTextStyle(style: 'bold', colour: Colors.deepOrange, size: 16),
       );
     }
 
@@ -131,10 +131,10 @@ class _CreateNewContactState extends State<CreateNewContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color("black"),
+      backgroundColor: colour(colour: 'black'),
       appBar: AppBar(
         centerTitle: true,
-        title: cText("Create New", color('def'), null, null),
+        title: cText(text: "Create New", colour: colour()),
         actions: [
           IconButton(
             icon: Icon(Icons.undo),
@@ -167,8 +167,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
                   context: context,
                   fieldPrompt: "First Name",
                   ctrlrID: firstNameCtrlr,
-                  defaultColor: color('def'),
-                  selectedColor: color('sel'),
+                  defaultColor: colour(),
+                  selectedColor: colour(colour: 'sel'),
                   errorColor: Colors.red,
                   next: true,
                   autoFocus: true),
@@ -177,20 +177,21 @@ class _CreateNewContactState extends State<CreateNewContact> {
                   context: context,
                   fieldPrompt: "Last Name",
                   ctrlrID: lastNameCtrlr,
-                  defaultColor: color('def'),
-                  selectedColor: color('sel'),
+                  defaultColor: colour(),
+                  selectedColor: colour(colour: 'sel'),
                   errorColor: Colors.red,
                   next: true,
                   autoFocus: true),
               /*
-              ctrlrField(context, "Last Name", lastNameCtrlr, color('sel'),
-                  color('def'), Colors.red, null, false, true, true),*/
+              ctrlrField(context, "Last Name", lastNameCtrlr, colour('sel'),
+                  colour('def'), Colors.red, null, false, true, true),*/
               hfill(10),
               Container(
                 alignment: Alignment.centerRight,
                 padding: EdgeInsets.only(bottom: 8, left: 8),
                 child: Text("#s: $_count",
-                    style: cxTextStyle('italic', Colors.grey, 12)),
+                    style: cxTextStyle(
+                        style: 'italic', colour: Colors.grey, size: 12)),
               ),
               hfill(5),
               Flexible(
@@ -209,7 +210,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton.extended(
+          FAB(
             onPressed: () {
               // >>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
               setState(() {
@@ -220,20 +221,19 @@ class _CreateNewContactState extends State<CreateNewContact> {
               });
             },
             icon: Icon(Icons.add),
-            label: Text("Add"),
-            foregroundColor: color('white'),
-            backgroundColor: color('blue'),
+            text: "Add",
+            foreground: colour(),
+            background: colour(colour: 'dblue'),
           ),
-          SizedBox(width: 12),
-          FloatingActionButton.extended(
+          vfill(12),
+          FAB(
             onPressed: () {
               // >>>>>>>>>>>>>>>>>>>>>>>>>>>> SAVE BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
               saveContact();
             },
             icon: Icon(Icons.save),
-            label: Text("Save"),
-            foregroundColor: color('white'),
-            backgroundColor: color('dblue'),
+            text: "Save",
+            background: colour(colour: 'dblue'),
           ),
         ],
       ),
@@ -258,8 +258,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
                 context: context,
                 fieldPrompt: "Contact Number",
                 ctrlrID: contactNumCtrlr[index],
-                defaultColor: color('def'),
-                selectedColor: color('sel'),
+                defaultColor: colour(),
+                selectedColor: colour(colour: 'sel'),
                 errorColor: Colors.red,
                 next: true,
                 autoFocus: true,
@@ -269,8 +269,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
                 context,
                 "Contact Number",
                 contactNumCtrlr[index],
-                color('sel'),
-                color('def'),
+                colour('sel'),
+                colour('def'),
                 Colors.red,
                 TextInputType.phone,
                 false,

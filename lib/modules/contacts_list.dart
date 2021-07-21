@@ -19,7 +19,8 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   late SharedPreferences tokenStore;
   List<Contact> contactsList = [];
-  var target = -1;
+  String debug = "";
+
   List<PopupItem> menu = [
     PopupItem(1, "Log-in"),
     PopupItem(2, "Log-out"),
@@ -32,7 +33,6 @@ class _ContactListState extends State<ContactList> {
     setState(() {
       _selectedChoices = choice;
     });
-    //print("Onstart: " + target.toString());
     switch (_selectedChoices) {
       case 'Log-in':
         loginTrigger();
@@ -50,8 +50,8 @@ class _ContactListState extends State<ContactList> {
           await Future.delayed(Duration(seconds: 3), () {});
           disguisedToast(
             context: context,
-            message: 'TESTING FLUSHBAR',
-            msgColor: color('red'),
+            message: 'TESTING FLUSHBAR' + debug,
+            msgColor: colour(colour: 'red'),
             secDur: 2,
           );
         }
@@ -64,7 +64,6 @@ class _ContactListState extends State<ContactList> {
         print(_selectedChoices);
         _selectedChoices = "none";
         print(_selectedChoices);
-        target = -1;
     }
   }
 
@@ -99,15 +98,6 @@ class _ContactListState extends State<ContactList> {
     tokenStore = await SharedPreferences.getInstance();
     return tokenStore.getString('token');
   }
-  /*
-  void extractContacts() async {
-    ImportAPIContacts.getContacts().then((response) {
-      setState(() {
-        Iterable list = json.decode(response.body);
-        contactsList = list.map((model) => Contact.fromJson(model)).toList();
-      });
-    });
-  }*/
 
   // TO_DO IMPLEMENT IN LOCAL
   Future<http.Response> deleteContact(String id) {
@@ -115,38 +105,6 @@ class _ContactListState extends State<ContactList> {
     return http.delete(
         Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id));
   }
-  /*
-  void _select(String choice) {
-    setState(() {
-      _selectedChoices = choice;
-    });
-    print("Onstart: " + target.toString());
-    switch (_selectedChoices) {
-      case 'Nuke':
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
-        break;
-      case 'Update':
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
-        break;
-      case 'Delete':
-        deleteContact(contactsList[target].id);
-        setState(() {
-          target = 0;
-          reloadList();
-        });
-        break;
-      case 'Index':
-        print("Onrun: " + target.toString());
-        target = -1;
-        print("AftRun: " + target.toString());
-        break;
-      default:
-        _selectedChoices = "none";
-        target = -1;
-    }
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +195,8 @@ class _ContactListState extends State<ContactList> {
                                     color: Colors.black,
                                     shape: BeveledRectangleBorder(
                                         side: BorderSide(
-                                            color: color('blue'), width: 1.5),
+                                            color: colour(colour: 'blue'),
+                                            width: 1.5),
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     child: Column(
@@ -264,31 +223,24 @@ class _ContactListState extends State<ContactList> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton.extended(
-            onPressed: () {
-              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> REFRESH BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-              reloadList();
-            },
+          FAB(
+            onPressed: () => reloadList(),
             icon: Icon(Icons.refresh),
-            label: Text(
-              "Refresh",
-            ),
-            foregroundColor: color('white'),
-            backgroundColor: color('dblue'),
+            text: "Refresh",
+            background: colour(colour: 'dblue'),
           ),
-          SizedBox(width: 12),
-          FloatingActionButton.extended(
+          vfill(12),
+          FAB(
             onPressed: () async {
-              final value = await Navigator.push(context,
+              await Navigator.push(context,
                   MaterialPageRoute(builder: (context) => CreateNewContact()));
               setState(() {
                 reloadList();
               });
             },
             icon: Icon(Icons.phone),
-            label: Text("Add New"),
-            foregroundColor: color('white'),
-            backgroundColor: color('dblue'),
+            text: "Add New",
+            background: colour(colour: 'dblue'),
           ),
         ],
       ),

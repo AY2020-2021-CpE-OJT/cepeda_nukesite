@@ -107,7 +107,8 @@ class _UpdateContactState extends State<UpdateContact> {
     } else {
       message = Text(
         'Please Fill All Fields',
-        style: cxTextStyle('bold', color('red'), 15),
+        style:
+            cxTextStyle(style: 'bold', colour: colour(colour: 'red'), size: 15),
       );
     }
 
@@ -161,10 +162,10 @@ class _UpdateContactState extends State<UpdateContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: color("black"),
+        backgroundColor: colour(colour: 'black'),
         appBar: AppBar(
           centerTitle: true,
-          title: cText("Update Contact", color('def'), null, null),
+          title: cText(text: "Update Contact", colour: colour()),
           actions: [
             IconButton(
               icon: Icon(Icons.clear),
@@ -197,9 +198,8 @@ class _UpdateContactState extends State<UpdateContact> {
                     context: context,
                     fieldPrompt: "First Name",
                     ctrlrID: firstNameCtrlr,
-                    defaultColor: color('def'),
-                    selectedColor: color('sel'),
-                    errorColor: Colors.red,
+                    defaultColor: colour(),
+                    selectedColor: colour(colour: 'sel'),
                     next: true,
                     autoFocus: false),
                 hfill(10),
@@ -207,9 +207,8 @@ class _UpdateContactState extends State<UpdateContact> {
                     context: context,
                     fieldPrompt: "Last Name",
                     ctrlrID: lastNameCtrlr,
-                    defaultColor: color('def'),
-                    selectedColor: color('sel'),
-                    errorColor: Colors.red,
+                    defaultColor: colour(),
+                    selectedColor: colour(colour: 'sel'),
                     next: true,
                     autoFocus: false),
                 hfill(10),
@@ -217,7 +216,8 @@ class _UpdateContactState extends State<UpdateContact> {
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.only(bottom: 8, left: 8),
                   child: Text("#s: $_count",
-                      style: cxTextStyle('italic', Colors.grey, 12)),
+                      style: cxTextStyle(
+                          style: 'italic', colour: Colors.grey, size: 12)),
                 ),
                 hfill(5),
                 Flexible(
@@ -252,7 +252,7 @@ class _UpdateContactState extends State<UpdateContact> {
               },
               icon: Icon(Icons.delete_forever),
               label: Text("Delete"),
-              foregroundColor: color('def'),
+              foregroundColor: colour(),
               backgroundColor: Colors.red[900],
             ),
             SizedBox(width: 12),
@@ -268,8 +268,8 @@ class _UpdateContactState extends State<UpdateContact> {
               },
               icon: Icon(Icons.add),
               label: Text("Add"),
-              foregroundColor: color('def'),
-              backgroundColor: color('dblue'),
+              foregroundColor: colour(),
+              backgroundColor: colour(colour: 'dblue'),
             ),
             SizedBox(width: 12),
             FloatingActionButton.extended(
@@ -279,8 +279,8 @@ class _UpdateContactState extends State<UpdateContact> {
               },
               icon: Icon(Icons.save),
               label: Text("Save"),
-              foregroundColor: color('def'),
-              backgroundColor: color('dblue'),
+              foregroundColor: colour(),
+              backgroundColor: colour(colour: 'dblue'),
             ),
           ],
         ),
@@ -305,9 +305,8 @@ class _UpdateContactState extends State<UpdateContact> {
                 context: context,
                 fieldPrompt: "Contact Number",
                 ctrlrID: contactNumCtrlr[index],
-                defaultColor: color('def'),
-                selectedColor: color('sel'),
-                errorColor: Colors.red,
+                defaultColor: colour(),
+                selectedColor: colour(colour: 'sel'),
                 next: true,
                 autoFocus: true,
                 inputType: TextInputType

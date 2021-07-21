@@ -6,8 +6,8 @@ import 'package:flushbar/flushbar.dart';
 //import 'package:flushbar/flushbar_helper.dart';
 //import 'dart:async';
 
-Color color(String id) {
-  switch (id) {
+Color colour({String? colour}) {
+  switch (colour) {
     case ('black'):
       return Colors.black;
     case ('blue'):
@@ -33,7 +33,6 @@ Color color(String id) {
     case ('dred'):
       return Color(0xff500000);
     default:
-      print('colorNot Identifed');
       return Colors.white;
   }
 }
@@ -83,18 +82,24 @@ Widget ctrlrField(
       disabledBorder: InputBorder.none,
       contentPadding: EdgeInsets.symmetric(horizontal: 15),
       labelText: fieldPrompt,
-      labelStyle: cxTextStyle('bold', selectedColor, 15),
+      labelStyle: cxTextStyle(style: 'bold', colour: selectedColor, size: 15),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: (errorColor != null) ? errorColor : Colors.red,
+        ),
+      ),
       //errorText: (ctrlrID.text.isEmpty) ? "Field is Required" : null,
     ),
-    style: cxTextStyle('bold', defaultColor, 15),
+    style: cxTextStyle(style: 'bold', colour: defaultColor, size: 15),
   );
 }
 
-Widget cText(String text, Color? colour, double? size, String? style) {
-  return Text(text, style: cxTextStyle(style, colour, size));
+Widget cText({String? text, Color? colour, double? size, String? style}) {
+  return Text((text != null) ? text : 'test_text',
+      style: cxTextStyle(style: style, colour: colour, size: size));
 }
 
-TextStyle cxTextStyle(String? style, Color? colour, double? size) {
+TextStyle cxTextStyle({String? style, Color? colour, double? size}) {
   double defaultSize = 20;
   // DEFAULT GREY BECAUSE WHITE FADES IN WHITE BG, BLACK FADES IN BLACK BG
   switch (style) {
@@ -133,6 +138,10 @@ Widget hfill(double height) {
   return SizedBox(height: height);
 }
 
+Widget vfill(double width) {
+  return SizedBox(width: width);
+}
+
 class PopupItem {
   int value;
   String name;
@@ -163,11 +172,45 @@ class SelectionMenu extends StatelessWidget {
               value: choice.name,
               child: Text(
                 choice.name,
-                style: cxTextStyle('bold', color('white'), 16),
+                style: cxTextStyle(style: 'bold', colour: colour(), size: 16),
               ),
             );
           }).toList();
         });
+  }
+}
+
+class FAB extends StatelessWidget {
+  final VoidCallback onPressed;
+  final Icon? icon;
+  final String? text;
+  final TextStyle? style;
+  final Color? foreground, background;
+
+  FAB(
+      {required this.onPressed,
+      this.icon,
+      this.text,
+      this.style,
+      this.foreground,
+      this.background});
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>> CALLBACK BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        onPressed();
+      },
+      icon: icon,
+      label: Text((text != null) ? text! : 'Test',
+          style: (style != null)
+              ? style
+              : cxTextStyle(colour: colour(), size: 16)),
+      foregroundColor: (foreground != null) ? foreground : colour(),
+      backgroundColor:
+          (background != null) ? background : colour(colour: 'sel'),
+    );
   }
 }
 
@@ -178,7 +221,7 @@ void disguisedToast({
   Color? msgColor,
   double? msgSize,
   String? button,
-  Color? bgcolor,
+  Color? bgcolour,
   int? secDur,
   VoidCallback? atEnd,
   /*VoidCallback? callback}*/
@@ -187,12 +230,12 @@ void disguisedToast({
     margin: EdgeInsets.all(8),
     padding: EdgeInsets.all(10),
     borderRadius: 8,
-    backgroundColor: (bgcolor != null) ? bgcolor : Colors.black87,
+    backgroundColor: (bgcolour != null) ? bgcolour : Colors.black87,
     /* TO FINISH DEVELOPMENT
     mainButton: TextButton(
       child: Text(
         'Click Me',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(colour: Colors.white),
       ),
       onPressed: () => callback,
     ),*/
@@ -203,83 +246,14 @@ void disguisedToast({
     title: title,
     messageText: Text(
       message,
-      style: cxTextStyle('bold', msgColor, msgSize),
+      style: cxTextStyle(style: 'bold', colour: msgColor, size: msgSize),
     ),
   )..show(context).then((r) => atEnd);
 }
+
 /*  THIS DELAY ISN'T WORKING AS A METHOD BUT WORKS IF PUT IN CODE AS IT, NO PASS
 void delay(int dur) async {
   await Future.delayed(Duration(seconds: dur), () {});
-}*/
-/*
-class DisguisedToast {
-  DisguisedToast({
-    required this.context,
-    required this.message,
-  });
-  final String message;
-  final BuildContext context;
-  show(BuildContext context) {
-    Flushbar(
-      margin: EdgeInsets.all(8),
-      padding: EdgeInsets.all(10),
-      borderRadius: 8,
-      backgroundGradient: LinearGradient(
-        colors: [Colors.green.shade800, Colors.greenAccent.shade700],
-        stops: [0.6, 1],
-      ),
-      boxShadows: [
-        BoxShadow(
-          color: Colors.black45,
-          offset: Offset(3, 3),
-          blurRadius: 3,
-        ),
-      ],
-      // All of the previous Flushbars could be dismissed by swiping down
-      // now we want to swipe to the sides
-      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-      // The default curve is Curves.easeOut
-      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-      title: 'This is a floating Flushbar',
-      message: message,
-    )..show(context);
-  }
-}*/
-
-/*
-class GlobalSnackBar {
-  final String message;
-  final String? button;
-  final Color? buttonColor;
-
-  GlobalSnackBar({
-    required this.message,
-    this.button,
-    this.buttonColor,
-  });
-  show(
-    BuildContext context,
-    String message,
-  ) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        elevation: 0.0,
-        //behavior: SnackBarBehavior.floating,
-        content: Text(message),
-        duration: new Duration(seconds: 5000000),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0)),
-        ),
-        //backgroundColor: Colors.redAccent,
-        action: (button!=null)? SnackBarAction(
-          textColor: Color(0xFFFAF2FB),
-          label: button!,
-          onPressed: () {/*BUTTON CALLBACK HERE*/ },
-        ): null,
-      ),
-    );
-  }
 }*/
 
 /*

@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       message = Text(
         'Please Fill All Fields',
-        style: cxTextStyle('bold', Colors.deepOrange, 16),
+        style: cxTextStyle(style: 'bold', colour: Colors.deepOrange, size: 16),
       );
     }
 
@@ -107,10 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color("black"),
+      backgroundColor: colour(colour: 'black'),
       appBar: AppBar(
         centerTitle: true,
-        title: cText("Log-in", color('def'), null, null),
+        title: cText(text: "Log-in", colour: colour()),
         actions: [
           IconButton(
             icon: Icon(Icons.undo),
@@ -135,8 +135,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   context: context,
                   fieldPrompt: "User Name",
                   ctrlrID: usernameCtrlr,
-                  defaultColor: color('def'),
-                  selectedColor: color('sel'),
+                  defaultColor: colour(),
+                  selectedColor: colour(colour: 'sel'),
                   errorColor: Colors.red,
                   next: true,
                   autoFocus: true),
@@ -145,9 +145,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   context: context,
                   fieldPrompt: "Password",
                   ctrlrID: passwordCtrlr,
-                  defaultColor: color('def'),
-                  selectedColor: color('sel'),
-                  errorColor: Colors.red,
+                  defaultColor: colour(),
+                  selectedColor: colour(colour: 'sel'),
                   obscure: true,
                   next: true,
                   autoFocus: true),
@@ -167,8 +166,8 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             icon: Icon(Icons.login),
             label: Text("Log-in"),
-            foregroundColor: color('white'),
-            backgroundColor: color('dblue'),
+            foregroundColor: colour(),
+            backgroundColor: colour(colour: 'dblue'),
           ),
         ],
       ),
