@@ -264,22 +264,10 @@ class _CreateNewContactState extends State<CreateNewContact> {
                 next: true,
                 autoFocus: true,
                 inputType: TextInputType.phone),
-
-            /*ctrlrField(
-                context,
-                "Contact Number",
-                contactNumCtrlr[index],
-                colour('sel'),
-                colour('def'),
-                Colors.red,
-                TextInputType.phone,
-                false,
-                true,
-                true),*/
           ),
         ],
       ),
-      SizedBox(height: 12),
+      hfill(12),
     ]);
   }
 

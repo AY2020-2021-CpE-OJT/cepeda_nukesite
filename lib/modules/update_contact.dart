@@ -36,7 +36,21 @@ class _UpdateContactState extends State<UpdateContact> {
   late Contact updatedContact;
   String contactIdentifier = '';
 
-  Future<http.Response> deleteContact(String id) {
+  Future<int> deleteContact(String id) async {
+    String retrievedToken = '';
+    await prefSetup().then((value) =>
+        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    final response = await http.delete(
+      Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
+      },
+    );
+    return (response.statusCode);
+  }
+
+  Future<http.Response> deleteContact2(String id) {
     final snackBar = SnackBar(
       content: Text("Contact Deleted: " + id),
     );
@@ -230,13 +244,6 @@ class _UpdateContactState extends State<UpdateContact> {
                       }),
                 ),
                 hfill(10),
-                /*
-              Container(
-                alignment: Alignment.bottomRight,
-                child: Text("Number of Contacts: $_count",
-                    style: cxTextStyle('italic', Colors.grey, 15)),
-              ),
-              //Text(_result),*/
               ],
             ),
           ),
@@ -244,19 +251,17 @@ class _UpdateContactState extends State<UpdateContact> {
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            FloatingActionButton.extended(
-              onPressed: () {
-                // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                deleteContact(contactIdentifier);
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.delete_forever),
-              label: Text("Delete"),
-              foregroundColor: colour(),
-              backgroundColor: Colors.red[900],
-            ),
-            SizedBox(width: 12),
-            FloatingActionButton.extended(
+            FAB(
+                onPressed: () async {
+                  // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                  final statusCode = await deleteContact(contactIdentifier);
+                  Navigator.pop(context, statusCode);
+                },
+                icon: Icon(Icons.delete_forever),
+                text: "Delete",
+                background: colour(colour: 'dred')),
+            vfill(48),
+            FAB(
               onPressed: () {
                 // >>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 setState(() {
@@ -267,20 +272,18 @@ class _UpdateContactState extends State<UpdateContact> {
                 });
               },
               icon: Icon(Icons.add),
-              label: Text("Add"),
-              foregroundColor: colour(),
-              backgroundColor: colour(colour: 'dblue'),
+              text: "Add",
+              background: colour(colour: 'dblue'),
             ),
-            SizedBox(width: 12),
-            FloatingActionButton.extended(
+            vfill(12),
+            FAB(
               onPressed: () {
                 // >>>>>>>>>>>>>>>>>>>>>>>>>>>> SAVE BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 saveContact();
               },
               icon: Icon(Icons.save),
-              label: Text("Save"),
-              foregroundColor: colour(),
-              backgroundColor: colour(colour: 'dblue'),
+              text: "Save",
+              background: colour(colour: 'dblue'),
             ),
           ],
         ),

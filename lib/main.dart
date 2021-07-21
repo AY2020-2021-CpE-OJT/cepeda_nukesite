@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'modules/add_contact.dart';
 import 'modules/contacts_list.dart';
 
 void main() {

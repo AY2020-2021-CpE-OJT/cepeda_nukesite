@@ -109,7 +109,7 @@ class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: colour(colour: 'dblue'),
       appBar: AppBar(
         backgroundColor: Colors.white10,
         title: Text("Contacts"),
