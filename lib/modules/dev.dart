@@ -105,28 +105,28 @@ TextStyle cxTextStyle({String? style, Color? colour, double? size}) {
   switch (style) {
     case 'bold':
       return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
+        color: (colour != null) ? colour : Colors.white,
         fontStyle: FontStyle.normal,
         fontWeight: FontWeight.bold,
         fontSize: (size != null) ? size : defaultSize,
       );
     case 'italic':
       return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
+        color: (colour != null) ? colour : Colors.white,
         fontStyle: FontStyle.italic,
         fontWeight: FontWeight.normal,
         fontSize: (size != null) ? size : defaultSize,
       );
     case 'boldItalic':
       return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
+        color: (colour != null) ? colour : Colors.white,
         fontStyle: FontStyle.italic,
         fontWeight: FontWeight.bold,
         fontSize: (size != null) ? size : defaultSize,
       );
     default:
       return TextStyle(
-        color: (colour != null) ? colour : Colors.grey,
+        color: (colour != null) ? colour : Colors.white,
         fontStyle: FontStyle.normal,
         fontWeight: FontWeight.normal,
         fontSize: (size != null) ? size : defaultSize,
@@ -220,23 +220,29 @@ void disguisedToast(
     required String message,
     Color? msgColor,
     double? msgSize,
-    String? button,
     Color? bgcolour,
     int? secDur,
     VoidCallback? atEnd,
+    String? buttonName,
+    Color? buttonColour,
+    Color? buttonTextColour,
     Function()? callback}) {
   Flushbar(
-    margin: EdgeInsets.all(8),
-    padding: EdgeInsets.all(10),
+    margin: EdgeInsets.all(10),
+    padding: EdgeInsets.all(15),
     borderRadius: 8,
     backgroundColor: (bgcolour != null) ? bgcolour : Colors.black87,
     mainButton: (callback != null)
         ? TextButton(
             child: Text(
-              'Click Me',
-              style: cxTextStyle(),
+              (buttonName != null) ? buttonName : 'BUTTON',
+              style: cxTextStyle(colour: buttonTextColour),
             ),
-            onPressed: () async => callback,
+            style: ButtonStyle(
+                backgroundColor: (buttonColour != null)
+                    ? MaterialStateProperty.all<Color>(buttonColour)
+                    : MaterialStateProperty.all<Color>(Colors.grey)),
+            onPressed: () => callback(),
           )
         : null,
     duration: Duration(seconds: (secDur == null) ? 3 : secDur),

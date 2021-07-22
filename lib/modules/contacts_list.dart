@@ -53,16 +53,15 @@ class _ContactListState extends State<ContactList> {
         setState(() {
           numdeBug++;
         });*/
-
+        /*
         disguisedToast(
           context: context,
           message: 'debugTesting' + debug,
+          buttonName: 'Log-in',
           msgColor: colour(colour: 'red'),
           secDur: 3,
-          callback: () async => setState(() {
-            numdeBug++;
-          }),
-        );
+          callback: () async => loginTrigger(),
+        );*/
         break;
       default:
         print(_selectedChoices);
@@ -84,8 +83,15 @@ class _ContactListState extends State<ContactList> {
     );
     print("RESPONSE BODY: " + response.body.toString());
     if (response.body.toString() == 'Forbidden') {
+      rejectAccess();
+      /*
       disguisedToast(
-          context: context, message: "Forbidden Access, Please Log-in...");
+        context: context,
+        message: "Forbidden Access..\n Please Log-In",
+        buttonName: 'Log-in',
+        buttonColour: colour(colour: 'dblue'),
+        callback: () => loginTrigger(),
+      );*/
       setState(() {
         contactsList.clear();
       });
@@ -178,9 +184,12 @@ class _ContactListState extends State<ContactList> {
                                         Duration(seconds: 2), () {});
                                     if (value == 403) {
                                       disguisedToast(
-                                          context: context,
-                                          message:
-                                              "Forbidden Access, Please Log-In");
+                                        context: context,
+                                        message:
+                                            "Forbidden Access..\n Please Log-In",
+                                        buttonName: 'Log-in',
+                                        callback: () => loginTrigger(),
+                                      );
                                     } else if (value == 200) {
                                       disguisedToast(
                                           context: context,
@@ -245,11 +254,20 @@ class _ContactListState extends State<ContactList> {
           vfill(12),
           FAB(
             onPressed: () async {
-              await Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CreateNewContact()));
-              setState(() {
-                reloadList();
-              });
+              print((tokenStore.getString('token').toString().isNotEmpty &&
+                  tokenStore.getString('token').toString() != 'rejected'));
+              if (tokenStore.getString('token').toString().isNotEmpty &&
+                  tokenStore.getString('token').toString() != 'rejected') {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateNewContact()));
+                setState(() {
+                  reloadList();
+                });
+              } else {
+                rejectAccess();
+              }
             },
             icon: Icon(Icons.phone),
             text: "Add New",
@@ -304,6 +322,16 @@ class _ContactListState extends State<ContactList> {
         reloadList();
       });
     }
+  }
+
+  rejectAccess() {
+    disguisedToast(
+      context: context,
+      message: "Forbidden Access..\n Please Log-In",
+      buttonName: 'Log-in',
+      buttonColour: colour(colour: 'dblue'),
+      callback: () => loginTrigger(),
+    );
   }
 
   loginTrigger() async {
