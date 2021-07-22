@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:pb_v5/model/contact.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pb_v5/modules/add_contact.dart';
 import 'package:pb_v5/modules/nuke.dart';
-import 'contacts_import.dart';
 import 'update_contact.dart';
 import 'dev.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,13 +18,15 @@ class _ContactListState extends State<ContactList> {
   late SharedPreferences tokenStore;
   List<Contact> contactsList = [];
   String debug = "";
+  int numdeBug = 0;
 
   List<PopupItem> menu = [
     PopupItem(1, "Log-in"),
     PopupItem(2, "Log-out"),
-    PopupItem(3, "DevTest-sp"),
-    PopupItem(4, "DevTest-sb"),
-    PopupItem(5, "DevTest-newGet"),
+    //PopupItem(3, "DevTest-sp"),
+    //PopupItem(4, "DevTest-sb"),
+    //PopupItem(5, "DevTest-newGet"),
+    PopupItem(0, "debugTesting"),
   ];
   String _selectedChoices = "none";
   void _select(String choice) {
@@ -45,20 +45,24 @@ class _ContactListState extends State<ContactList> {
             .then((value) => {print("TOKEN FROM PREFERENCES: " + value!)});
         print(tokenStore.getString('token'));
         break;
-      case 'DevTest-sb':
-        function() async {
-          await Future.delayed(Duration(seconds: 3), () {});
-          disguisedToast(
-            context: context,
-            message: 'TESTING FLUSHBAR' + debug,
-            msgColor: colour(colour: 'red'),
-            secDur: 2,
-          );
-        }
-        function();
-        break;
       case 'DevTest-newGet':
         //newGet();
+        break;
+      case 'debugTesting':
+        /*
+        setState(() {
+          numdeBug++;
+        });*/
+
+        disguisedToast(
+          context: context,
+          message: 'debugTesting' + debug,
+          msgColor: colour(colour: 'red'),
+          secDur: 3,
+          callback: () async => setState(() {
+            numdeBug++;
+          }),
+        );
         break;
       default:
         print(_selectedChoices);
@@ -96,12 +100,18 @@ class _ContactListState extends State<ContactList> {
 
   Future<String?> prefSetup() async {
     tokenStore = await SharedPreferences.getInstance();
-    return tokenStore.getString('token');
+    if (tokenStore.getString('token') != null) {
+      print(tokenStore.getString('token'));
+      return tokenStore.getString('token');
+    } else {
+      print(tokenStore.getString('token'));
+      tokenStore.setString('token', 'empty');
+      return 'empty token';
+    }
   }
 
   // TO_DO IMPLEMENT IN LOCAL
   Future<http.Response> deleteContact(String id) {
-    print("Status Deleted [" + id + "]");
     return http.delete(
         Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id));
   }
@@ -112,7 +122,7 @@ class _ContactListState extends State<ContactList> {
       backgroundColor: colour(colour: 'dblue'),
       appBar: AppBar(
         backgroundColor: Colors.white10,
-        title: Text("Contacts"),
+        title: cText(text: "Contacts " + numdeBug.toString()),
         actions: [
           SelectionMenu(
             selectables: menu,
@@ -163,9 +173,9 @@ class _ContactListState extends State<ContactList> {
                                                       .id
                                                       .toString(),
                                                 )));
-                                    print("RETURNED VALUE" + value.toString());
+                                    //print("RETURNED VALUE" + value.toString());
                                     await Future.delayed(
-                                        Duration(seconds: 5), () {});
+                                        Duration(seconds: 2), () {});
                                     if (value == 403) {
                                       disguisedToast(
                                           context: context,
@@ -187,6 +197,9 @@ class _ContactListState extends State<ContactList> {
                                     setState(() {
                                       reloadList();
                                     });
+                                    /*
+                                    await Future.delayed(
+                                        Duration(seconds: 3), () {});*/
                                     /*
                                     print(index.toString() + "/" +
                                         contactsList[index].first_name);*/
@@ -275,13 +288,13 @@ class _ContactListState extends State<ContactList> {
   }
 
   Future<void> reloadList() async {
-    extractContacts();
     disguisedToast(context: context, message: "Reloading...");
+    extractContacts();
   }
 
   delayedLogin() async {
     await Future.delayed(Duration(seconds: 3), () {});
-    print("TOKEN DELAY:" + tokenStore.getString('token').toString());
+    //print("TOKEN DELAY:" + tokenStore.getString('token').toString());
     if (tokenStore.getString('token').toString().isEmpty ||
         tokenStore.getString('token').toString() == 'rejected') {
       final value = await Navigator.push(

@@ -214,31 +214,31 @@ class FAB extends StatelessWidget {
   }
 }
 
-void disguisedToast({
-  required BuildContext context,
-  String? title,
-  required String message,
-  Color? msgColor,
-  double? msgSize,
-  String? button,
-  Color? bgcolour,
-  int? secDur,
-  VoidCallback? atEnd,
-  /*VoidCallback? callback}*/
-}) {
+void disguisedToast(
+    {required BuildContext context,
+    String? title,
+    required String message,
+    Color? msgColor,
+    double? msgSize,
+    String? button,
+    Color? bgcolour,
+    int? secDur,
+    VoidCallback? atEnd,
+    Function()? callback}) {
   Flushbar(
     margin: EdgeInsets.all(8),
     padding: EdgeInsets.all(10),
     borderRadius: 8,
     backgroundColor: (bgcolour != null) ? bgcolour : Colors.black87,
-    /* TO FINISH DEVELOPMENT
-    mainButton: TextButton(
-      child: Text(
-        'Click Me',
-        style: TextStyle(colour: Colors.white),
-      ),
-      onPressed: () => callback,
-    ),*/
+    mainButton: (callback != null)
+        ? TextButton(
+            child: Text(
+              'Click Me',
+              style: cxTextStyle(),
+            ),
+            onPressed: () async => callback,
+          )
+        : null,
     duration: Duration(seconds: (secDur == null) ? 3 : secDur),
     dismissDirection: FlushbarDismissDirection.HORIZONTAL,
     forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
@@ -248,7 +248,7 @@ void disguisedToast({
       message,
       style: cxTextStyle(style: 'bold', colour: msgColor, size: msgSize),
     ),
-  )..show(context).then((r) => atEnd);
+  )..show(context).then((value) => null);
 }
 
 /*  THIS DELAY ISN'T WORKING AS A METHOD BUT WORKS IF PUT IN CODE AS IT, NO PASS
@@ -273,7 +273,7 @@ void delay(int dur) async {
       default:
         print(_selectedChoices);
         _selectedChoices = "none";
-        print(_selectedChoices);
+        print(_selectedChoices);d
         target = -1;
     }
   }*/

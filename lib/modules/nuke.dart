@@ -33,7 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   User user = new User("", "");
 
   Future<http.Response> uploadUser(String username, String password) async {
-    print("ABOUT TO SEND");
+    disguisedToast(
+        context: context, message: 'Logging in as ' + user.username, secDur: 3);
     final response = await http.post(
       Uri.parse(
           /*'http://localhost:2077/login_nuke'*/ 'https://nukesite-phonebook-api.herokuapp.com/login_nuke'),
@@ -51,11 +52,13 @@ class _LoginScreenState extends State<LoginScreen> {
     //print(tokenStore);
 
     print("STORED TOKEN: " + tokenStore.getString('token').toString());
-    return response;
+    return (response);
   }
 
-  void saveUser() {
+  Future<void> saveUser() async {
     bool emptyDetect = false;
+    String responseToken = '';
+    int statusCode = 0;
 
     setState(() {
       user = new User(usernameCtrlr.text, passwordCtrlr.text);
@@ -68,25 +71,45 @@ class _LoginScreenState extends State<LoginScreen> {
         Text('User : ' + user.username + ' / ' + 'Password : ' + user.password);
 
     if (!emptyDetect) {
-      uploadUser(
+      var response = await uploadUser(
         user.username,
         user.password,
       );
+      //print(json.decode(response.body)['token']);
+      statusCode = response.statusCode;
+      responseToken = json.decode(response.body)['token'];
+      await Future.delayed(Duration(seconds: 2), () {});
+      if (responseToken == 'rejected') {
+        disguisedToast(
+            context: context,
+            message: 'Access Forbidden,\nPlease Enter Correct Credentials');
+      } else if (statusCode == 200) {
+        disguisedToast(
+            context: context,
+            message: 'Login Successful',
+            msgColor: colour(colour: 'blue'),
+            secDur: 2);
+        await Future.delayed(Duration(seconds: 3), () {});
+        setState(() {
+          Navigator.pop(context);
+        });
+      } else if (statusCode != 200) {
+        disguisedToast(
+            context: context,
+            message: 'Something else happened: ' + statusCode.toString());
+      }
     } else {
-      message = Text(
-        'Please Fill All Fields',
-        style: cxTextStyle(style: 'bold', colour: Colors.deepOrange, size: 16),
-      );
+      disguisedToast(
+          context: context,
+          message: 'Please fill all fields ',
+          msgColor: colour(colour: 'red'));
     }
-
-    final snackBar = SnackBar(
-      content: message,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+    //await Future.delayed(Duration(seconds: 3), () {});
     if (!emptyDetect) {
-      Navigator.pop(context);
+      /*
+      setState(() {
+        Navigator.pop(context);
+      });*/ ///
     } else {
       emptyDetect = false;
     }

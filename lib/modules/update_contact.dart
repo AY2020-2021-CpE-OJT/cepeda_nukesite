@@ -37,6 +37,8 @@ class _UpdateContactState extends State<UpdateContact> {
   String contactIdentifier = '';
 
   Future<int> deleteContact(String id) async {
+    disguisedToast(context: context, message: 'Deleting Contact:\n ID: ' + id);
+    await Future.delayed(Duration(seconds: 2), () {});
     String retrievedToken = '';
     await prefSetup().then((value) =>
         {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
@@ -62,6 +64,16 @@ class _UpdateContactState extends State<UpdateContact> {
   Future<int> uploadUpdated(
       String firstName, String lastName, List contactNumbers, String id) async {
     String retrievedToken = '';
+    disguisedToast(
+        context: context,
+        message: 'Updating Contact:\n First Name: ' +
+            firstName +
+            '\n Last Name: ' +
+            lastName +
+            '\n Contacts : ' +
+            contactNumbers.toString(),
+        secDur: 2);
+    await Future.delayed(Duration(seconds: 3), () {});
     await prefSetup().then((value) =>
         {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
     final response = await http.patch(
@@ -102,13 +114,6 @@ class _UpdateContactState extends State<UpdateContact> {
       emptyDetect = true;
     }
 
-    Text message = Text('Contact Updating: \n\n' +
-        updatedContact.first_name +
-        " " +
-        updatedContact.last_name +
-        "\n" +
-        listedContacts.reversed.toList().toString());
-
     if (!emptyDetect) {
       statusCode = await uploadUpdated(
         updatedContact.first_name,
@@ -116,21 +121,12 @@ class _UpdateContactState extends State<UpdateContact> {
         listedContacts.reversed.toList(),
         contactIdentifier,
       );
-      print(statusCode);
-      //return statusCode;
     } else {
-      message = Text(
-        'Please Fill All Fields',
-        style:
-            cxTextStyle(style: 'bold', colour: colour(colour: 'red'), size: 15),
-      );
+      disguisedToast(
+          context: context,
+          message: 'Please fill all fields ',
+          msgColor: colour(colour: 'red'));
     }
-
-    final snackBar = SnackBar(
-      content: message,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     if ((statusCode == 200) || (statusCode == 403)) {
       Navigator.pop(context, statusCode);

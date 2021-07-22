@@ -24,26 +24,19 @@ class _CreateNewContactState extends State<CreateNewContact> {
 
   late Contact newContact;
   late SharedPreferences tokenStore;
-  /*
-  Future<http.Response> uploadContact(
-      String firstName, String lastName, List contactNumbers) {
-    return http.post(
-      Uri.parse('https://nukesite-phonebook-api.herokuapp.com/new'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'first_name': firstName,
-        'last_name': lastName,
-        'contact_numbers': contactNumbers,
-      }),
-      // RETURN ERROR CATCH
-    );
-  }*/
 
   Future<int> uploadContact(
       String firstName, String lastName, List contactNumbers) async {
     String retrievedToken = '';
+    disguisedToast(
+        context: context,
+        message: 'Creating New Contact:\n First Name: ' +
+            firstName +
+            '\n Last Name: ' +
+            lastName +
+            '\n Contacts : ' +
+            contactNumbers.toString(),
+        secDur: 2);
     await prefSetup().then((value) =>
         {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
     final response = await http.post(
@@ -58,7 +51,6 @@ class _CreateNewContactState extends State<CreateNewContact> {
         'contact_numbers': contactNumbers,
       }),
     );
-    print("RESPONSE UPLOAD: " + response.statusCode.toString());
     return (response.statusCode);
   }
 
@@ -70,6 +62,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
   void saveContact() async {
     bool emptyDetect = false;
     List<String> listedContacts = <String>[];
+    int statusCode = 0;
     for (int i = 0; i < _count; i++) {
       listedContacts.add(contactNumCtrlr[i].text);
       if (contactNumCtrlr[i].text.isEmpty) {
@@ -84,33 +77,22 @@ class _CreateNewContactState extends State<CreateNewContact> {
       emptyDetect = true;
     }
 
-    Text message = Text('New Contact Added: \n\n' +
-        newContact.first_name +
-        " " +
-        newContact.last_name +
-        "\n" +
-        listedContacts.reversed.toList().toString());
-
     if (!emptyDetect) {
-      //disguisedToast(context: context, message: 'Adding...');
-      await uploadContact(newContact.first_name, newContact.last_name,
-          listedContacts.reversed.toList());
-    } else {
-      message = Text(
-        'Please Fill All Fields',
-        style: cxTextStyle(style: 'bold', colour: Colors.deepOrange, size: 16),
+      statusCode = await uploadContact(
+        newContact.first_name,
+        newContact.last_name,
+        listedContacts.reversed.toList(),
       );
+    } else {
+      disguisedToast(
+          context: context,
+          message: 'Please fill all fields ',
+          msgColor: colour(colour: 'red'));
     }
 
-    final snackBar = SnackBar(
-      content: message,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-    if (!emptyDetect) {
-      Navigator.pop(context);
-    } else {
+    if ((statusCode == 200) || (statusCode == 403)) {
+      Navigator.pop(context, statusCode);
+    } else if (emptyDetect) {
       emptyDetect = false;
     }
   }
@@ -163,6 +145,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
+              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> NAME ENTRY FIELDS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
               ctrlrField(
                   context: context,
                   fieldPrompt: "First Name",
@@ -212,7 +195,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
         children: <Widget>[
           FAB(
             onPressed: () {
-              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD BUTTON <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
               setState(() {
                 _count++;
                 increments++;
@@ -228,7 +211,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
           vfill(12),
           FAB(
             onPressed: () {
-              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> SAVE BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> SAVE BUTTON <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
               saveContact();
             },
             icon: Icon(Icons.save),
@@ -245,6 +228,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // >>>>>>>>>>>>>>>>>>>>>>>>>>>> INCREMENTING CONTACT FIELDS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
           Padding(
             padding: const EdgeInsets.all(15),
             child: SizedBox(
