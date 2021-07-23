@@ -35,6 +35,9 @@ dev_dependencies:
     sdk: flutter
   shared_preferences: ^2.0.6
   flushbar: ^1.10.4
+  dbcrypt: ^1.0.0
+  crypto: ^3.0.1
+  encrypt: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

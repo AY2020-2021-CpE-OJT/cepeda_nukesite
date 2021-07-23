@@ -37,8 +37,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
             '\n Contacts : ' +
             contactNumbers.toString(),
         secDur: 2);
-    await prefSetup().then((value) =>
-        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    await prefSetup().then((value) => {retrievedToken = value!});
     final response = await http.post(
       Uri.parse('https://nukesite-phonebook-api.herokuapp.com/new'),
       headers: <String, String>{

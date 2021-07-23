@@ -40,8 +40,7 @@ class _UpdateContactState extends State<UpdateContact> {
     disguisedToast(context: context, message: 'Deleting Contact:\n ID: ' + id);
     await Future.delayed(Duration(seconds: 2), () {});
     String retrievedToken = '';
-    await prefSetup().then((value) =>
-        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    await prefSetup().then((value) => {retrievedToken = value!});
     final response = await http.delete(
       Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id),
       headers: <String, String>{
@@ -50,15 +49,6 @@ class _UpdateContactState extends State<UpdateContact> {
       },
     );
     return (response.statusCode);
-  }
-
-  Future<http.Response> deleteContact2(String id) {
-    final snackBar = SnackBar(
-      content: Text("Contact Deleted: " + id),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    return http.delete(
-        Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id));
   }
 
   Future<int> uploadUpdated(
@@ -74,8 +64,7 @@ class _UpdateContactState extends State<UpdateContact> {
             contactNumbers.toString(),
         secDur: 2);
     await Future.delayed(Duration(seconds: 3), () {});
-    await prefSetup().then((value) =>
-        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    await prefSetup().then((value) => {retrievedToken = value!});
     final response = await http.patch(
       Uri.parse('https://nukesite-phonebook-api.herokuapp.com/update/' + id),
       headers: <String, String>{
@@ -345,7 +334,7 @@ class _UpdateContactState extends State<UpdateContact> {
           ),
         ],
       ),
-      SizedBox(height: 12),
+      hfill(12),
     ]);
   }
 

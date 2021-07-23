@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:pb_v5/model/contact.dart';
 import 'dart:convert';
@@ -49,6 +50,10 @@ class _ContactListState extends State<ContactList> {
         //newGet();
         break;
       case 'debugTesting':
+        encrypt_test('this');
+        //print(encryptPassword('4live'));
+        /*print(checkPassword(
+            '\$2b\$10\$d2HZElXeAkNYaejUrz0YeeDmGcdSlPR38szk.XBQL/A7hPobHp9o.'));*/
         /*
         setState(() {
           numdeBug++;
@@ -72,8 +77,9 @@ class _ContactListState extends State<ContactList> {
 
   Future<int> extractContacts() async {
     String retrievedToken = '';
-    await prefSetup().then((value) =>
-        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    await prefSetup().then((value) => {
+          /*print("TOKEN FROM PREFERENCES: " + value!)*/ retrievedToken = value!
+        });
     final response = await http.get(
       Uri.parse('https://nukesite-phonebook-api.herokuapp.com/all/'),
       headers: <String, String>{
@@ -81,17 +87,9 @@ class _ContactListState extends State<ContactList> {
         HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
       },
     );
-    print("RESPONSE BODY: " + response.body.toString());
+    // print("RESPONSE BODY: " + response.body.toString());
     if (response.body.toString() == 'Forbidden') {
       rejectAccess();
-      /*
-      disguisedToast(
-        context: context,
-        message: "Forbidden Access..\n Please Log-In",
-        buttonName: 'Log-in',
-        buttonColour: colour(colour: 'dblue'),
-        callback: () => loginTrigger(),
-      );*/
       setState(() {
         contactsList.clear();
       });
@@ -116,10 +114,19 @@ class _ContactListState extends State<ContactList> {
     }
   }
 
-  // TO_DO IMPLEMENT IN LOCAL
-  Future<http.Response> deleteContact(String id) {
-    return http.delete(
-        Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id));
+  Future<int> deleteContact(String id) async {
+    disguisedToast(context: context, message: 'Deleting Contact:\n ID: ' + id);
+    await Future.delayed(Duration(seconds: 2), () {});
+    String retrievedToken = '';
+    await prefSetup().then((value) => {retrievedToken = value!});
+    final response = await http.delete(
+      Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
+      },
+    );
+    return (response.statusCode);
   }
 
   @override
@@ -128,7 +135,7 @@ class _ContactListState extends State<ContactList> {
       backgroundColor: colour(colour: 'dblue'),
       appBar: AppBar(
         backgroundColor: Colors.white10,
-        title: cText(text: "Contacts " + numdeBug.toString()),
+        title: cText(text: "Contacts " /*+ numdeBug.toString()*/),
         actions: [
           SelectionMenu(
             selectables: menu,
@@ -157,90 +164,101 @@ class _ContactListState extends State<ContactList> {
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                  onTap: () async {
-                                    // >>>>>>>>>>>>>>>>>>>>>>>>>>>> PUSH TO NEXT UPDATE SCREEN HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    final value = await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => UpdateContact(
-                                                  initialFirstName:
-                                                      contactsList[index]
-                                                          .first_name,
-                                                  initialLastName:
-                                                      contactsList[index]
-                                                          .last_name,
-                                                  initialContacts: contactsList[
-                                                          index]
-                                                      .contact_numbers
-                                                      .map((s) => s as String)
-                                                      .toList(),
-                                                  contactID: contactsList[index]
-                                                      .id
-                                                      .toString(),
-                                                )));
-                                    //print("RETURNED VALUE" + value.toString());
+                              return Dismissible(
+                                  direction: DismissDirection.horizontal,
+                                  onDismissed: (direction) async {
+                                    // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE ON DISMISS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    final statusCode = await deleteContact(
+                                        contactsList[index].id);
                                     await Future.delayed(
                                         Duration(seconds: 2), () {});
-                                    if (value == 403) {
-                                      disguisedToast(
-                                        context: context,
-                                        message:
-                                            "Forbidden Access..\n Please Log-In",
-                                        buttonName: 'Log-in',
-                                        callback: () => loginTrigger(),
-                                      );
-                                    } else if (value == 200) {
-                                      disguisedToast(
-                                          context: context,
-                                          message: "Successful Update");
-                                    } else {
-                                      disguisedToast(
-                                          context: context,
-                                          message:
-                                              "Something else happened\n Error Code: " +
-                                                  value.toString());
+                                    if (statusCode == 200) {
+                                      contactsList.clear();
                                     }
+                                    statusCodeEval(statusCode);
                                     await Future.delayed(
                                         Duration(seconds: 3), () {});
                                     setState(() {
                                       reloadList();
                                     });
-                                    /*
+                                  },
+                                  key: UniqueKey(),
+                                  child: GestureDetector(
+                                      onTap: () async {
+                                        // >>>>>>>>>>>>>>>>>>>>>>>>>>>> PUSH TO NEXT UPDATE SCREEN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                        final statusCode = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UpdateContact(
+                                                      initialFirstName:
+                                                          contactsList[index]
+                                                              .first_name,
+                                                      initialLastName:
+                                                          contactsList[index]
+                                                              .last_name,
+                                                      initialContacts:
+                                                          contactsList[index]
+                                                              .contact_numbers
+                                                              .map((s) =>
+                                                                  s as String)
+                                                              .toList(),
+                                                      contactID:
+                                                          contactsList[index]
+                                                              .id
+                                                              .toString(),
+                                                    )));
+                                        //print("RETURNED VALUE" + value.toString());
+                                        await Future.delayed(
+                                            Duration(seconds: 2), () {});
+                                        statusCodeEval(statusCode);
+                                        await Future.delayed(
+                                            Duration(seconds: 3), () {});
+                                        setState(() {
+                                          reloadList();
+                                        });
+                                        /*
                                     await Future.delayed(
                                         Duration(seconds: 3), () {});*/
-                                    /*
+                                        /*
                                     print(index.toString() + "/" +
                                         contactsList[index].first_name);*/
-                                  },
-                                  child: Card(
-                                    color: Colors.black,
-                                    shape: BeveledRectangleBorder(
-                                        side: BorderSide(
-                                            color: colour(colour: 'blue'),
-                                            width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Column(
-                                      children: <Widget>[
-                                        ListTile(
-                                          title: Text(
-                                              contactsList[index].first_name +
-                                                  ' ' +
-                                                  contactsList[index].last_name,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              )),
+                                      },
+                                      child: Card(
+                                        color: Colors.black,
+                                        shape: BeveledRectangleBorder(
+                                            side: BorderSide(
+                                                color: colour(colour: 'blue'),
+                                                width: 1.5),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Column(
+                                          children: <Widget>[
+                                            ListTile(
+                                              title: Text(
+                                                  contactsList[index]
+                                                          .first_name +
+                                                      ' ' +
+                                                      contactsList[index]
+                                                          .last_name,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ),
+                                            _contactsOfIndex(index),
+                                          ],
                                         ),
-                                        _contactsOfIndex(index),
-                                      ],
-                                    ),
-                                  ));
+                                      )));
                             })),
                     onRefresh: reloadList,
                   )
-                : Center(child: CircularProgressIndicator());
+                : Center(
+                    child: CircularProgressIndicator(
+                    color: colour(colour: 'blue'),
+                    backgroundColor: colour(colour: 'dblue'),
+                    strokeWidth: 5,
+                  ));
           })),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -254,14 +272,18 @@ class _ContactListState extends State<ContactList> {
           vfill(12),
           FAB(
             onPressed: () async {
+              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> PUSH TO ADD SCREEN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
               print((tokenStore.getString('token').toString().isNotEmpty &&
                   tokenStore.getString('token').toString() != 'rejected'));
               if (tokenStore.getString('token').toString().isNotEmpty &&
                   tokenStore.getString('token').toString() != 'rejected') {
-                await Navigator.push(
+                final statusCode = await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => CreateNewContact()));
+                await Future.delayed(Duration(seconds: 2), () {});
+                statusCodeEval(statusCode);
+                await Future.delayed(Duration(seconds: 3), () {});
                 setState(() {
                   reloadList();
                 });
@@ -306,6 +328,9 @@ class _ContactListState extends State<ContactList> {
   }
 
   Future<void> reloadList() async {
+    setState(() {
+      contactsList.clear();
+    });
     disguisedToast(context: context, message: "Reloading...");
     extractContacts();
   }
@@ -334,8 +359,19 @@ class _ContactListState extends State<ContactList> {
     );
   }
 
+  statusCodeEval(int statusCode) {
+    if (statusCode == 200) {
+      disguisedToast(context: context, message: "Successful Update");
+    } else {
+      disguisedToast(
+          context: context,
+          message:
+              "Something else happened\n Error Code: " + statusCode.toString());
+    }
+  }
+
   loginTrigger() async {
-    final value = await Navigator.push(
+    await Navigator.push(
         context, MaterialPageRoute(builder: (context) => LoginScreen()));
     await Future.delayed(Duration(seconds: 3), () {});
     setState(() {

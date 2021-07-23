@@ -1,8 +1,14 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:crypto/crypto.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+
 //import 'package:flushbar/flushbar_helper.dart';
 //import 'dart:async';
 
@@ -26,6 +32,8 @@ Color colour({String? colour}) {
       return Color(0xFF6F6F6F);
     case ('high'):
       return Colors.deepOrange;
+    case ('orange'):
+      return Colors.orange;
     case ('white'):
       return Colors.white;
     case ('red'):
@@ -214,6 +222,10 @@ class FAB extends StatelessWidget {
   }
 }
 
+void debugToast(context) {
+  disguisedToast(context: context, message: "TEST");
+}
+
 void disguisedToast(
     {required BuildContext context,
     String? title,
@@ -256,6 +268,80 @@ void disguisedToast(
     ),
   )..show(context).then((value) => null);
 }
+/*
+double rng(double min, double max) {
+  final rng = new Random();
+  final double rex = max - min;
+  return min + rng.nextInt(rex);
+}*/
+
+int rng(int? min, int max) {
+  final rng = new Random();
+  if (min == null) {
+    min = 0;
+  }
+  final int rex = max - min;
+  return min + rng.nextInt(rex);
+}
+
+bool checkPassword(String plainPassword) {
+  return new DBCrypt().checkpw(plainPassword,
+      "\$2b\$10\$/N6h1FyS267XiEoDS7bUzeIvmtI.N0GHg5KWP..cOidccJNvR0W6u");
+}
+
+String encryptPassword(String password) {
+  return new DBCrypt().hashpw(password, new DBCrypt().gensalt());
+}
+
+void cryptoEncryptPassword(String password) {
+  var key = utf8.encode('p@ssw0rd');
+  var bytes = utf8.encode("foobar");
+
+  var hmacSha256 = Hmac(sha256, key); // HMAC-SHA256
+  var digest = hmacSha256.convert(bytes);
+
+  print("HMAC digest as bytes: ${digest.bytes}");
+  print("HMAC digest as hex string: $digest");
+/*
+var cipher = crypto.createCipher(algorithm, key);  
+var encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+var decipher = crypto.createDecipher(algorithm, key);
+var decrypted = decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');*/
+}
+
+encrypt_test(String data) {
+  //final data = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+  final key = encrypt.Key.fromUtf8('iQKAIzLzObCn522aw92EQB9EZECKAITC');
+  final iv = encrypt.IV.fromLength(16);
+
+  final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
+  final encrypted = encrypter.encrypt(data, iv: iv);
+  final decrypted = encrypter.decrypt(encrypted, iv: iv);
+
+  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  print(encrypted.base64);
+}
+
+/*
+class EncrypData implements IEncrypData {
+  late String Key=new Buffer(key,'hex';
+
+
+  @override
+  String crypteFile(String data) {
+    final encrypter = Encrypter(AES(key, padding: null));
+    final encrypted = encrypter.encrypt(data, iv: iv);
+    return encrypted.base64;
+  }
+
+  @override
+  String decryptFile(String data) {
+    final encrypter = Encrypter(AES(key, padding: null));
+    final decrypted = encrypter.decrypt(Encrypted.from64(data), iv: iv);
+    return decrypted;
+  }
+}*/
 
 /*  THIS DELAY ISN'T WORKING AS A METHOD BUT WORKS IF PUT IN CODE AS IT, NO PASS
 void delay(int dur) async {
