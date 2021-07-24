@@ -34,17 +34,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<http.Response> uploadUser(String username, String password) async {
     disguisedToast(
-        context: context, message: 'Logging in as ' + user.username, secDur: 3);
+        context: context, message: 'Logging in as ' + user.username, secDur: 1);
+    await Future.delayed(Duration(seconds: 2), () {});
+    String authCode = 'Basic ' +
+        base64Encode(utf8.encode(user.username + ':' + user.password));
+    print(authCode);
     final response = await http.post(
       Uri.parse(
-          /*'http://localhost:2077/login_nuke'*/ 'https://nukesite-phonebook-api.herokuapp.com/login_nuke'),
+          /*'http://localhost:2077/login_nuke'*/ 'https://nukesite-phonebook-api.herokuapp.com/login_new'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'authorization': authCode,
       },
+      /*
       body: jsonEncode({
         'username': username,
         'password': password,
-      }),
+      }),*/
     );
     print(json.decode(response.body)['token']);
     SharedPreferences tokenStore = await SharedPreferences.getInstance();
