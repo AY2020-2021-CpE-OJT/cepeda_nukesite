@@ -39,7 +39,9 @@ class _ContactListState extends State<ContactList> {
         loginTrigger();
         break;
       case 'Log-out':
-        print("Log-out OTW");
+        //print("Log-out OTW");
+        tokenStore.setString('token', '');
+        reloadList();
         break;
       case 'DevTest-sp':
         prefSetup()
@@ -50,7 +52,7 @@ class _ContactListState extends State<ContactList> {
         //newGet();
         break;
       case 'debugTesting':
-        encrypt_test('this');
+        debugToast();
         //print(encryptPassword('4live'));
         /*print(checkPassword(
             '\$2b\$10\$d2HZElXeAkNYaejUrz0YeeDmGcdSlPR38szk.XBQL/A7hPobHp9o.'));*/

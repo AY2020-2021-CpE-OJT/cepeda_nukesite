@@ -88,8 +88,10 @@ class _CreateNewContactState extends State<CreateNewContact> {
           message: 'Please fill all fields ',
           msgColor: colour(colour: 'red'));
     }
+    print("ARRIVED HERE");
 
     if ((statusCode == 200) || (statusCode == 403)) {
+      print("ALSO HERE");
       Navigator.pop(context, statusCode);
     } else if (emptyDetect) {
       emptyDetect = false;

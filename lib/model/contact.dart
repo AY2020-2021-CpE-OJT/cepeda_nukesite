@@ -1,7 +1,7 @@
 class Contact {
-  final String first_name;
-  final String last_name;
-  final List<dynamic> contact_numbers;
+  late final String first_name;
+  late final String last_name;
+  late final List<dynamic> contact_numbers;
   late String id;
 
   Contact(this.first_name, this.last_name, this.contact_numbers);

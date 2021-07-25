@@ -4,10 +4,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dbcrypt/dbcrypt.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
+//import 'package:dbcrypt/dbcrypt.dart';
+//import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
+//import 'package:another_flushbar/flushbar_helper.dart';
+//import 'package:another_flushbar/flushbar_route.dart';
+//import 'package:crypto/crypto.dart';
+//import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:overlay_support/overlay_support.dart';
 
 //import 'package:flushbar/flushbar_helper.dart';
 //import 'dart:async';
@@ -222,8 +226,12 @@ class FAB extends StatelessWidget {
   }
 }
 
-void debugToast(context) {
+void debugToast_der(context) {
   disguisedToast(context: context, message: "TEST");
+}
+
+void debugToast() {
+  toast('this is debugToast');
 }
 
 void disguisedToast(
@@ -242,7 +250,7 @@ void disguisedToast(
   Flushbar(
     margin: EdgeInsets.all(10),
     padding: EdgeInsets.all(15),
-    borderRadius: 8,
+    borderRadius: BorderRadius.all(Radius.circular(12)),
     backgroundColor: (bgcolour != null) ? bgcolour : Colors.black87,
     mainButton: (callback != null)
         ? TextButton(
@@ -266,7 +274,7 @@ void disguisedToast(
       message,
       style: cxTextStyle(style: 'bold', colour: msgColor, size: msgSize),
     ),
-  )..show(context).then((value) => null);
+  )..show(context);
 }
 /*
 double rng(double min, double max) {
@@ -284,7 +292,7 @@ int rng(int? min, int max) {
   return min + rng.nextInt(rex);
 }
 
-bool checkPassword(String plainPassword) {
+/* bool checkPassword(String plainPassword) {
   return new DBCrypt().checkpw(plainPassword,
       "\$2b\$10\$/N6h1FyS267XiEoDS7bUzeIvmtI.N0GHg5KWP..cOidccJNvR0W6u");
 }
@@ -302,14 +310,14 @@ void cryptoEncryptPassword(String password) {
 
   print("HMAC digest as bytes: ${digest.bytes}");
   print("HMAC digest as hex string: $digest");
-/*
-var cipher = crypto.createCipher(algorithm, key);  
+
+/*var cipher = crypto.createCipher(algorithm, key);  
 var encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
 var decipher = crypto.createDecipher(algorithm, key);
 var decrypted = decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');*/
-}
+}*/
 
-encrypt_test(String data) {
+/*encrypt_test(String data) {
   //final data = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
   final key = encrypt.Key.fromUtf8('iQKAIzLzObCn522aw92EQB9EZECKAITC');
   final iv = encrypt.IV.fromLength(16);
@@ -321,12 +329,9 @@ encrypt_test(String data) {
 
   print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
   print(encrypted.base64);
-}
+}*/
 
-
-
-/*
-class EncrypData implements IEncrypData {
+/*class EncrypData implements IEncrypData {
   late String Key=new Buffer(key,'hex';
 
 
@@ -350,8 +355,7 @@ void delay(int dur) async {
   await Future.delayed(Duration(seconds: dur), () {});
 }*/
 
-/*
-  void _select(String choice) {
+/* void _select(String choice) {
     setState(() {
       _selectedChoices = choice;
     });
