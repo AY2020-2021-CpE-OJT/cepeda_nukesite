@@ -136,7 +136,10 @@ class _ContactListState extends State<ContactList> {
   }
 
   Future<int> deleteContact(String id) async {
-    disguisedToast(context: context, message: 'Deleting Contact:\n ID: ' + id);
+    disguisedToast(
+        context: context,
+        message: 'Deleting Contact',
+        messageStyle: cxTextStyle(colour: colour('lred')));
     await Future.delayed(Duration(seconds: 2), () {});
     String retrievedToken = '';
     await prefSetup().then((value) => {retrievedToken = value!});
@@ -192,18 +195,20 @@ class _ContactListState extends State<ContactList> {
                                     // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE ON DISMISS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                                     flush = disguisedPrompt(
                                       dismissible: false,
-                                      secDur: 15,
+                                      secDur: 0,
                                       context: context,
                                       title: 'Confirm Delete',
-                                      titleStyle: cxTextStyle(style: 'bold'),
+                                      titleStyle: cxTextStyle(
+                                          style: 'bold',
+                                          colour: colour('blue')),
                                       message:
-                                          'Do you really wish to delete contacts of\n' +
+                                          'Do you really wish to\ndelete contacts of\n' +
                                               contactsList[index].first_name +
                                               ' ' +
                                               contactsList[index].last_name +
                                               '?',
-                                      messageStyle: cxTextStyle(
-                                          style: 'italic', size: 16),
+                                      messageStyle:
+                                          cxTextStyle(style: 'bold', size: 16),
                                       button1Name: 'Yes',
                                       button1Colour: colour('green'),
                                       button1Callback: () async {
@@ -225,7 +230,7 @@ class _ContactListState extends State<ContactList> {
                                       button2Name: 'No',
                                       button2Colour: colour('red'),
                                       button2Callback: () async {
-                                        //flush.dismiss(true);
+                                        flush.dismiss(true);
                                         setState(() {
                                           reloadList();
                                         });
@@ -399,7 +404,7 @@ class _ContactListState extends State<ContactList> {
 
   rejectAccess() {
     flush = disguisedToast(
-      secDur: 10,
+      secDur: 0,
       context: context,
       title: "Warning",
       titleStyle: cxTextStyle(style: 'bold', colour: colour('lred')),
@@ -407,8 +412,8 @@ class _ContactListState extends State<ContactList> {
       buttonName: 'Log-in',
       buttonColour: colour('dblue'),
       callback: () async {
-        loginTrigger();
         flush.dismiss(true);
+        loginTrigger();
       },
       dismissible: false,
     );

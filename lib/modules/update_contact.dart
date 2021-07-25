@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dev.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class UpdateContact extends StatefulWidget {
   final String initialFirstName, initialLastName, contactID;
@@ -33,8 +34,9 @@ class _UpdateContactState extends State<UpdateContact> {
     TextEditingController()
   ];
 
-  late Contact updatedContact;
+  late Contact previousContact, updatedContact;
   String contactIdentifier = '';
+  late Flushbar flush;
 
   Future<int> deleteContact(String id) async {
     disguisedToast(context: context, message: 'Deleting Contact:\n ID: ' + id);
@@ -56,12 +58,18 @@ class _UpdateContactState extends State<UpdateContact> {
     String retrievedToken = '';
     disguisedToast(
         context: context,
-        message: 'Updating Contact:\n First Name: ' +
+        title: 'Updating Contact',
+        titleStyle: cxTextStyle(
+          style: 'bold',
+          colour: colour('blue'),
+        ),
+        message: 'First Name: ' +
             firstName +
             '\n Last Name: ' +
             lastName +
             '\n Contacts : ' +
             contactNumbers.toString(),
+        messageStyle: cxTextStyle(size: 15),
         secDur: 2);
     //await Future.delayed(Duration(seconds: 3), () {});
     await prefSetup().then((value) =>
@@ -78,6 +86,27 @@ class _UpdateContactState extends State<UpdateContact> {
         'contact_numbers': contactNumbers,
       }),
     );
+    if (response.statusCode == 200) {
+      // >>>>>>>>>>>>>>>>>>>>>>>>>>>> RETURN OR UNDO PROMPT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+      flush = disguisedPrompt(
+          dismissible: false,
+          secDur: 0,
+          context: context,
+          title: "Update Successful",
+          message: "Do you wish to return to main screen?",
+          button1Name: 'Yes',
+          button1Colour: colour('green'),
+          button1Callback: () async {
+            flush.dismiss(true);
+          },
+          button2Name: 'No',
+          button2Colour: colour('red'),
+          button2Callback: () async {
+            flush.dismiss(true);
+            //s await Future.delayed(Duration(seconds: 2), () {});
+            Navigator.pop(context, response.statusCode);
+          });
+    }
     return (response.statusCode);
   }
 
@@ -132,13 +161,18 @@ class _UpdateContactState extends State<UpdateContact> {
     super.initState();
     setState(() {
       _count = 0;
+      previousContact = new Contact(widget.initialFirstName,
+          widget.initialLastName, widget.initialContacts);
       firstNameCtrlr = TextEditingController(text: widget.initialFirstName);
       lastNameCtrlr = TextEditingController(text: widget.initialLastName);
       contactIdentifier = widget.contactID;
       List<String> contactsToDisplay = <String>[];
+      contactsToDisplay.clear();
+      contactNumCtrlr.clear();
       contactsToDisplay = widget.initialContacts;
       print("IN:" + widget.initialContacts.length.toString());
       final int edge = widget.initialContacts.length;
+
       for (int i = 0; i < edge; i++) {
         contactsToDisplay.add(widget.initialContacts[i]);
         if (i < edge) {
@@ -153,6 +187,7 @@ class _UpdateContactState extends State<UpdateContact> {
             " / inserted: " +
             widget.initialContacts[i]);
       }
+      contactsSize = widget.initialContacts.length;
     });
   }
 
@@ -177,13 +212,31 @@ class _UpdateContactState extends State<UpdateContact> {
                   key = 0;
                   increments = 0;
                   contactsSize = 1;
-                  _count = 1;
+                  _count = 0;
                   firstNameCtrlr.clear();
                   lastNameCtrlr.clear();
                   contactNumCtrlr.clear();
                   contactNumCtrlr = <TextEditingController>[
                     TextEditingController()
                   ];
+                  firstNameCtrlr =
+                      TextEditingController(text: previousContact.first_name);
+                  lastNameCtrlr =
+                      TextEditingController(text: previousContact.last_name);
+                  List<String> contactsToDisplay = <String>[];
+                  contactsToDisplay.clear();
+                  final int edge = previousContact.contact_numbers.length;
+                  for (int i = 0; i < edge; i++) {
+                    contactsToDisplay.add(previousContact.contact_numbers[i]);
+                    if (i < edge) {
+                      contactNumCtrlr.insert(
+                          0,
+                          TextEditingController(
+                              text: previousContact.contact_numbers[i]));
+                    }
+                    _count++;
+                    contactsSize = widget.initialContacts.length;
+                  }
                 });
               },
             )

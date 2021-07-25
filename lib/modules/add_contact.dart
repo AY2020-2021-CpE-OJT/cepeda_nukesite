@@ -31,12 +31,18 @@ class _CreateNewContactState extends State<CreateNewContact> {
     String retrievedToken = '';
     disguisedToast(
         context: context,
-        message: 'Creating New Contact:\n First Name: ' +
+        title: 'Creating New Contact',
+        titleStyle: cxTextStyle(
+          style: 'bold',
+          colour: colour('blue'),
+        ),
+        message: 'First Name: ' +
             firstName +
             '\n Last Name: ' +
             lastName +
             '\n Contacts : ' +
             contactNumbers.toString(),
+        messageStyle: cxTextStyle(size: 15),
         secDur: 2);
     await prefSetup().then((value) => {retrievedToken = value!});
     final response = await http.post(
@@ -52,6 +58,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
       }),
     );
     if (response.statusCode == 200) {
+      // >>>>>>>>>>>>>>>>>>>>>>>>>>>> RETURN OR REDO PROMPT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
       flush = disguisedPrompt(
           dismissible: false,
           secDur: 0,
@@ -83,7 +90,6 @@ class _CreateNewContactState extends State<CreateNewContact> {
   void saveContact() async {
     bool emptyDetect = false;
     List<String> listedContacts = <String>[];
-    int statusCode = 0;
     for (int i = 0; i < _count; i++) {
       listedContacts.add(contactNumCtrlr[i].text);
       if (contactNumCtrlr[i].text.isEmpty) {
@@ -99,7 +105,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
     }
 
     if (!emptyDetect) {
-      statusCode = await uploadContact(
+      await uploadContact(
         newContact.first_name,
         newContact.last_name,
         listedContacts.reversed.toList(),
@@ -107,8 +113,10 @@ class _CreateNewContactState extends State<CreateNewContact> {
     } else {
       disguisedToast(
         context: context,
-        message: 'Please fill all fields ',
-        messageStyle: cxTextStyle(colour: colour('lred')),
+        title: 'Warning!',
+        titleStyle: cxTextStyle(style: 'bold', colour: colour('lred')),
+        message: 'Please fill all empty fields',
+        messageStyle: cxTextStyle(colour: colour('')),
       );
       emptyDetect = false;
     }
