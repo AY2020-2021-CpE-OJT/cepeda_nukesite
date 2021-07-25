@@ -16,34 +16,41 @@ import 'package:overlay_support/overlay_support.dart';
 //import 'package:flushbar/flushbar_helper.dart';
 //import 'dart:async';
 
-Color colour({String? colour}) {
+Color colour(String? colour) {
   switch (colour) {
-    case ('black'):
-      return Colors.black;
-    case ('blue'):
-      return Colors.blue;
+    case ('lred'):
+      return Colors.red;
+    case ('red'):
+      return Color(0xff801010);
+    case ('dred'):
+      return Color(0xff500000);
+    case ('orange'):
+      return Colors.orange;
+    case ('yellow'):
+      return Colors.yellow;
+    case ('green'):
+      return Colors.green;
     case ('lblue'):
       return Colors.lightBlue;
+    case ('blue'):
+      return Colors.blue;
     case ('dblue'):
       return Color(0xFF01579B);
+    case ('black'):
+      return Colors.black;
     case ('grey'):
       return Colors.grey;
+    case ('white'):
+      return Colors.white;
     case ('def'):
       return Color(0xFFFFFFFF);
     case ('sel'):
       return Color(0xFF00ABFF);
     case ('sub'):
       return Color(0xFF6F6F6F);
-    case ('high'):
-      return Colors.deepOrange;
-    case ('orange'):
-      return Colors.orange;
-    case ('white'):
-      return Colors.white;
-    case ('red'):
-      return Colors.red;
-    case ('dred'):
-      return Color(0xff500000);
+    // CUSTOM PALLETTE
+    case ('xblue'):
+      return Color(0xFF00A8DB);
     default:
       return Colors.white;
   }
@@ -184,7 +191,7 @@ class SelectionMenu extends StatelessWidget {
               value: choice.name,
               child: Text(
                 choice.name,
-                style: cxTextStyle(style: 'bold', colour: colour(), size: 16),
+                style: cxTextStyle(style: 'bold', colour: colour(''), size: 16),
               ),
             );
           }).toList();
@@ -218,26 +225,23 @@ class FAB extends StatelessWidget {
       label: Text((text != null) ? text! : 'Test',
           style: (style != null)
               ? style
-              : cxTextStyle(colour: colour(), size: 16)),
-      foregroundColor: (foreground != null) ? foreground : colour(),
-      backgroundColor:
-          (background != null) ? background : colour(colour: 'sel'),
+              : cxTextStyle(colour: colour(''), size: 16)),
+      foregroundColor: (foreground != null) ? foreground : colour(''),
+      backgroundColor: (background != null) ? background : colour('sel'),
     );
   }
 }
 
-void debugToast_der(context) {
+void debugToast(context) {
   disguisedToast(context: context, message: "TEST");
-}
-
-void debugToast() {
-  toast('this is debugToast');
 }
 
 void disguisedToast(
     {required BuildContext context,
     String? title,
+    TextStyle? titleStyle,
     required String message,
+    TextStyle? messageStyle,
     Color? msgColor,
     double? msgSize,
     Color? bgcolour,
@@ -265,14 +269,21 @@ void disguisedToast(
             onPressed: () => callback(),
           )
         : null,
-    duration: Duration(seconds: (secDur == null) ? 3 : secDur),
+    duration: (secDur == null)
+        ? Duration(seconds: 3)
+        : (secDur == 0)
+            ? null
+            : Duration(seconds: secDur),
     dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-    // TO RENDER CUSTOMISABLE
-    title: title,
+    forwardAnimationCurve: Curves.fastOutSlowIn,
+    titleText: Text(
+      (title != null) ? title : "",
+      style: (titleStyle != null) ? titleStyle : cxTextStyle(style: 'normal'),
+    ),
     messageText: Text(
       message,
-      style: cxTextStyle(style: 'bold', colour: msgColor, size: msgSize),
+      style:
+          (messageStyle != null) ? messageStyle : cxTextStyle(style: 'normal'),
     ),
   )..show(context);
 }
@@ -280,9 +291,9 @@ void disguisedToast(
 void disguisedPrompt(
     {required BuildContext context,
     String? title,
+    TextStyle? titleStyle,
     required String message,
-    Color? msgColor,
-    double? msgSize,
+    TextStyle? messageStyle,
     Color? bgcolour,
     int? secDur,
     VoidCallback? atEnd,
@@ -304,21 +315,43 @@ void disguisedPrompt(
         TextButton(
             onPressed:
                 (button1Callback != null) ? () => button1Callback() : null,
-            child: Text("BUTTON1")),
+            child: Text(
+              (button1Name != null) ? button1Name : 'BUTTON',
+              style: cxTextStyle(colour: button1TextColour),
+            ),
+            style: ButtonStyle(
+                backgroundColor: (button1Colour != null)
+                    ? MaterialStateProperty.all<Color>(button1Colour)
+                    : MaterialStateProperty.all<Color>(Colors.grey))),
+        vfill(12),
         TextButton(
             onPressed:
                 (button2Callback != null) ? () => button2Callback() : null,
-            child: Text("BUTTON2"))
+            child: Text(
+              (button2Name != null) ? button2Name : 'BUTTON',
+              style: cxTextStyle(colour: button2TextColour),
+            ),
+            style: ButtonStyle(
+                backgroundColor: (button2Colour != null)
+                    ? MaterialStateProperty.all<Color>(button2Colour)
+                    : MaterialStateProperty.all<Color>(Colors.grey))),
       ],
     ),
-    duration: Duration(seconds: (secDur == null) ? 3 : secDur),
+    duration: (secDur == null)
+        ? Duration(seconds: 3)
+        : (secDur == 0)
+            ? null
+            : Duration(seconds: secDur),
     dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-    // TO RENDER CUSTOMISABLE
-    title: title,
+    forwardAnimationCurve: Curves.fastOutSlowIn,
+    titleText: Text(
+      (title != null) ? title : "",
+      style: (titleStyle != null) ? titleStyle : cxTextStyle(style: 'normal'),
+    ),
     messageText: Text(
       message,
-      style: cxTextStyle(style: 'bold', colour: msgColor, size: msgSize),
+      style:
+          (messageStyle != null) ? messageStyle : cxTextStyle(style: 'normal'),
     ),
   )..show(context);
 }

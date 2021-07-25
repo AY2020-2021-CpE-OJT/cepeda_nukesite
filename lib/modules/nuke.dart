@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
         disguisedToast(
             context: context,
             message: 'Login Successful',
-            msgColor: colour(colour: 'blue'),
+            msgColor: colour('blue'),
             secDur: 2);
         await Future.delayed(Duration(seconds: 3), () {});
         setState(() {
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
       disguisedToast(
           context: context,
           message: 'Please fill all fields ',
-          msgColor: colour(colour: 'red'));
+          msgColor: colour('red'));
     }
     //await Future.delayed(Duration(seconds: 3), () {});
     if (!emptyDetect) {
@@ -136,10 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colour(colour: 'black'),
+      backgroundColor: colour('black'),
       appBar: AppBar(
         centerTitle: true,
-        title: cText(text: "Log-in", colour: colour()),
+        title: cText(text: "Log-in", colour: colour('')),
         actions: [
           IconButton(
             icon: Icon(Icons.undo),
@@ -164,8 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   context: context,
                   fieldPrompt: "User Name",
                   ctrlrID: usernameCtrlr,
-                  defaultColor: colour(),
-                  selectedColor: colour(colour: 'sel'),
+                  defaultColor: colour(''),
+                  selectedColor: colour('sel'),
                   errorColor: Colors.red,
                   next: true,
                   autoFocus: true),
@@ -174,8 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   context: context,
                   fieldPrompt: "Password",
                   ctrlrID: passwordCtrlr,
-                  defaultColor: colour(),
-                  selectedColor: colour(colour: 'sel'),
+                  defaultColor: colour(''),
+                  selectedColor: colour('sel'),
                   obscure: true,
                   next: true,
                   autoFocus: true),
@@ -195,8 +195,8 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             icon: Icon(Icons.login),
             label: Text("Log-in"),
-            foregroundColor: colour(),
-            backgroundColor: colour(colour: 'dblue'),
+            foregroundColor: colour(''),
+            backgroundColor: colour('dblue'),
           ),
         ],
       ),

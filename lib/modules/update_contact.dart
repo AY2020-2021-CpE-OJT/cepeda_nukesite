@@ -115,7 +115,7 @@ class _UpdateContactState extends State<UpdateContact> {
       disguisedToast(
           context: context,
           message: 'Please fill all fields ',
-          msgColor: colour(colour: 'red'));
+          msgColor: colour('red'));
     }
 
     if ((statusCode == 200) || (statusCode == 403)) {
@@ -163,10 +163,10 @@ class _UpdateContactState extends State<UpdateContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: colour(colour: 'black'),
+        backgroundColor: colour('black'),
         appBar: AppBar(
           centerTitle: true,
-          title: cText(text: "Update Contact", colour: colour()),
+          title: cText(text: "Update Contact", colour: colour('')),
           actions: [
             IconButton(
               icon: Icon(Icons.clear),
@@ -199,8 +199,8 @@ class _UpdateContactState extends State<UpdateContact> {
                     context: context,
                     fieldPrompt: "First Name",
                     ctrlrID: firstNameCtrlr,
-                    defaultColor: colour(),
-                    selectedColor: colour(colour: 'sel'),
+                    defaultColor: colour(''),
+                    selectedColor: colour('sel'),
                     next: true,
                     autoFocus: false),
                 hfill(10),
@@ -208,8 +208,8 @@ class _UpdateContactState extends State<UpdateContact> {
                     context: context,
                     fieldPrompt: "Last Name",
                     ctrlrID: lastNameCtrlr,
-                    defaultColor: colour(),
-                    selectedColor: colour(colour: 'sel'),
+                    defaultColor: colour(''),
+                    selectedColor: colour('sel'),
                     next: true,
                     autoFocus: false),
                 hfill(10),
@@ -246,7 +246,7 @@ class _UpdateContactState extends State<UpdateContact> {
                 },
                 icon: Icon(Icons.delete_forever),
                 text: "Delete",
-                background: colour(colour: 'dred')),
+                background: colour('dred')),
             vfill(48),
             FAB(
               onPressed: () {
@@ -260,7 +260,7 @@ class _UpdateContactState extends State<UpdateContact> {
               },
               icon: Icon(Icons.add),
               text: "Add",
-              background: colour(colour: 'dblue'),
+              background: colour('dblue'),
             ),
             vfill(12),
             FAB(
@@ -270,7 +270,7 @@ class _UpdateContactState extends State<UpdateContact> {
               },
               icon: Icon(Icons.save),
               text: "Save",
-              background: colour(colour: 'dblue'),
+              background: colour('dblue'),
             ),
           ],
         ),
@@ -295,8 +295,8 @@ class _UpdateContactState extends State<UpdateContact> {
                 context: context,
                 fieldPrompt: "Contact Number",
                 ctrlrID: contactNumCtrlr[index],
-                defaultColor: colour(),
-                selectedColor: colour(colour: 'sel'),
+                defaultColor: colour(''),
+                selectedColor: colour('sel'),
                 next: true,
                 autoFocus: true,
                 inputType: TextInputType

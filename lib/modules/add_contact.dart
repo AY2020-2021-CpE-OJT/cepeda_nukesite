@@ -86,7 +86,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
       disguisedToast(
           context: context,
           message: 'Please fill all fields ',
-          msgColor: colour(colour: 'red'));
+          msgColor: colour('red'));
     }
     print("ARRIVED HERE");
 
@@ -115,10 +115,10 @@ class _CreateNewContactState extends State<CreateNewContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colour(colour: 'black'),
+      backgroundColor: colour('black'),
       appBar: AppBar(
         centerTitle: true,
-        title: cText(text: "Create New", colour: colour()),
+        title: cText(text: "Create New", colour: colour('')),
         actions: [
           IconButton(
             icon: Icon(Icons.undo),
@@ -152,8 +152,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
                   context: context,
                   fieldPrompt: "First Name",
                   ctrlrID: firstNameCtrlr,
-                  defaultColor: colour(),
-                  selectedColor: colour(colour: 'sel'),
+                  defaultColor: colour(''),
+                  selectedColor: colour('sel'),
                   errorColor: Colors.red,
                   next: true,
                   autoFocus: true),
@@ -162,8 +162,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
                   context: context,
                   fieldPrompt: "Last Name",
                   ctrlrID: lastNameCtrlr,
-                  defaultColor: colour(),
-                  selectedColor: colour(colour: 'sel'),
+                  defaultColor: colour(''),
+                  selectedColor: colour('sel'),
                   errorColor: Colors.red,
                   next: true,
                   autoFocus: true),
@@ -207,8 +207,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
             },
             icon: Icon(Icons.add),
             text: "Add",
-            foreground: colour(),
-            background: colour(colour: 'dblue'),
+            foreground: colour(''),
+            background: colour('dblue'),
           ),
           vfill(12),
           FAB(
@@ -218,7 +218,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
             },
             icon: Icon(Icons.save),
             text: "Save",
-            background: colour(colour: 'dblue'),
+            background: colour('dblue'),
           ),
         ],
       ),
@@ -244,8 +244,8 @@ class _CreateNewContactState extends State<CreateNewContact> {
                 context: context,
                 fieldPrompt: "Contact Number",
                 ctrlrID: contactNumCtrlr[index],
-                defaultColor: colour(),
-                selectedColor: colour(colour: 'sel'),
+                defaultColor: colour(''),
+                selectedColor: colour('sel'),
                 errorColor: Colors.red,
                 next: true,
                 autoFocus: true,

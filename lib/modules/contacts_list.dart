@@ -53,13 +53,19 @@ class _ContactListState extends State<ContactList> {
         break;
       case 'debugTesting':
         disguisedPrompt(
-            secDur: 15,
             context: context,
-            message: 'PROMPT',
+            title: 'Confirm Delete',
+            titleStyle: cxTextStyle(style: 'bold'),
+            message: '   Would you like\n   to proceed?',
+            messageStyle: cxTextStyle(style: 'italic', size: 16),
+            button1Name: 'Yes',
+            button1Colour: colour('green'),
             button1Callback: () => setState(() {
                   numdeBug++;
                   print(numdeBug);
                 }),
+            button2Name: 'No',
+            button2Colour: colour('red'),
             button2Callback: () => setState(() {
                   numdeBug--;
                   print(numdeBug);
@@ -146,7 +152,7 @@ class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colour(colour: 'dblue'),
+      backgroundColor: colour('dblue'),
       appBar: AppBar(
         backgroundColor: Colors.white10,
         title: cText(text: "Contacts " /*+ numdeBug.toString()*/),
@@ -242,7 +248,7 @@ class _ContactListState extends State<ContactList> {
                                         color: Colors.black,
                                         shape: BeveledRectangleBorder(
                                             side: BorderSide(
-                                                color: colour(colour: 'blue'),
+                                                color: colour('blue'),
                                                 width: 1.5),
                                             borderRadius:
                                                 BorderRadius.circular(10)),
@@ -269,8 +275,8 @@ class _ContactListState extends State<ContactList> {
                   )
                 : Center(
                     child: CircularProgressIndicator(
-                    color: colour(colour: 'blue'),
-                    backgroundColor: colour(colour: 'dblue'),
+                    color: colour('blue'),
+                    backgroundColor: colour('dblue'),
                     strokeWidth: 5,
                   ));
           })),
@@ -281,14 +287,14 @@ class _ContactListState extends State<ContactList> {
             onPressed: () => reloadList(),
             icon: Icon(Icons.refresh),
             text: "Refresh",
-            background: colour(colour: 'dblue'),
+            background: colour('dblue'),
           ),
           vfill(12),
           FAB(
             onPressed: () async {
               // >>>>>>>>>>>>>>>>>>>>>>>>>>>> PUSH TO ADD SCREEN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-              print((tokenStore.getString('token').toString().isNotEmpty &&
-                  tokenStore.getString('token').toString() != 'rejected'));
+              /*print((tokenStore.getString('token').toString().isNotEmpty &&
+                  tokenStore.getString('token').toString() != 'rejected'));*/
               if (tokenStore.getString('token').toString().isNotEmpty &&
                   tokenStore.getString('token').toString() != 'rejected') {
                 final statusCode = await Navigator.push(
@@ -307,7 +313,7 @@ class _ContactListState extends State<ContactList> {
             },
             icon: Icon(Icons.phone),
             text: "Add New",
-            background: colour(colour: 'dblue'),
+            background: colour('dblue'),
           ),
         ],
       ),
@@ -325,10 +331,8 @@ class _ContactListState extends State<ContactList> {
             padding: EdgeInsets.only(left: 24, bottom: 16),
             child: Text(temp[contactsIndex],
                 textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                )),
+                style: cxTextStyle(
+                    style: 'bold', colour: colour('lblue'), size: 14)),
           );
         });
   }
@@ -365,10 +369,13 @@ class _ContactListState extends State<ContactList> {
 
   rejectAccess() {
     disguisedToast(
+      secDur: 10,
       context: context,
+      title: "Warning",
+      titleStyle: cxTextStyle(style: 'bold', colour: colour('red')),
       message: "Forbidden Access..\n Please Log-In",
       buttonName: 'Log-in',
-      buttonColour: colour(colour: 'dblue'),
+      buttonColour: colour('dblue'),
       callback: () => loginTrigger(),
     );
   }
