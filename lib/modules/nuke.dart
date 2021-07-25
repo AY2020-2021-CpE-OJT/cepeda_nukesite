@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
         disguisedToast(
             context: context,
             message: 'Login Successful',
-            msgColor: colour('blue'),
+            messageStyle: cxTextStyle(colour: colour('blue')),
             secDur: 2);
         await Future.delayed(Duration(seconds: 3), () {});
         setState(() {
@@ -106,9 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } else {
       disguisedToast(
-          context: context,
-          message: 'Please fill all fields ',
-          msgColor: colour('red'));
+        context: context,
+        message: 'Please fill all fields ',
+        messageStyle: cxTextStyle(colour: colour('lred')),
+      );
     }
     //await Future.delayed(Duration(seconds: 3), () {});
     if (!emptyDetect) {

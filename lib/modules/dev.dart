@@ -236,8 +236,9 @@ void debugToast(context) {
   disguisedToast(context: context, message: "TEST");
 }
 
-void disguisedToast(
+Flushbar disguisedToast(
     {required BuildContext context,
+    bool? dismissible,
     String? title,
     TextStyle? titleStyle,
     required String message,
@@ -249,9 +250,10 @@ void disguisedToast(
     VoidCallback? atEnd,
     String? buttonName,
     Color? buttonColour,
-    Color? buttonTextColour,
-    Function()? callback}) {
-  Flushbar(
+    TextStyle? buttonTextStyle,
+    Function()? callback,
+    Function()? onDismiss}) {
+  return Flushbar(
     margin: EdgeInsets.all(10),
     padding: EdgeInsets.all(15),
     borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -260,7 +262,8 @@ void disguisedToast(
         ? TextButton(
             child: Text(
               (buttonName != null) ? buttonName : 'BUTTON',
-              style: cxTextStyle(colour: buttonTextColour),
+              style:
+                  (buttonTextStyle != null) ? buttonTextStyle : cxTextStyle(),
             ),
             style: ButtonStyle(
                 backgroundColor: (buttonColour != null)
@@ -274,12 +277,22 @@ void disguisedToast(
         : (secDur == 0)
             ? null
             : Duration(seconds: secDur),
+    isDismissible: (dismissible != null) ? dismissible : true,
     dismissDirection: FlushbarDismissDirection.HORIZONTAL,
     forwardAnimationCurve: Curves.fastOutSlowIn,
-    titleText: Text(
-      (title != null) ? title : "",
-      style: (titleStyle != null) ? titleStyle : cxTextStyle(style: 'normal'),
-    ),
+    onStatusChanged: (status) async {
+      if ((status == FlushbarStatus.DISMISSED) && (onDismiss != null)) {
+        onDismiss();
+      }
+    },
+    titleText: (title != null)
+        ? Text(
+            title,
+            style: (titleStyle != null)
+                ? titleStyle
+                : cxTextStyle(style: 'normal'),
+          )
+        : null,
     messageText: Text(
       message,
       style:
@@ -288,8 +301,9 @@ void disguisedToast(
   )..show(context);
 }
 
-void disguisedPrompt(
+Flushbar disguisedPrompt(
     {required BuildContext context,
+    bool? dismissible,
     String? title,
     TextStyle? titleStyle,
     required String message,
@@ -304,8 +318,10 @@ void disguisedPrompt(
     Color? button2Colour,
     Color? button2TextColour,
     Function()? button1Callback,
-    Function()? button2Callback}) {
-  Flushbar(
+    Function()? button2Callback,
+    Function()? onDismiss}) {
+  late Flushbar flushbar;
+  return flushbar = Flushbar(
     margin: EdgeInsets.all(10),
     padding: EdgeInsets.all(15),
     borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -313,8 +329,12 @@ void disguisedPrompt(
     mainButton: Row(
       children: [
         TextButton(
-            onPressed:
-                (button1Callback != null) ? () => button1Callback() : null,
+            onPressed: (button1Callback != null)
+                ? () async {
+                    flushbar.dismiss(true);
+                    button1Callback();
+                  }
+                : null,
             child: Text(
               (button1Name != null) ? button1Name : 'BUTTON',
               style: cxTextStyle(colour: button1TextColour),
@@ -342,12 +362,22 @@ void disguisedPrompt(
         : (secDur == 0)
             ? null
             : Duration(seconds: secDur),
+    isDismissible: (dismissible != null) ? dismissible : true,
     dismissDirection: FlushbarDismissDirection.HORIZONTAL,
     forwardAnimationCurve: Curves.fastOutSlowIn,
-    titleText: Text(
-      (title != null) ? title : "",
-      style: (titleStyle != null) ? titleStyle : cxTextStyle(style: 'normal'),
-    ),
+    onStatusChanged: (status) async {
+      if ((status == FlushbarStatus.DISMISSED) && (onDismiss != null)) {
+        onDismiss();
+      }
+    },
+    titleText: (title != null)
+        ? Text(
+            title,
+            style: (titleStyle != null)
+                ? titleStyle
+                : cxTextStyle(style: 'normal'),
+          )
+        : null,
     messageText: Text(
       message,
       style:
@@ -355,6 +385,8 @@ void disguisedPrompt(
     ),
   )..show(context);
 }
+// BUILD A CLASS WITH DISGUISED TOAST AND METHODS COMBINED AND VARIABLE ASPECTS CUSTOMIZABLE
+
 /*
 double rng(double min, double max) {
   final rng = new Random();

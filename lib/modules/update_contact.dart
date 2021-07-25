@@ -113,9 +113,10 @@ class _UpdateContactState extends State<UpdateContact> {
       );
     } else {
       disguisedToast(
-          context: context,
-          message: 'Please fill all fields ',
-          msgColor: colour('red'));
+        context: context,
+        message: 'Please fill all fields ',
+        messageStyle: cxTextStyle(colour: colour('lred')),
+      );
     }
 
     if ((statusCode == 200) || (statusCode == 403)) {

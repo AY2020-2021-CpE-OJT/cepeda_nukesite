@@ -9,6 +9,7 @@ import 'package:pb_v5/modules/nuke.dart';
 import 'update_contact.dart';
 import 'dev.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class ContactList extends StatefulWidget {
   @override
@@ -149,6 +150,7 @@ class _ContactListState extends State<ContactList> {
     return (response.statusCode);
   }
 
+  late Flushbar flush;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,19 +190,47 @@ class _ContactListState extends State<ContactList> {
                                   direction: DismissDirection.horizontal,
                                   onDismissed: (direction) async {
                                     // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE ON DISMISS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    final statusCode = await deleteContact(
-                                        contactsList[index].id);
-                                    await Future.delayed(
-                                        Duration(seconds: 2), () {});
-                                    if (statusCode == 200) {
-                                      contactsList.clear();
-                                    }
-                                    statusCodeEval(statusCode);
-                                    await Future.delayed(
-                                        Duration(seconds: 3), () {});
-                                    setState(() {
-                                      reloadList();
-                                    });
+                                    flush = disguisedPrompt(
+                                      dismissible: false,
+                                      secDur: 15,
+                                      context: context,
+                                      title: 'Confirm Delete',
+                                      titleStyle: cxTextStyle(style: 'bold'),
+                                      message:
+                                          'Do you really wish to delete contacts of\n' +
+                                              contactsList[index].first_name +
+                                              ' ' +
+                                              contactsList[index].last_name +
+                                              '?',
+                                      messageStyle: cxTextStyle(
+                                          style: 'italic', size: 16),
+                                      button1Name: 'Yes',
+                                      button1Colour: colour('green'),
+                                      button1Callback: () async {
+                                        flush.dismiss(true);
+                                        final statusCode = await deleteContact(
+                                            contactsList[index].id);
+                                        await Future.delayed(
+                                            Duration(seconds: 2), () {});
+                                        if (statusCode == 200) {
+                                          contactsList.clear();
+                                        }
+                                        statusCodeEval(statusCode);
+                                        await Future.delayed(
+                                            Duration(seconds: 3), () {});
+                                        setState(() {
+                                          reloadList();
+                                        });
+                                      },
+                                      button2Name: 'No',
+                                      button2Colour: colour('red'),
+                                      button2Callback: () async {
+                                        //flush.dismiss(true);
+                                        setState(() {
+                                          reloadList();
+                                        });
+                                      },
+                                    );
                                   },
                                   key: UniqueKey(),
                                   child: GestureDetector(
@@ -368,15 +398,19 @@ class _ContactListState extends State<ContactList> {
   }
 
   rejectAccess() {
-    disguisedToast(
+    flush = disguisedToast(
       secDur: 10,
       context: context,
       title: "Warning",
-      titleStyle: cxTextStyle(style: 'bold', colour: colour('red')),
+      titleStyle: cxTextStyle(style: 'bold', colour: colour('lred')),
       message: "Forbidden Access..\n Please Log-In",
       buttonName: 'Log-in',
       buttonColour: colour('dblue'),
-      callback: () => loginTrigger(),
+      callback: () async {
+        loginTrigger();
+        flush.dismiss(true);
+      },
+      dismissible: false,
     );
   }
 
@@ -394,7 +428,7 @@ class _ContactListState extends State<ContactList> {
   loginTrigger() async {
     await Navigator.push(
         context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    await Future.delayed(Duration(seconds: 3), () {});
+    await Future.delayed(Duration(seconds: 1), () {});
     setState(() {
       reloadList();
     });

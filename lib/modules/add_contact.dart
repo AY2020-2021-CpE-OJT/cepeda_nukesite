@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dev.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class CreateNewContact extends StatefulWidget {
   @override
@@ -50,6 +51,27 @@ class _CreateNewContactState extends State<CreateNewContact> {
         'contact_numbers': contactNumbers,
       }),
     );
+    if (response.statusCode == 200) {
+      flush = disguisedPrompt(
+          dismissible: false,
+          secDur: 0,
+          context: context,
+          title: "Successfully Added",
+          message: "Would you like to add another?",
+          button1Name: 'Yes',
+          button1Colour: colour('green'),
+          button1Callback: () async {
+            flush.dismiss(true);
+            resetAllFields();
+          },
+          button2Name: 'No',
+          button2Colour: colour('red'),
+          button2Callback: () async {
+            flush.dismiss(true);
+            //s await Future.delayed(Duration(seconds: 2), () {});
+            Navigator.pop(context, response.statusCode);
+          });
+    }
     return (response.statusCode);
   }
 
@@ -84,17 +106,10 @@ class _CreateNewContactState extends State<CreateNewContact> {
       );
     } else {
       disguisedToast(
-          context: context,
-          message: 'Please fill all fields ',
-          msgColor: colour('red'));
-    }
-    print("ARRIVED HERE");
-
-    if ((statusCode == 200) || (statusCode == 403)) {
-      print("ALSO HERE");
-      await Future.delayed(Duration(seconds: 3), () {});
-      Navigator.pop(context, statusCode);
-    } else if (emptyDetect) {
+        context: context,
+        message: 'Please fill all fields ',
+        messageStyle: cxTextStyle(colour: colour('lred')),
+      );
       emptyDetect = false;
     }
   }
@@ -105,6 +120,19 @@ class _CreateNewContactState extends State<CreateNewContact> {
     _count = 1;
   }
 
+  resetAllFields() {
+    setState(() {
+      key = 0;
+      increments = 0;
+      contactsSize = 1;
+      _count = 1;
+      firstNameCtrlr.clear();
+      lastNameCtrlr.clear();
+      contactNumCtrlr.clear();
+      contactNumCtrlr = <TextEditingController>[TextEditingController()];
+    });
+  }
+
   @override
   void dispose() {
     firstNameCtrlr.dispose();
@@ -112,6 +140,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
     super.dispose();
   }
 
+  late Flushbar flush;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
