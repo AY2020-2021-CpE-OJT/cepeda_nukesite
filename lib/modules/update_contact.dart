@@ -63,7 +63,7 @@ class _UpdateContactState extends State<UpdateContact> {
             '\n Contacts : ' +
             contactNumbers.toString(),
         secDur: 2);
-    await Future.delayed(Duration(seconds: 3), () {});
+    //await Future.delayed(Duration(seconds: 3), () {});
     await prefSetup().then((value) =>
         {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
     final response = await http.patch(
@@ -119,6 +119,7 @@ class _UpdateContactState extends State<UpdateContact> {
     }
 
     if ((statusCode == 200) || (statusCode == 403)) {
+      await Future.delayed(Duration(seconds: 3), () {});
       Navigator.pop(context, statusCode);
     } else if (emptyDetect) {
       emptyDetect = false;

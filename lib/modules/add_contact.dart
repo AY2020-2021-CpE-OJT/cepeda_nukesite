@@ -92,6 +92,7 @@ class _CreateNewContactState extends State<CreateNewContact> {
 
     if ((statusCode == 200) || (statusCode == 403)) {
       print("ALSO HERE");
+      await Future.delayed(Duration(seconds: 3), () {});
       Navigator.pop(context, statusCode);
     } else if (emptyDetect) {
       emptyDetect = false;

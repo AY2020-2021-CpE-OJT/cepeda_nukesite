@@ -276,6 +276,52 @@ void disguisedToast(
     ),
   )..show(context);
 }
+
+void disguisedPrompt(
+    {required BuildContext context,
+    String? title,
+    required String message,
+    Color? msgColor,
+    double? msgSize,
+    Color? bgcolour,
+    int? secDur,
+    VoidCallback? atEnd,
+    String? button1Name,
+    Color? button1Colour,
+    Color? button1TextColour,
+    String? button2Name,
+    Color? button2Colour,
+    Color? button2TextColour,
+    Function()? button1Callback,
+    Function()? button2Callback}) {
+  Flushbar(
+    margin: EdgeInsets.all(10),
+    padding: EdgeInsets.all(15),
+    borderRadius: BorderRadius.all(Radius.circular(12)),
+    backgroundColor: (bgcolour != null) ? bgcolour : Colors.black87,
+    mainButton: Row(
+      children: [
+        TextButton(
+            onPressed:
+                (button1Callback != null) ? () => button1Callback() : null,
+            child: Text("BUTTON1")),
+        TextButton(
+            onPressed:
+                (button2Callback != null) ? () => button2Callback() : null,
+            child: Text("BUTTON2"))
+      ],
+    ),
+    duration: Duration(seconds: (secDur == null) ? 3 : secDur),
+    dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+    // TO RENDER CUSTOMISABLE
+    title: title,
+    messageText: Text(
+      message,
+      style: cxTextStyle(style: 'bold', colour: msgColor, size: msgSize),
+    ),
+  )..show(context);
+}
 /*
 double rng(double min, double max) {
   final rng = new Random();

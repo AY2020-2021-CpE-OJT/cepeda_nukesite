@@ -52,7 +52,19 @@ class _ContactListState extends State<ContactList> {
         //newGet();
         break;
       case 'debugTesting':
-        debugToast();
+        disguisedPrompt(
+            secDur: 15,
+            context: context,
+            message: 'PROMPT',
+            button1Callback: () => setState(() {
+                  numdeBug++;
+                  print(numdeBug);
+                }),
+            button2Callback: () => setState(() {
+                  numdeBug--;
+                  print(numdeBug);
+                }));
+
         //print(encryptPassword('4live'));
         /*print(checkPassword(
             '\$2b\$10\$d2HZElXeAkNYaejUrz0YeeDmGcdSlPR38szk.XBQL/A7hPobHp9o.'));*/
