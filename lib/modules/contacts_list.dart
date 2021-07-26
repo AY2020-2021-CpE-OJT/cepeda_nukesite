@@ -153,6 +153,41 @@ class _ContactListState extends State<ContactList> {
     return (response.statusCode);
   }
 
+  deleteContactPrompt(String id, String firstName, String lastName) {
+    flush = disguisedPrompt(
+      dismissible: false,
+      secDur: 0,
+      context: context,
+      title: 'Confirm Delete',
+      titleStyle: cxTextStyle(style: 'bold', colour: colour('blue')),
+      message: 'Do you really wish to\ndelete contacts of\n' +
+          firstName +
+          ' ' +
+          lastName +
+          '?',
+      messageStyle: cxTextStyle(style: 'bold', size: 16),
+      button1Name: 'Yes',
+      button1Colour: colour('green'),
+      button1Callback: () async {
+        flush.dismiss(true);
+        final statusCode = await deleteContact(id);
+        await Future.delayed(Duration(seconds: 2), () {});
+        if (statusCode == 200) {
+          contactsList.clear();
+        }
+        statusCodeEval(statusCode);
+      },
+      button2Name: 'No',
+      button2Colour: colour('red'),
+      button2Callback: () async {
+        flush.dismiss(true);
+        setState(() {
+          reloadList();
+        });
+      },
+    );
+  }
+
   late Flushbar flush;
   @override
   Widget build(BuildContext context) {
@@ -192,7 +227,13 @@ class _ContactListState extends State<ContactList> {
                               return Dismissible(
                                   direction: DismissDirection.horizontal,
                                   onDismissed: (direction) async {
+                                    deleteContactPrompt(
+                                        contactsList[index].id,
+                                        contactsList[index].first_name,
+                                        contactsList[index].last_name);
+
                                     // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE ON DISMISS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    /*
                                     flush = disguisedPrompt(
                                       dismissible: false,
                                       secDur: 0,
@@ -221,11 +262,12 @@ class _ContactListState extends State<ContactList> {
                                           contactsList.clear();
                                         }
                                         statusCodeEval(statusCode);
+                                        /*
                                         await Future.delayed(
                                             Duration(seconds: 3), () {});
                                         setState(() {
                                           reloadList();
-                                        });
+                                        });*/
                                       },
                                       button2Name: 'No',
                                       button2Colour: colour('red'),
@@ -235,7 +277,7 @@ class _ContactListState extends State<ContactList> {
                                           reloadList();
                                         });
                                       },
-                                    );
+                                    );*/
                                   },
                                   key: UniqueKey(),
                                   child: GestureDetector(
@@ -267,11 +309,12 @@ class _ContactListState extends State<ContactList> {
                                         await Future.delayed(
                                             Duration(seconds: 2), () {});
                                         statusCodeEval(statusCode);
+                                        /*
                                         await Future.delayed(
                                             Duration(seconds: 3), () {});
                                         setState(() {
                                           reloadList();
-                                        });
+                                        });*/
                                         /*
                                     await Future.delayed(
                                         Duration(seconds: 3), () {});*/
@@ -384,7 +427,7 @@ class _ContactListState extends State<ContactList> {
     setState(() {
       contactsList.clear();
     });
-    disguisedToast(context: context, message: "Reloading...");
+    //disguisedToast(context: context, message: "Reloading...");
     extractContacts();
   }
 
@@ -419,14 +462,23 @@ class _ContactListState extends State<ContactList> {
     );
   }
 
-  statusCodeEval(int statusCode) {
+  statusCodeEval(int? statusCode) async {
     if (statusCode == 200) {
+      setState(() {
+        reloadList();
+      });
       disguisedToast(context: context, message: "Successful Update");
+    } else if (statusCode == null) {
+      // IN CASE NULL STATUS CODE ERRORS OCCUR DO SOMETHING HERE
     } else {
+      setState(() {
+        reloadList();
+      });
       disguisedToast(
           context: context,
           message:
               "Something else happened\n Error Code: " + statusCode.toString());
+      //await Future.delayed(Duration(seconds: 3), () {});
     }
   }
 

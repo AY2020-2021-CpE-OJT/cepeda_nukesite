@@ -64,7 +64,9 @@ class _CreateNewContactState extends State<CreateNewContact> {
           secDur: 0,
           context: context,
           title: "Successfully Added",
+          titleStyle: cxTextStyle(style: 'bold'),
           message: "Would you like to add another?",
+          messageStyle: cxTextStyle(size: 14),
           button1Name: 'Yes',
           button1Colour: colour('green'),
           button1Callback: () async {

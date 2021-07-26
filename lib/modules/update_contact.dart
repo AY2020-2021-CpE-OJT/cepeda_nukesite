@@ -37,7 +37,7 @@ class _UpdateContactState extends State<UpdateContact> {
   late Contact previousContact, updatedContact;
   String contactIdentifier = '';
   late Flushbar flush;
-
+  /*
   Future<int> deleteContact(String id) async {
     disguisedToast(context: context, message: 'Deleting Contact:\n ID: ' + id);
     await Future.delayed(Duration(seconds: 2), () {});
@@ -51,6 +51,55 @@ class _UpdateContactState extends State<UpdateContact> {
       },
     );
     return (response.statusCode);
+  }*/
+
+  Future<int> deleteContact(String id) async {
+    disguisedToast(
+        context: context,
+        message: 'Deleting Contact',
+        messageStyle: cxTextStyle(colour: colour('lred')));
+    await Future.delayed(Duration(seconds: 2), () {});
+    String retrievedToken = '';
+    await prefSetup().then((value) => {retrievedToken = value!});
+    final response = await http.delete(
+      Uri.parse('https://nukesite-phonebook-api.herokuapp.com/delete/' + id),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
+      },
+    );
+    return (response.statusCode);
+  }
+
+  deleteContactPrompt(String id, String firstName, String lastName) {
+    flush = disguisedPrompt(
+      dismissible: false,
+      secDur: 0,
+      context: context,
+      title: 'Confirm Delete',
+      titleStyle: cxTextStyle(style: 'bold', colour: colour('blue')),
+      message: 'Do you really wish to\ndelete contacts of\n' +
+          firstName +
+          ' ' +
+          lastName +
+          '?',
+      messageStyle: cxTextStyle(style: 'bold', size: 16),
+      button1Name: 'Yes',
+      button1Colour: colour('green'),
+      button1Callback: () async {
+        flush.dismiss(true);
+        final statusCode = await deleteContact(id);
+        await Future.delayed(Duration(seconds: 2), () {});
+        if (statusCode == 200) {
+          Navigator.pop(context, statusCode);
+        }
+      },
+      button2Name: 'No',
+      button2Colour: colour('red'),
+      button2Callback: () async {
+        flush.dismiss(true);
+      },
+    );
   }
 
   Future<int> uploadUpdated(
@@ -72,8 +121,7 @@ class _UpdateContactState extends State<UpdateContact> {
         messageStyle: cxTextStyle(size: 15),
         secDur: 2);
     //await Future.delayed(Duration(seconds: 3), () {});
-    await prefSetup().then((value) =>
-        {print("TOKEN FROM PREFERENCES: " + value!), retrievedToken = value});
+    await prefSetup().then((value) => {retrievedToken = value!});
     final response = await http.patch(
       Uri.parse('https://nukesite-phonebook-api.herokuapp.com/update/' + id),
       headers: <String, String>{
@@ -86,25 +134,32 @@ class _UpdateContactState extends State<UpdateContact> {
         'contact_numbers': contactNumbers,
       }),
     );
+    //print(response.body);
+    //print('here1');
     if (response.statusCode == 200) {
       // >>>>>>>>>>>>>>>>>>>>>>>>>>>> RETURN OR UNDO PROMPT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+      //print('here2');
       flush = disguisedPrompt(
           dismissible: false,
           secDur: 0,
           context: context,
           title: "Update Successful",
-          message: "Do you wish to return to main screen?",
-          button1Name: 'Yes',
+          titleStyle: cxTextStyle(style: 'bold'),
+          message: "Undo or commit changes?\n(Press save again to commit undo)",
+          messageStyle: cxTextStyle(size: 14),
+          button1Name: 'Commit',
           button1Colour: colour('green'),
           button1Callback: () async {
             flush.dismiss(true);
+            Navigator.pop(context, response.statusCode);
           },
-          button2Name: 'No',
+          button2Name: 'Undo',
           button2Colour: colour('red'),
           button2Callback: () async {
             flush.dismiss(true);
+            resetCtrlrFields();
+            //saveContact();
             //s await Future.delayed(Duration(seconds: 2), () {});
-            Navigator.pop(context, response.statusCode);
           });
     }
     return (response.statusCode);
@@ -143,17 +198,20 @@ class _UpdateContactState extends State<UpdateContact> {
     } else {
       disguisedToast(
         context: context,
-        message: 'Please fill all fields ',
-        messageStyle: cxTextStyle(colour: colour('lred')),
+        title: 'Warning!',
+        titleStyle: cxTextStyle(style: 'bold', colour: colour('lred')),
+        message: 'Please fill all empty fields',
+        messageStyle: cxTextStyle(colour: colour('')),
       );
+      emptyDetect = false;
     }
-
+    /*
     if ((statusCode == 200) || (statusCode == 403)) {
       await Future.delayed(Duration(seconds: 3), () {});
       Navigator.pop(context, statusCode);
     } else if (emptyDetect) {
       emptyDetect = false;
-    }
+    }*/
   }
 
   @override
@@ -163,6 +221,9 @@ class _UpdateContactState extends State<UpdateContact> {
       _count = 0;
       previousContact = new Contact(widget.initialFirstName,
           widget.initialLastName, widget.initialContacts);
+      contactIdentifier = widget.contactID;
+      resetCtrlrFields();
+      /*
       firstNameCtrlr = TextEditingController(text: widget.initialFirstName);
       lastNameCtrlr = TextEditingController(text: widget.initialLastName);
       contactIdentifier = widget.contactID;
@@ -187,7 +248,34 @@ class _UpdateContactState extends State<UpdateContact> {
             " / inserted: " +
             widget.initialContacts[i]);
       }
-      contactsSize = widget.initialContacts.length;
+      contactsSize = widget.initialContacts.length;*/
+    });
+  }
+
+  resetCtrlrFields() {
+    setState(() {
+      key = 0;
+      increments = 0;
+      contactsSize = 0;
+      _count = 0;
+      firstNameCtrlr.clear();
+      lastNameCtrlr.clear();
+      contactNumCtrlr.clear();
+      contactNumCtrlr = <TextEditingController>[TextEditingController()];
+      firstNameCtrlr = TextEditingController(text: previousContact.first_name);
+      lastNameCtrlr = TextEditingController(text: previousContact.last_name);
+      List<String> contactsToDisplay = <String>[];
+      contactsToDisplay.clear();
+      final int edge = previousContact.contact_numbers.length;
+      for (int i = 0; i < edge; i++) {
+        contactsToDisplay.add(previousContact.contact_numbers[i]);
+        if (i < edge) {
+          contactNumCtrlr.insert(0,
+              TextEditingController(text: previousContact.contact_numbers[i]));
+        }
+        _count++;
+        contactsSize = previousContact.contact_numbers.length;
+      }
     });
   }
 
@@ -295,8 +383,11 @@ class _UpdateContactState extends State<UpdateContact> {
             FAB(
                 onPressed: () async {
                   // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE BUTTON HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                  deleteContactPrompt(contactIdentifier, firstNameCtrlr.text,
+                      lastNameCtrlr.text);
+                  /*
                   final statusCode = await deleteContact(contactIdentifier);
-                  Navigator.pop(context, statusCode);
+                  Navigator.pop(context, statusCode);*/
                 },
                 icon: Icon(Icons.delete_forever),
                 text: "Delete",
