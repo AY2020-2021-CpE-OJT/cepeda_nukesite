@@ -21,6 +21,8 @@ class _ContactListState extends State<ContactList> {
   List<Contact> contactsList = [];
   String debug = "";
   int numdeBug = 0;
+  TextEditingController searchCtrlr = TextEditingController();
+  //
 
   List<PopupItem> menu = [
     PopupItem(1, "Log-in"),
@@ -28,7 +30,7 @@ class _ContactListState extends State<ContactList> {
     //PopupItem(3, "DevTest-sp"),
     //PopupItem(4, "DevTest-sb"),
     //PopupItem(5, "DevTest-newGet"),
-    PopupItem(0, "debugTesting"),
+    //PopupItem(0, "debugTesting"),
   ];
   String _selectedChoices = "none";
   void _select(String choice) {
@@ -123,6 +125,34 @@ class _ContactListState extends State<ContactList> {
     return (response.statusCode);
   }
 
+  Future<int> filterContacts(String identifier) async {
+    String retrievedToken = '';
+    await prefSetup().then((value) => {
+          /*print("TOKEN FROM PREFERENCES: " + value!)*/ retrievedToken = value!
+        });
+    final response = await http.get(
+      Uri.parse(
+          'https://nukesite-phonebook-api.herokuapp.com/search/' + identifier),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + retrievedToken
+      },
+    );
+    // print("RESPONSE BODY: " + response.body.toString());
+    if (response.body.toString() == 'Forbidden') {
+      rejectAccess();
+      setState(() {
+        contactsList.clear();
+      });
+    } else {
+      setState(() {
+        Iterable list = json.decode(response.body);
+        contactsList = list.map((model) => Contact.fromJson(model)).toList();
+      });
+    }
+    return (response.statusCode);
+  }
+
   Future<String?> prefSetup() async {
     tokenStore = await SharedPreferences.getInstance();
     if (tokenStore.getString('token') != null) {
@@ -192,9 +222,9 @@ class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colour('dblue'),
+      backgroundColor: colour('black'),
       appBar: AppBar(
-        backgroundColor: Colors.white10,
+        backgroundColor: colour('dblue'),
         title: cText(text: "Contacts " /*+ numdeBug.toString()*/),
         actions: [
           SelectionMenu(
@@ -205,159 +235,137 @@ class _ContactListState extends State<ContactList> {
           )
         ],
       ),
-      body: Container(
-          padding: EdgeInsets.only(bottom: 60),
-          height: double.infinity,
-          width: double.infinity,
-          color: Colors.black,
-          child: FutureBuilder<List<Contact>>(builder: (context, snapshot) {
-            return contactsList.length != 0
-                ? RefreshIndicator(
-                    child: new SingleChildScrollView(
-                        padding: EdgeInsets.only(bottom: 100),
-                        physics: const BouncingScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        child: ListView.builder(
-                            key: UniqueKey(),
-                            padding: EdgeInsetsDirectional.all(10), // MARK
-                            itemCount: contactsList.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Dismissible(
-                                  direction: DismissDirection.horizontal,
-                                  onDismissed: (direction) async {
-                                    deleteContactPrompt(
-                                        contactsList[index].id,
-                                        contactsList[index].first_name,
-                                        contactsList[index].last_name);
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // SEARCH BAR SHOULD BE HERE
+          Padding(
+            padding: EdgeInsets.all(12),
+            child: ctrlrField(
+                context: context,
+                fieldPrompt: 'Search',
+                ctrlrID: searchCtrlr,
+                onChangeString: (String value) {
+                  if (value == '') {
+                    extractContacts();
+                  } else {
+                    filterContacts(value);
+                  }
+                },
+                defaultColor: colour(''),
+                selectedColor: colour('sel'),
+                next: true,
+                autoFocus: false),
+          ),
 
-                                    // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE ON DISMISS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    /*
-                                    flush = disguisedPrompt(
-                                      dismissible: false,
-                                      secDur: 0,
-                                      context: context,
-                                      title: 'Confirm Delete',
-                                      titleStyle: cxTextStyle(
-                                          style: 'bold',
-                                          colour: colour('blue')),
-                                      message:
-                                          'Do you really wish to\ndelete contacts of\n' +
-                                              contactsList[index].first_name +
-                                              ' ' +
-                                              contactsList[index].last_name +
-                                              '?',
-                                      messageStyle:
-                                          cxTextStyle(style: 'bold', size: 16),
-                                      button1Name: 'Yes',
-                                      button1Colour: colour('green'),
-                                      button1Callback: () async {
-                                        flush.dismiss(true);
-                                        final statusCode = await deleteContact(
-                                            contactsList[index].id);
-                                        await Future.delayed(
-                                            Duration(seconds: 2), () {});
-                                        if (statusCode == 200) {
-                                          contactsList.clear();
-                                        }
-                                        statusCodeEval(statusCode);
-                                        /*
-                                        await Future.delayed(
-                                            Duration(seconds: 3), () {});
-                                        setState(() {
-                                          reloadList();
-                                        });*/
-                                      },
-                                      button2Name: 'No',
-                                      button2Colour: colour('red'),
-                                      button2Callback: () async {
-                                        flush.dismiss(true);
-                                        setState(() {
-                                          reloadList();
-                                        });
-                                      },
-                                    );*/
-                                  },
+          //TextFormField(decoration: new InputDecoration(labelText: "test")),
+          Expanded(
+            child: Container(
+                padding: EdgeInsets.only(bottom: 60),
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.black,
+                child:
+                    FutureBuilder<List<Contact>>(builder: (context, snapshot) {
+                  return contactsList.length != 0
+                      ? RefreshIndicator(
+                          child: new SingleChildScrollView(
+                              padding: EdgeInsets.only(bottom: 100),
+                              physics: const BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics()),
+                              child: ListView.builder(
                                   key: UniqueKey(),
-                                  child: GestureDetector(
-                                      onTap: () async {
-                                        // >>>>>>>>>>>>>>>>>>>>>>>>>>>> PUSH TO NEXT UPDATE SCREEN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                        final statusCode = await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    UpdateContact(
-                                                      initialFirstName:
-                                                          contactsList[index]
-                                                              .first_name,
-                                                      initialLastName:
-                                                          contactsList[index]
-                                                              .last_name,
-                                                      initialContacts:
-                                                          contactsList[index]
-                                                              .contact_numbers
-                                                              .map((s) =>
-                                                                  s as String)
-                                                              .toList(),
-                                                      contactID:
-                                                          contactsList[index]
-                                                              .id
-                                                              .toString(),
-                                                    )));
-                                        //print("RETURNED VALUE" + value.toString());
-                                        await Future.delayed(
-                                            Duration(seconds: 2), () {});
-                                        statusCodeEval(statusCode);
-                                        /*
-                                        await Future.delayed(
-                                            Duration(seconds: 3), () {});
-                                        setState(() {
-                                          reloadList();
-                                        });*/
-                                        /*
-                                    await Future.delayed(
-                                        Duration(seconds: 3), () {});*/
-                                        /*
-                                    print(index.toString() + "/" +
-                                        contactsList[index].first_name);*/
-                                      },
-                                      child: Card(
-                                        color: Colors.black,
-                                        shape: BeveledRectangleBorder(
-                                            side: BorderSide(
-                                                color: colour('blue'),
-                                                width: 1.5),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Column(
-                                          children: <Widget>[
-                                            ListTile(
-                                              title: Text(
-                                                  contactsList[index]
-                                                          .first_name +
-                                                      ' ' +
-                                                      contactsList[index]
-                                                          .last_name,
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                            _contactsOfIndex(index),
-                                          ],
-                                        ),
-                                      )));
-                            })),
-                    onRefresh: reloadList,
-                  )
-                : Center(
-                    child: CircularProgressIndicator(
-                    color: colour('blue'),
-                    backgroundColor: colour('dblue'),
-                    strokeWidth: 5,
-                  ));
-          })),
+                                  padding:
+                                      EdgeInsetsDirectional.all(10), // MARK
+                                  itemCount: contactsList.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Dismissible(
+                                        direction: DismissDirection.horizontal,
+                                        onDismissed: (direction) async {
+                                          // >>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE ON DISMISS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                          deleteContactPrompt(
+                                              contactsList[index].id,
+                                              contactsList[index].first_name,
+                                              contactsList[index].last_name);
+                                        },
+                                        key: UniqueKey(),
+                                        child: GestureDetector(
+                                            onTap: () async {
+                                              // >>>>>>>>>>>>>>>>>>>>>>>>>>>> PUSH TO NEXT UPDATE SCREEN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                              final statusCode =
+                                                  await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder:
+                                                              (context) =>
+                                                                  UpdateContact(
+                                                                    initialFirstName:
+                                                                        contactsList[index]
+                                                                            .first_name,
+                                                                    initialLastName:
+                                                                        contactsList[index]
+                                                                            .last_name,
+                                                                    initialContacts: contactsList[
+                                                                            index]
+                                                                        .contact_numbers
+                                                                        .map((s) =>
+                                                                            s as String)
+                                                                        .toList(),
+                                                                    contactID: contactsList[
+                                                                            index]
+                                                                        .id
+                                                                        .toString(),
+                                                                  )));
+                                              //print("RETURNED VALUE" + value.toString());
+                                              await Future.delayed(
+                                                  Duration(seconds: 2), () {});
+                                              statusCodeEval(statusCode);
+                                            },
+                                            child: Card(
+                                              color: Colors.black,
+                                              shape: BeveledRectangleBorder(
+                                                  side: BorderSide(
+                                                      color: colour('blue'),
+                                                      width: 1.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  ListTile(
+                                                    title: Text(
+                                                        contactsList[index]
+                                                                .first_name +
+                                                            ' ' +
+                                                            contactsList[index]
+                                                                .last_name,
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        )),
+                                                  ),
+                                                  _contactsOfIndex(index),
+                                                ],
+                                              ),
+                                            )));
+                                  })),
+                          onRefresh: reloadList,
+                        )
+                      : Center(
+                          child: CircularProgressIndicator(
+                          color: colour('blue'),
+                          backgroundColor: colour('dblue'),
+                          strokeWidth: 5,
+                        ));
+                })),
+          ),
+        ],
+      ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -418,6 +426,7 @@ class _ContactListState extends State<ContactList> {
   @override
   void initState() {
     super.initState();
+    searchCtrlr.clear();
     extractContacts();
     prefSetup();
     delayedLogin();

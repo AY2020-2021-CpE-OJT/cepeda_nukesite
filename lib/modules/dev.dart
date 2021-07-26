@@ -67,19 +67,27 @@ Widget ctrlrField(
     TextInputType? inputType,
     bool? obscure = false,
     bool? autoFocus = false,
-    bool? next}) {
+    bool? next,
+    Function(String)? onChangeString}) {
   return TextFormField(
     //initialValue: initialValue,
+    onChanged: (value) {
+      if (onChangeString != null) {
+        onChangeString(value);
+      }
+    },
     controller: ctrlrID,
     keyboardType: (inputType == null) ? TextInputType.text : inputType,
-    obscureText: obscure!,
-    autofocus: autoFocus!,
+    obscureText: (obscure == null) ? false : obscure,
+    autofocus: (autoFocus == null) ? false : autoFocus,
     //focusNode: focus,
     /*
     onFieldSubmitted: (v) {
       FocusScope.of(context).requestFocus();
     },*/
-    textInputAction: (next!) ? TextInputAction.next : TextInputAction.done,
+    textInputAction: (next != null && next == true)
+        ? TextInputAction.next
+        : TextInputAction.done,
     textCapitalization: TextCapitalization.sentences,
     //focusNode: currentNodeID,
     /*
